@@ -26,11 +26,13 @@ void Edito::on_Open_clicked()
 
     if(!FileOpened.isEmpty())
     {
-        qDebug() << "Selected file: " << FileOpened;
         this->close();
         Editor *editor = new Editor();
         editor->setAttribute(Qt::WA_DeleteOnClose);
         editor->show();
+        editor->raise();
+        editor->activateWindow();
+        editor->OpenFile(FileOpened);
     }
 }
 

@@ -14,7 +14,7 @@
    <string>Edito Editor</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTextEdit" name="textEdit">
+   <widget class="QTextEdit" name="TextOut">
     <property name="geometry">
      <rect>
       <x>10</x>

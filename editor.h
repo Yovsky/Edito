@@ -13,6 +13,7 @@ class Editor : public QMainWindow
 
 public:
     explicit Editor(QWidget *parent = nullptr);
+    void OpenFile(const QString &FilePath);
     ~Editor();
 
 private:
