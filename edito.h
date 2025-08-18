@@ -17,6 +17,9 @@ public:
     Edito(QWidget *parent = nullptr);
     ~Edito();
 
+private slots:
+    void on_Open_clicked();
+
 private:
     Ui::Edito *ui;
 };
