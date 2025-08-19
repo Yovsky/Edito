@@ -7,6 +7,7 @@
 #include <QStatusBar>
 #include <QTextEdit>
 #include <QTextCursor>
+#include <QTextDocument>
 
 Editor::Editor(QWidget *parent)
     : QMainWindow(parent)
@@ -14,13 +15,20 @@ Editor::Editor(QWidget *parent)
 {
     ui->setupUi(this);
     QLabel *posStatus = new QLabel(); //Position label.
-    ui->statusbar->addPermanentWidget(posStatus, 1);
+    ui->statusbar->addPermanentWidget(posStatus, 2);
+    QLabel *sizeStatus = new QLabel(); //Size label.
+    ui->statusbar->addPermanentWidget(sizeStatus, 1);
     connect(ui->TextOut, &QTextEdit::cursorPositionChanged, this, [=]()
     {
         QTextCursor cursor = ui->TextOut->textCursor();
         posStatus->setText("Line " + QString::number(cursor.blockNumber() + 1) //Line position.
-                        + ", Col " + QString::number(cursor.positionInBlock() + 1) //Column position.
-                        + ", Pos " + QString::number(cursor.position() + 1)); //Character position.
+                         + ", Col " + QString::number(cursor.positionInBlock() + 1) //Column position.
+                         + ", Pos " + QString::number(cursor.position() + 1)); //Character position.
+
+        int chCount = ui->TextOut->toPlainText().length();
+        int lnCount = ui->TextOut->document()->blockCount();
+        sizeStatus->setText("Size " + QString::number(chCount) //Character count.
+                          + ", Lines " + QString::number(lnCount)); //Line count.
     });
 }
 
