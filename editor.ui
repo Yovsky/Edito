@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>671</width>
-    <height>600</height>
+    <height>622</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,16 +18,11 @@
     <normaloff>:/icons/editoIco.png</normaloff>:/icons/editoIco.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTextEdit" name="TextOut">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>0</y>
-      <width>651</width>
-      <height>551</height>
-     </rect>
-    </property>
-   </widget>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QTextEdit" name="TextOut"/>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -63,7 +58,11 @@
    <addaction name="menuView"/>
    <addaction name="menuHelp"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QStatusBar" name="statusbar">
+   <property name="acceptDrops">
+    <bool>false</bool>
+   </property>
+  </widget>
  </widget>
  <resources>
   <include location="Resources.qrc"/>

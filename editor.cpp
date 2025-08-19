@@ -1,20 +1,34 @@
 #include "editor.h"
 #include "ui_editor.h"
+#include <QString>
 #include <QFile>
 #include <QTextStream>
+#include <QLabel>
+#include <QStatusBar>
+#include <QTextEdit>
+#include <QTextCursor>
 
 Editor::Editor(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Editor)
 {
     ui->setupUi(this);
+    QLabel *posStatus = new QLabel(); //Position label.
+    ui->statusbar->addPermanentWidget(posStatus, 1);
+    connect(ui->TextOut, &QTextEdit::cursorPositionChanged, this, [=]()
+    {
+        QTextCursor cursor = ui->TextOut->textCursor();
+        posStatus->setText("Line " + QString::number(cursor.blockNumber() + 1) //Line position.
+                        + ", Col " + QString::number(cursor.positionInBlock() + 1) //Column position.
+                        + ", Pos " + QString::number(cursor.position() + 1)); //Character position.
+    });
 }
 
 void Editor::OpenFile(const QString &FilePath)
 {
     QFile file(FilePath);
 
-    if(file.open(QIODevice::ReadOnly | QIODevice::Text))
+    if(file.open(QIODevice::ReadOnly | QIODevice::Text)) //Setting the encoding.
     {
         QTextStream content(&file);
         content.setEncoding(QStringConverter::Utf8);
