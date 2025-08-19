@@ -1,6 +1,7 @@
 #include "editor.h"
 #include "ui_editor.h"
 #include <QFile>
+#include <QTextStream>
 
 Editor::Editor(QWidget *parent)
     : QMainWindow(parent)
@@ -16,6 +17,7 @@ void Editor::OpenFile(const QString &FilePath)
     if(file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         QTextStream content(&file);
+        content.setEncoding(QStringConverter::Utf8);
         ui->TextOut->setPlainText(content.readAll());
     }
 }

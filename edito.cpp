@@ -5,6 +5,8 @@
 #include <QDebug>
 #include <QString>
 #include <QStandardPaths>
+#include <QMessageBox>
+#include <QIcon>
 
 Edito::Edito(QWidget *parent)
     : QMainWindow(parent)
@@ -21,12 +23,13 @@ Edito::~Edito()
 void Edito::on_Open_clicked()
 {
     QString DefLocation =  QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation); //Get the Documents folder.
-    if(!DefLocation.isEmpty()) DefLocation = QStandardPaths::writableLocation(QStandardPaths::HomeLocation); //Fallback to Home if not existing.
+    if(DefLocation.isEmpty()) DefLocation = QStandardPaths::writableLocation(QStandardPaths::HomeLocation); //Fallback to Home if not existing.
     QString FileOpened = QFileDialog::getOpenFileName(this, tr("Open File"), DefLocation, tr("Text Files (*.txt)")); //File path.
 
     if(!FileOpened.isEmpty())
     {
         this->close();
+        qDebug() << "opended as hell :" << FileOpened;
         Editor *editor = new Editor();
         editor->setAttribute(Qt::WA_DeleteOnClose);
         editor->show();
@@ -34,5 +37,6 @@ void Edito::on_Open_clicked()
         editor->activateWindow();
         editor->OpenFile(FileOpened);
     }
+    else QMessageBox::critical(this, "Error", "Failed to open from a file.");
 }
 
