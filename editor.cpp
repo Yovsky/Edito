@@ -5,7 +5,6 @@
 #include <QTextStream>
 #include <QLabel>
 #include <QStatusBar>
-#include <QTextEdit>
 #include <QTextCursor>
 #include <QTextDocument>
 
@@ -18,7 +17,7 @@ Editor::Editor(QWidget *parent)
     ui->statusbar->addPermanentWidget(posStatus, 2);
     QLabel *sizeStatus = new QLabel(); //Size label.
     ui->statusbar->addPermanentWidget(sizeStatus, 1);
-    connect(ui->TextOut, &QTextEdit::cursorPositionChanged, this, [=]()
+    connect(ui->TextOut, &QPlainTextEdit::cursorPositionChanged, this, [=]()
     {
         QTextCursor cursor = ui->TextOut->textCursor();
         posStatus->setText("Line " + QString::number(cursor.blockNumber() + 1) //Line position.
