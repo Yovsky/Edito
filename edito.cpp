@@ -40,3 +40,16 @@ void Edito::on_Open_clicked()
     else QMessageBox::critical(this, "Error", "Failed to open from a file.");
 }
 
+
+void Edito::on_createNew_clicked()
+{
+    this->close();
+    qDebug() << "Opened new";
+    Editor *editor = new Editor();
+    editor->setAttribute(Qt::WA_DeleteOnClose);
+    editor->show();
+    editor->raise();
+    editor->activateWindow();
+    editor->NewFile();
+}
+

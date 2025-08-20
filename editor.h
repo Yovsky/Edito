@@ -14,10 +14,13 @@ class Editor : public QMainWindow
 public:
     explicit Editor(QWidget *parent = nullptr);
     void OpenFile(const QString &FilePath);
+    void NewFile();
     ~Editor();
 
 private slots:
     void on_actionOpen_triggered();
+
+    void on_actionNew_triggered();
 
 private:
     Ui::Editor *ui;

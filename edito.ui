@@ -18,7 +18,7 @@
     <normaloff>:/icons/editoIco.png</normaloff>:/icons/editoIco.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="createNew">
     <property name="geometry">
      <rect>
       <x>460</x>

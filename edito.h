@@ -20,6 +20,8 @@ public:
 private slots:
     void on_Open_clicked();
 
+    void on_createNew_clicked();
+
 private:
     Ui::Edito *ui;
 };

@@ -10,6 +10,7 @@
 #include <QStandardPaths>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QIcon>
 
 Editor::Editor(QWidget *parent)
     : QMainWindow(parent)
@@ -46,10 +47,21 @@ void Editor::OpenFile(const QString &FilePath)
     in.setEncoding(QStringConverter::Utf8);
     QString content = in.readAll();
     CodeEditor *editor = new CodeEditor();
-    editor->setPlainText(content);
+    editor->setPlainText(content); //Passing the file content to the text editor.
 
-    ui->editorTabs->addTab(editor, QFileInfo(file).fileName());
+    QIcon icon(":/icons/saved"); //Setting the icon.
+    ui->editorTabs->addTab(editor, icon,QFileInfo(file).fileName());
     ui->editorTabs->setCurrentWidget(editor);
+}
+
+void Editor::NewFile()
+{
+    CodeEditor *content = new CodeEditor(); //Handle the CreateNew from external windows.
+
+    QIcon icon(":/icons/saved.png");
+
+    ui->editorTabs->addTab(content, icon,"Untitled"); //Set tab parameters.
+    ui->editorTabs->setCurrentWidget(content);
 }
 
 Editor::~Editor()
@@ -69,5 +81,16 @@ void Editor::on_actionOpen_triggered()
         this->OpenFile(FileOpened);
     }
     else QMessageBox::critical(this, "Error", "Failed to open from a file.");
+}
+
+
+void Editor::on_actionNew_triggered()
+{
+    CodeEditor *content = new CodeEditor(); //Handle CreateNew from menus bar.
+
+    QIcon icon(":/icons/saved.png");
+
+    ui->editorTabs->addTab(content, icon, "Untitled"); //Set tab parameters.
+    ui->editorTabs->setCurrentWidget(content);
 }
 
