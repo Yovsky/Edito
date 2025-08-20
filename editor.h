@@ -19,7 +19,10 @@ public:
     void UpdateStatusBar();
     void NewFile();
     void CloseTab(int index);
-    void FileEdited();
+    void FileEdited(bool edited);
+    void SaveAs(CodeEditor* editor);
+    void Save(CodeEditor* editor);
+    CodeEditor* currentEditor() const;
     ~Editor();
 
 private slots:
@@ -36,6 +39,7 @@ private:
     QLabel *posStatus;
     QLabel *sizeStatus;
     QHash<CodeEditor*, QString> tabBaseNames;
+    QHash<CodeEditor*, QString> filePaths;
 };
 
 #endif // EDITOR_H
