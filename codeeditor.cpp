@@ -24,9 +24,9 @@ CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent)
 
 int CodeEditor::lineNumberAreaWidth()
 {
-    int digits = 3; //Set the initial margin width.
+    int digits = 4; //Set the initial margin width.
     int max = qMax(1, blockCount());
-    while (max >= 10) { //Adjust the width for bigger line counts.
+    while (max >= 10000) { //Adjust the width for bigger line counts.
         max /= 10;
         ++digits;
     }

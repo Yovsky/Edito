@@ -16,6 +16,9 @@ public:
     void OpenFile(const QString &FilePath);
     ~Editor();
 
+private slots:
+    void on_actionOpen_triggered();
+
 private:
     Ui::Editor *ui;
 };

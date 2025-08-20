@@ -29,7 +29,7 @@ void Edito::on_Open_clicked()
     if(!FileOpened.isEmpty())
     {
         this->close();
-        qDebug() << "opended as hell :" << FileOpened;
+        qDebug() << "opended: " << FileOpened;
         Editor *editor = new Editor();
         editor->setAttribute(Qt::WA_DeleteOnClose);
         editor->show();

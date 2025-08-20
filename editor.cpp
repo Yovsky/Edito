@@ -7,12 +7,16 @@
 #include <QStatusBar>
 #include <QTextCursor>
 #include <QTextDocument>
+#include <QStandardPaths>
+#include <QFileDialog>
+#include <QMessageBox>
 
 Editor::Editor(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Editor)
 {
     ui->setupUi(this);
+    ui->editorTabs->removeTab(0);
     QLabel *posStatus = new QLabel(); //Position label.
     ui->statusbar->addPermanentWidget(posStatus, 2);
     QLabel *sizeStatus = new QLabel(); //Size label.
@@ -35,15 +39,35 @@ void Editor::OpenFile(const QString &FilePath)
 {
     QFile file(FilePath);
 
-    if(file.open(QIODevice::ReadOnly | QIODevice::Text)) //Setting the encoding.
-    {
-        QTextStream content(&file);
-        content.setEncoding(QStringConverter::Utf8);
-        ui->TextOut->setPlainText(content.readAll());
-    }
+    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) //Setting the encoding.
+        return;
+
+    QTextStream in(&file);
+    in.setEncoding(QStringConverter::Utf8);
+    QString content = in.readAll();
+    CodeEditor *editor = new CodeEditor();
+    editor->setPlainText(content);
+
+    ui->editorTabs->addTab(editor, QFileInfo(file).fileName());
+    ui->editorTabs->setCurrentWidget(editor);
 }
 
 Editor::~Editor()
 {
     delete ui;
 }
+
+void Editor::on_actionOpen_triggered()
+{
+    QString DefLocation =  QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation); //Get the Documents folder.
+    if(DefLocation.isEmpty()) DefLocation = QStandardPaths::writableLocation(QStandardPaths::HomeLocation); //Fallback to Home if not existing.
+    QString FileOpened = QFileDialog::getOpenFileName(this, tr("Open File"), DefLocation, tr("Text Files (*.txt)")); //File path.
+
+    if(!FileOpened.isEmpty())
+    {
+        qDebug() << "opended: " << FileOpened;
+        this->OpenFile(FileOpened);
+    }
+    else QMessageBox::critical(this, "Error", "Failed to open from a file.");
+}
+

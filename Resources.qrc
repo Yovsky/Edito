@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/icons">
         <file>editoIco.png</file>
+        <file>notsaved.png</file>
+        <file>saved.png</file>
+        <file>saveico.png</file>
     </qresource>
 </RCC>
