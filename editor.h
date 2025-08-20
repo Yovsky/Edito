@@ -17,6 +17,7 @@ public:
     void OpenFile(const QString &FilePath);
     void UpdateStatusBar();
     void NewFile();
+    void CloseTab(int index);
     ~Editor();
 
 private slots:
@@ -25,6 +26,8 @@ private slots:
     void on_actionNew_triggered();
 
     void on_actionSave_As_triggered();
+
+    void on_editorTabs_tabCloseRequested(int index);
 
 private:
     Ui::Editor *ui;

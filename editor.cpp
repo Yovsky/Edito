@@ -103,6 +103,11 @@ void Editor::NewFile()
     UpdateStatusBar(); //Status update.
 }
 
+void Editor::CloseTab(int index)
+{
+    ui->editorTabs->removeTab(index); //Close the tab.
+}
+
 Editor::~Editor()
 {
     delete posStatus;
@@ -116,12 +121,12 @@ void Editor::on_actionOpen_triggered()
     if(DefLocation.isEmpty()) DefLocation = QStandardPaths::writableLocation(QStandardPaths::HomeLocation); //Fallback to Home if not existing.
     QString FileOpened = QFileDialog::getOpenFileName(this, tr("Open File"), DefLocation, tr("Text Files (*.txt)")); //File path.
 
-    if(!FileOpened.isEmpty())
+    if(!FileOpened.isEmpty()) //Safety.
     {
         qDebug() << "opended: " << FileOpened;
         this->OpenFile(FileOpened);
     }
-    else QMessageBox::critical(this, "Error", "Failed to open from a file.");
+    else QMessageBox::critical(this, "Error", "Failed to open from a file."); //Handle opening errors.
 }
 
 
@@ -143,5 +148,11 @@ void Editor::on_actionNew_triggered()
 void Editor::on_actionSave_As_triggered()
 {
 
+}
+
+
+void Editor::on_editorTabs_tabCloseRequested(int index)
+{
+    CloseTab(index); //Send the signal to the function.
 }
 
