@@ -34,6 +34,8 @@ private slots:
 
     void on_editorTabs_tabCloseRequested(int index);
 
+    void on_actionSave_triggered();
+
 private:
     Ui::Editor *ui;
     QLabel *posStatus;

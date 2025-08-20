@@ -70,6 +70,12 @@ void Editor::FileEdited(bool modified)
     QWidget *current = ui->editorTabs->currentWidget();
     CodeEditor *editor = qobject_cast<CodeEditor*>(current);
 
+    if (!editor) //Safety.
+    {
+        editor = qobject_cast<CodeEditor*>(ui->editorTabs->currentWidget());
+        if (!editor) return; //Safety.
+    }
+
     if(editor || ui->editorTabs->count() != 0) //Safety.
     {
         int currentTab = ui->editorTabs->currentIndex(); //Setting variables.
@@ -148,6 +154,12 @@ void Editor::SaveAs(CodeEditor* editor)
     if (Deflocation.isEmpty()) Deflocation = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
     QString filePath = QFileDialog::getSaveFileName(this, tr("Save As..."), Deflocation, tr("Text Files (*.txt)")); //Obtaining new file path.
 
+    if (filePath.isEmpty())
+    {
+        QMessageBox::warning(this, "Warning", "File not saved." + filePath);
+        return;
+    }
+
     filePaths.insert(editor, filePath); //Registering file path for later use.
     tabBaseNames.insert(editor, QFileInfo(filePath).fileName());
 
@@ -158,7 +170,8 @@ void Editor::SaveAs(CodeEditor* editor)
         stream.setEncoding(QStringConverter::Utf8);
         stream << editor->toPlainText();
         file.close();
-        FileEdited(true);
+
+        editor->document()->setModified(false); //Set file as saved.
     }
     else
         QMessageBox::critical(this, "Error", "Failed to save as " + filePath);
@@ -177,7 +190,8 @@ void Editor::Save(CodeEditor* editor)
             stream.setEncoding(QStringConverter::Utf8); //Encoding setting.
             stream << editor->toPlainText(); //Writing text.
             file.close();
-            FileEdited(true);
+
+            editor->document()->setModified(false); //Set file as saved.
         }
         else
             QMessageBox::critical(this, "Error", "Failed to save file."); //Error handling.
@@ -201,15 +215,16 @@ void Editor::on_actionOpen_triggered()
 
 void Editor::on_actionNew_triggered()
 {
-    CodeEditor *content = new CodeEditor(); //Handle CreateNew from menus bar.
+    CodeEditor *editor = new CodeEditor(); //Handle CreateNew from menus bar.
 
-    connect(content, &QPlainTextEdit::cursorPositionChanged, this, &Editor::UpdateStatusBar);
-    connect(content, &QPlainTextEdit::textChanged, this, &Editor::UpdateStatusBar); //Connecting the signals for Status.
+    connect(editor, &QPlainTextEdit::cursorPositionChanged, this, &Editor::UpdateStatusBar);
+    connect(editor, &QPlainTextEdit::textChanged, this, &Editor::UpdateStatusBar); //Connecting the signals for Status.
 
     QIcon icon(":/icons/saved.png");
+    tabBaseNames.insert(editor, "Untitled");
 
-    ui->editorTabs->addTab(content, icon, "Untitled"); //Set tab parameters.
-    ui->editorTabs->setCurrentWidget(content);
+    ui->editorTabs->addTab(editor, icon, "Untitled"); //Set tab parameters.
+    ui->editorTabs->setCurrentWidget(editor);
     UpdateStatusBar();
 }
 
@@ -217,10 +232,16 @@ void Editor::on_actionNew_triggered()
 void Editor::on_actionSave_As_triggered()
 {
     CodeEditor *editor = currentEditor();
-    if (editor) //safety.
+    if (editor) //Safety.
         SaveAs(editor); //Pass to SaveAs.
 }
 
+void Editor::on_actionSave_triggered()
+{
+    CodeEditor *editor = currentEditor();
+    if(editor) //Safety.
+        Save(editor); //Pass to Save.
+}
 
 void Editor::on_editorTabs_tabCloseRequested(int index)
 {
@@ -238,3 +259,5 @@ Editor::~Editor()
     delete sizeStatus;
     delete ui;
 }
+
+
