@@ -88,7 +88,7 @@ void Editor::OpenFile(const QString &FilePath)
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) //Setting the encoding.
         return;
 
-    QTextStream in(&file);
+    QTextStream in(&file); //Text setup.
     in.setEncoding(QStringConverter::Utf8);
     QString content = in.readAll();
     CodeEditor *editor = new CodeEditor();
