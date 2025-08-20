@@ -7,6 +7,7 @@
 #include <QStatusBar>
 #include <QTextCursor>
 #include <QTextDocument>
+#include <QTabWidget>
 #include <QStandardPaths>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -19,7 +20,7 @@ Editor::Editor(QWidget *parent)
     , sizeStatus(nullptr)
 {
     ui->setupUi(this);
-    ui->editorTabs->removeTab(0);
+    ui->editorTabs->removeTab(0); //Removing the default "Tab 1".
 
     posStatus = new QLabel("Line 0, Col 0, Pos 0"); //Position label.
     sizeStatus = new QLabel("Size 0, Lines 0"); //Size label.
@@ -27,7 +28,7 @@ Editor::Editor(QWidget *parent)
     ui->statusbar->addPermanentWidget(posStatus, 2);
     ui->statusbar->addPermanentWidget(sizeStatus, 1); //Assign the blocks with their sizes.
 
-    connect(ui->editorTabs, &QTabWidget::currentChanged, this, [this](int index) {
+    connect(ui->editorTabs, &QTabWidget::currentChanged, this, [this](int index) { //Connecting when swiching tabs.
         Q_UNUSED(index);
         this->UpdateStatusBar();
     });
@@ -64,6 +65,22 @@ void Editor::UpdateStatusBar()
     }
 }
 
+void Editor::FileEdited()
+{
+    QWidget *current = ui->editorTabs->currentWidget();
+    CodeEditor *editor = qobject_cast<CodeEditor*>(current);
+
+    if(editor || ui->editorTabs->count() != 0) //Safety.
+    {
+        int currentTab = ui->editorTabs->currentIndex(); //Setting variables.
+        QIcon icon(":/icons/notsaved.png");
+        QString fileName = tabBaseNames.value(editor, "Unknown");
+
+        ui->editorTabs->setTabIcon(currentTab, icon); //Changing the icon.
+        ui->editorTabs->setTabText(currentTab, fileName + "*");
+    }
+}
+
 void Editor::OpenFile(const QString &FilePath)
 {
     QFile file(FilePath);
@@ -76,13 +93,17 @@ void Editor::OpenFile(const QString &FilePath)
     QString content = in.readAll();
     CodeEditor *editor = new CodeEditor();
 
-    connect(editor, &QPlainTextEdit::cursorPositionChanged, this, &Editor::UpdateStatusBar);
+    connect(editor, &QPlainTextEdit::cursorPositionChanged, this, &Editor::UpdateStatusBar); //Connecting signals for Status.
     connect(editor, &QPlainTextEdit::textChanged, this, &Editor::UpdateStatusBar);
+    connect(editor, &QPlainTextEdit::textChanged, this, &Editor::FileEdited); //Connecting signal for Unsaved indicator.
 
     editor->setPlainText(content); //Passing the file content to the text editor.
 
     QIcon icon(":/icons/saved"); //Setting the icon.
-    ui->editorTabs->addTab(editor, icon,QFileInfo(file).fileName());
+
+    tabBaseNames.insert(editor, QFileInfo(file).fileName()); //Registering the tab name for later use.
+
+    ui->editorTabs->addTab(editor, icon,QFileInfo(file).fileName()); //Set tab parameters.
     ui->editorTabs->setCurrentWidget(editor);
 
     UpdateStatusBar(); //Status update.
@@ -92,10 +113,13 @@ void Editor::NewFile()
 {
     CodeEditor *editor = new CodeEditor(); //Handle the CreateNew from external windows.
 
-    connect(editor, &QPlainTextEdit::cursorPositionChanged, this, &Editor::UpdateStatusBar);
+    connect(editor, &QPlainTextEdit::cursorPositionChanged, this, &Editor::UpdateStatusBar); //Connecting signals for Status.
     connect(editor, &QPlainTextEdit::textChanged, this, &Editor::UpdateStatusBar);
+    connect(editor, &QPlainTextEdit::textChanged, this, &Editor::FileEdited); //Connecting signal for Unsaved indicator.
 
     QIcon icon(":/icons/saved.png");
+
+    tabBaseNames.insert(editor, "Untitled"); //Registering the tab name for later use.
 
     ui->editorTabs->addTab(editor, icon,"Untitled"); //Set tab parameters.
     ui->editorTabs->setCurrentWidget(editor);

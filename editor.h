@@ -1,6 +1,7 @@
 #ifndef EDITOR_H
 #define EDITOR_H
 
+#include "codeeditor.h"
 #include <QMainWindow>
 #include <QLabel>
 
@@ -18,6 +19,7 @@ public:
     void UpdateStatusBar();
     void NewFile();
     void CloseTab(int index);
+    void FileEdited();
     ~Editor();
 
 private slots:
@@ -33,6 +35,7 @@ private:
     Ui::Editor *ui;
     QLabel *posStatus;
     QLabel *sizeStatus;
+    QHash<CodeEditor*, QString> tabBaseNames;
 };
 
 #endif // EDITOR_H
