@@ -1,10 +1,10 @@
 <RCC>
     <qresource prefix="/icons">
-        <file>editoIco.png</file>
         <file>notsaved.png</file>
         <file>saved.png</file>
         <file>saveico.png</file>
         <file>settings.png</file>
         <file>settings_w.png</file>
+        <file>editoIco.png</file>
     </qresource>
 </RCC>
