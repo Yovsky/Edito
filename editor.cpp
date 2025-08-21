@@ -145,7 +145,37 @@ void Editor::NewFile()
 
 void Editor::CloseTab(int index)
 {
-    ui->editorTabs->removeTab(index); //Close the tab.
+    if (index < 0 || index > ui->editorTabs->count()) return; //Safety.
+
+    CodeEditor *editor = qobject_cast<CodeEditor*>(ui->editorTabs->widget(index));
+    if (!editor) return; //Safety.
+
+    if (!editor->document()->isModified()) //File is saved.
+        ui->editorTabs->removeTab(index); //Close the tab.
+    else //File is not saved.
+    {
+        QString fileName = tabBaseNames.value(editor, "Unkown"); //Get the file name.
+
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this, "Unsaved Changes", //Message title.
+                                      QString("Save changes to \"%1\" before closing?").arg(fileName), //Message.
+                                      QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel); //Message buttons.
+
+        if (reply == QMessageBox::Save)
+        {
+            Save(editor); //Pass to save.
+        }
+        else if (reply == QMessageBox::Cancel)
+        {
+            return; //User canceled
+        }
+
+        //cleaning.
+        ui->editorTabs->removeTab(index); //Close the tab.
+        tabBaseNames.remove(editor); //Remove tab data.
+        filePaths.remove(editor);
+        delete editor;
+    }
 }
 
 void Editor::SaveAs(CodeEditor* editor)
