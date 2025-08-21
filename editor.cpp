@@ -163,7 +163,7 @@ void Editor::CloseTab(int index)
 
         if (reply == QMessageBox::Save)
         {
-            Save(editor); //Pass to save.
+            if(!Save(editor)) return; //Pass to save and handle failure.
         }
         else if (reply == QMessageBox::Cancel)
         {
@@ -178,7 +178,7 @@ void Editor::CloseTab(int index)
     }
 }
 
-void Editor::SaveAs(CodeEditor* editor)
+bool Editor::SaveAs(CodeEditor* editor)
 {
     QString Deflocation = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     if (Deflocation.isEmpty()) Deflocation = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
@@ -187,7 +187,7 @@ void Editor::SaveAs(CodeEditor* editor)
     if (filePath.isEmpty())
     {
         QMessageBox::warning(this, "Warning", "File not saved." + filePath);
-        return;
+        return false; //File not saved.
     }
 
     filePaths.insert(editor, filePath); //Registering file path for later use.
@@ -202,15 +202,19 @@ void Editor::SaveAs(CodeEditor* editor)
         file.close();
 
         editor->document()->setModified(false); //Set file as saved.
+        return true; //File saved.
     }
-    else
-        QMessageBox::critical(this, "Error", "Failed to save as " + filePath);
+    QMessageBox::critical(this, "Error", "Failed to save as " + filePath);
+    return false; //Save failed.
 }
 
-void Editor::Save(CodeEditor* editor)
+bool Editor::Save(CodeEditor* editor)
 {
     if(filePaths.value(editor).isEmpty()) //If the file does not exist (no path).
-        SaveAs(editor);
+    {
+        if(!SaveAs(editor))
+            return false; //In case of SaveAs failed.
+    }
     else
     {
         QFile file(filePaths.value(editor)); //Pass the file path.
@@ -222,10 +226,11 @@ void Editor::Save(CodeEditor* editor)
             file.close();
 
             editor->document()->setModified(false); //Set file as saved.
+            return true; //Save sucessful.
         }
-        else
-            QMessageBox::critical(this, "Error", "Failed to save file."); //Error handling.
     }
+    QMessageBox::critical(this, "Error", "Failed to save file."); //Error handling.
+    return false; //Save failed.
 }
 
 void Editor::on_actionOpen_triggered()

@@ -20,8 +20,8 @@ public:
     void NewFile();
     void CloseTab(int index);
     void FileEdited(bool edited);
-    void SaveAs(CodeEditor* editor);
-    void Save(CodeEditor* editor);
+    bool SaveAs(CodeEditor* editor);
+    bool Save(CodeEditor* editor);
     CodeEditor* currentEditor() const;
     ~Editor();
 
