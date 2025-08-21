@@ -36,6 +36,8 @@ private slots:
 
     void on_actionSave_triggered();
 
+    void on_actionPreferences_triggered();
+
 private:
     Ui::Editor *ui;
     QLabel *posStatus;

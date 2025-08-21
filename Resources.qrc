@@ -4,5 +4,7 @@
         <file>notsaved.png</file>
         <file>saved.png</file>
         <file>saveico.png</file>
+        <file>settings.png</file>
+        <file>settings_w.png</file>
     </qresource>
 </RCC>

@@ -22,6 +22,8 @@ private slots:
 
     void on_createNew_clicked();
 
+    void on_Options_clicked();
+
 private:
     Ui::Edito *ui;
 };

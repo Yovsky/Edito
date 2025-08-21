@@ -50,7 +50,7 @@
      <string>Open from</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_3">
+   <widget class="QPushButton" name="Options">
     <property name="geometry">
      <rect>
       <x>460</x>

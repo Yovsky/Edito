@@ -1,4 +1,5 @@
 #include "editor.h"
+#include "preferencesdialog.h"
 #include "ui_editor.h"
 #include <QString>
 #include <QFile>
@@ -12,6 +13,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QIcon>
+#include <QDialog>
 
 Editor::Editor(QWidget *parent)
     : QMainWindow(parent)
@@ -288,11 +290,19 @@ CodeEditor* Editor::currentEditor() const
     return qobject_cast<CodeEditor*>(ui->editorTabs->currentWidget());
 }
 
+void Editor::on_actionPreferences_triggered()
+{
+    PreferencesDialog dialog(this);
+    dialog.exec();
+}
+
 Editor::~Editor()
 {
     delete posStatus;
     delete sizeStatus;
     delete ui;
 }
+
+
 
 

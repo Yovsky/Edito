@@ -1,6 +1,7 @@
 #include "edito.h"
 #include "editor.h"
 #include "ui_edito.h"
+#include "preferencesdialog.h"
 #include <QFileDialog>
 #include <QDebug>
 #include <QString>
@@ -51,5 +52,12 @@ void Edito::on_createNew_clicked()
     editor->raise();
     editor->activateWindow();
     editor->NewFile();
+}
+
+
+void Edito::on_Options_clicked()
+{
+    PreferencesDialog dialog(this);
+    dialog.exec();
 }
 

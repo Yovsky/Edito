@@ -12,16 +12,19 @@ SOURCES += \
     codeeditor.cpp \
     editor.cpp \
     main.cpp \
-    edito.cpp
+    edito.cpp \
+    preferencesdialog.cpp
 
 HEADERS += \
     codeeditor.h \
     edito.h \
-    editor.h
+    editor.h \
+    preferencesdialog.h
 
 FORMS += \
     edito.ui \
-    editor.ui
+    editor.ui \
+    preferencesdialog.ui
 
 TRANSLATIONS += \
     Edito_en_US.ts
