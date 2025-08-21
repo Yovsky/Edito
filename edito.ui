@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>568</width>
-    <height>316</height>
+    <height>374</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,9 +21,9 @@
    <widget class="QPushButton" name="createNew">
     <property name="geometry">
      <rect>
-      <x>460</x>
+      <x>449</x>
       <y>60</y>
-      <width>80</width>
+      <width>91</width>
       <height>51</height>
      </rect>
     </property>
@@ -34,28 +34,28 @@
      </font>
     </property>
     <property name="text">
-     <string>Create new</string>
+     <string>Create New</string>
     </property>
    </widget>
    <widget class="QPushButton" name="Open">
     <property name="geometry">
      <rect>
-      <x>460</x>
+      <x>449</x>
       <y>120</y>
-      <width>80</width>
+      <width>91</width>
       <height>51</height>
      </rect>
     </property>
     <property name="text">
-     <string>Open from</string>
+     <string>Open From</string>
     </property>
    </widget>
    <widget class="QPushButton" name="Options">
     <property name="geometry">
      <rect>
-      <x>460</x>
-      <y>180</y>
-      <width>80</width>
+      <x>449</x>
+      <y>240</y>
+      <width>91</width>
       <height>24</height>
      </rect>
     </property>
@@ -66,9 +66,9 @@
    <widget class="QPushButton" name="pushButton_4">
     <property name="geometry">
      <rect>
-      <x>460</x>
-      <y>210</y>
-      <width>80</width>
+      <x>449</x>
+      <y>270</y>
+      <width>91</width>
       <height>24</height>
      </rect>
     </property>
@@ -79,10 +79,10 @@
    <widget class="Line" name="line">
     <property name="geometry">
      <rect>
-      <x>440</x>
+      <x>430</x>
       <y>50</y>
       <width>20</width>
-      <height>191</height>
+      <height>261</height>
      </rect>
     </property>
     <property name="orientation">
@@ -129,6 +129,20 @@
     </property>
     <property name="text">
      <string>Recent files:</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="EmptyFile">
+    <property name="geometry">
+     <rect>
+      <x>449</x>
+      <y>180</y>
+      <width>91</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Open Without
+ A File</string>
     </property>
    </widget>
   </widget>

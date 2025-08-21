@@ -24,6 +24,8 @@ private slots:
 
     void on_Options_clicked();
 
+    void on_EmptyFile_clicked();
+
 private:
     Ui::Edito *ui;
 };

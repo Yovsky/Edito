@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>643</width>
+    <width>693</width>
     <height>380</height>
    </rect>
   </property>
@@ -37,7 +37,7 @@
      <widget class="QWidget" name="General"/>
      <widget class="QWidget" name="Apperance">
       <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0">
+       <item row="0" column="1">
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
           <string>Color Options</string>
@@ -48,12 +48,12 @@
          <property name="flat">
           <bool>false</bool>
          </property>
-         <widget class="QRadioButton" name="radioButton">
+         <widget class="QRadioButton" name="Dark">
           <property name="geometry">
            <rect>
             <x>90</x>
-            <y>40</y>
-            <width>51</width>
+            <y>30</y>
+            <width>48</width>
             <height>21</height>
            </rect>
           </property>
@@ -65,8 +65,8 @@
           <property name="geometry">
            <rect>
             <x>10</x>
-            <y>40</y>
-            <width>81</width>
+            <y>30</y>
+            <width>72</width>
             <height>16</height>
            </rect>
           </property>
@@ -74,17 +74,30 @@
            <string>Color Theme:</string>
           </property>
          </widget>
-         <widget class="QRadioButton" name="radioButton_2">
+         <widget class="QRadioButton" name="Light">
           <property name="geometry">
            <rect>
             <x>180</x>
-            <y>40</y>
-            <width>90</width>
+            <y>30</y>
+            <width>51</width>
             <height>21</height>
            </rect>
           </property>
           <property name="text">
            <string>Light</string>
+          </property>
+         </widget>
+         <widget class="QRadioButton" name="SysDef">
+          <property name="geometry">
+           <rect>
+            <x>270</x>
+            <y>30</y>
+            <width>111</width>
+            <height>21</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>System Default</string>
           </property>
          </widget>
         </widget>

@@ -61,3 +61,14 @@ void Edito::on_Options_clicked()
     dialog.exec();
 }
 
+
+void Edito::on_EmptyFile_clicked()
+{
+    this->close();
+    Editor *editor = new Editor();
+    editor->setAttribute(Qt::WA_DeleteOnClose);
+    editor->show();
+    editor->raise();
+    editor->activateWindow();
+}
+
