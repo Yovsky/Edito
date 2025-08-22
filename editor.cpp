@@ -27,8 +27,8 @@ Editor::Editor(QWidget *parent)
     posStatus = new QLabel("Line 0, Col 0, Pos 0"); //Position label.
     sizeStatus = new QLabel("Size 0, Lines 0"); //Size label.
 
-    ui->statusbar->addPermanentWidget(posStatus, 2);
-    ui->statusbar->addPermanentWidget(sizeStatus, 1); //Assign the blocks with their sizes.
+    ui->statusbar->addPermanentWidget(posStatus, 2); //Assign the blocks with their sizes.
+    ui->statusbar->addPermanentWidget(sizeStatus, 1);
 
     connect(ui->editorTabs, &QTabWidget::currentChanged, this, [this](int index) { //Connecting when swiching tabs.
         Q_UNUSED(index);
@@ -296,12 +296,42 @@ void Editor::on_actionPreferences_triggered()
     dialog.exec();
 }
 
+void Editor::zoomIn()
+{
+    CodeEditor *editor = currentEditor();
+    if (editor) //Safety.
+    {
+        editor->zoomIn(1);
+    }
+}
+
+void Editor::zoomOut()
+{
+    CodeEditor *editor = currentEditor();
+    if (editor) //Safety.
+    {
+        editor->zoomOut(1);
+    }
+}
+
+void Editor::on_actionZoom_In_triggered()
+{
+    zoomIn(); //Call zoom in.
+}
+
+void Editor::on_actionZoom_Out_triggered()
+{
+    zoomOut(); //Call zoom out.
+}
+
 Editor::~Editor()
 {
     delete posStatus;
     delete sizeStatus;
     delete ui;
 }
+
+
 
 
 

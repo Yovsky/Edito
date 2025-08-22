@@ -23,6 +23,8 @@ public:
     bool SaveAs(CodeEditor* editor);
     bool Save(CodeEditor* editor);
     CodeEditor* currentEditor() const;
+    void zoomIn();
+    void zoomOut();
     ~Editor();
 
 private slots:
@@ -37,6 +39,10 @@ private slots:
     void on_actionSave_triggered();
 
     void on_actionPreferences_triggered();
+
+    void on_actionZoom_In_triggered();
+
+    void on_actionZoom_Out_triggered();
 
 private:
     Ui::Editor *ui;
