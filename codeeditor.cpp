@@ -5,6 +5,8 @@
 
 CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent)
 {
+    setLineWrapMode(NoWrap);
+
     QFont f("Consolas"); //Setting the font parameters.
     f.setStyleHint(QFont::Monospace);
     setFont(f);
@@ -17,7 +19,6 @@ CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent)
     connect(this, &CodeEditor::blockCountChanged, this, &CodeEditor::updateLineNumberAreaWidth);
     connect(this, &CodeEditor::updateRequest, this, &CodeEditor::updateLineNumberArea);
     connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
-
 
     updateLineNumberAreaWidth(0);
     highlightCurrentLine();

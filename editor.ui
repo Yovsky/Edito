@@ -44,7 +44,7 @@
            <enum>QPlainTextEdit::LineWrapMode::NoWrap</enum>
           </property>
           <property name="overwriteMode">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
          </widget>
         </item>
