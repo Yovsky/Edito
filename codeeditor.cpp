@@ -106,3 +106,16 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
     painter.setPen(QPen (Qt::red, 2)); //Set the line parameters.
     painter.drawLine(lineNumberArea->width()-1, event->rect().top(), lineNumberArea->width()-1, event->rect().bottom()); //Draw the red margin line.
 }
+
+void CodeEditor::wheelEvent(QWheelEvent *event)
+{
+    if (event->modifiers() & Qt::ControlModifier)
+    {
+        if (event->angleDelta().y() > 0)
+            zoomIn();
+        else
+            zoomOut();
+    }
+    else
+        QPlainTextEdit::wheelEvent(event);
+}

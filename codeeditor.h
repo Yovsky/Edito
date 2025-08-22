@@ -20,6 +20,7 @@ public:
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
+    void wheelEvent(QWheelEvent *event) override; //For zoom shortcuts.
 
 private slots:
     void updateLineNumberAreaWidth(int newBlockCount);
