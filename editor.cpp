@@ -14,6 +14,7 @@
 #include <QMessageBox>
 #include <QIcon>
 #include <QDialog>
+#include <QRegularExpression>
 
 Editor::Editor(QWidget *parent)
     : QMainWindow(parent)
@@ -60,9 +61,14 @@ void Editor::UpdateStatusBar()
 
     if (sizeStatus) //For size.
     {
-        int chCount = editor->toPlainText().length();
+        QString text = editor->toPlainText();
+        QStringList words = text.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
+
+        int chCount = text.length();
         int lnCount = editor->document()->blockCount();
+        int wCount = words.size();
         sizeStatus->setText("Size " + QString::number(chCount) //Character count.
+                            + ", Words " + QString::number(wCount) //Word count.
                             + ", Lines " + QString::number(lnCount)); //Line count.
     }
 }
