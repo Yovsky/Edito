@@ -20,8 +20,18 @@ private slots:
 
     void on_PrefList_currentRowChanged(int currentRow);
 
+    void on_Show_clicked();
+
+    void on_radioButton_2_clicked();
+
+    void on_buttonBox_accepted();
+
 private:
     Ui::PreferencesDialog *ui;
+
+
+signals:
+    void toggleStatusBarReq(bool visible);
 };
 
 #endif // PREFERENCESDIALOG_H

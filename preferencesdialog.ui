@@ -27,6 +27,11 @@
      </item>
      <item>
       <property name="text">
+       <string>View</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
        <string>Appearance</string>
       </property>
      </item>
@@ -34,7 +39,75 @@
    </item>
    <item row="0" column="1">
     <widget class="QStackedWidget" name="stackedWidget">
+     <property name="currentIndex">
+      <number>1</number>
+     </property>
      <widget class="QWidget" name="General"/>
+     <widget class="QWidget" name="View">
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="title">
+          <string>Status Bar</string>
+         </property>
+         <widget class="QLabel" name="label_2">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>30</y>
+            <width>51</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Visibility:</string>
+          </property>
+         </widget>
+         <widget class="QRadioButton" name="Show">
+          <property name="geometry">
+           <rect>
+            <x>70</x>
+            <y>30</y>
+            <width>61</width>
+            <height>20</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Show</string>
+          </property>
+         </widget>
+         <widget class="QRadioButton" name="radioButton_2">
+          <property name="geometry">
+           <rect>
+            <x>150</x>
+            <y>30</y>
+            <width>90</width>
+            <height>20</height>
+           </rect>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <bold>false</bold>
+            <underline>false</underline>
+           </font>
+          </property>
+          <property name="autoFillBackground">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>Hide</string>
+          </property>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="Apperance">
       <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="1">
@@ -54,7 +127,7 @@
             <x>90</x>
             <y>30</y>
             <width>48</width>
-            <height>21</height>
+            <height>20</height>
            </rect>
           </property>
           <property name="text">
@@ -80,7 +153,7 @@
             <x>180</x>
             <y>30</y>
             <width>51</width>
-            <height>21</height>
+            <height>20</height>
            </rect>
           </property>
           <property name="text">
@@ -93,7 +166,7 @@
             <x>270</x>
             <y>30</y>
             <width>111</width>
-            <height>21</height>
+            <height>20</height>
            </rect>
           </property>
           <property name="text">
@@ -104,13 +177,12 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="page_3"/>
     </widget>
    </item>
    <item row="1" column="1">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="standardButtons">
-      <set>QDialogButtonBox::StandardButton::Apply|QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
+      <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
      </property>
     </widget>
    </item>

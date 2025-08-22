@@ -299,6 +299,7 @@ CodeEditor* Editor::currentEditor() const
 void Editor::on_actionPreferences_triggered()
 {
     PreferencesDialog dialog(this);
+    connect(&dialog, &PreferencesDialog::toggleStatusBarReq, this, &Editor::statusBarApperance);
     dialog.exec();
 }
 
@@ -328,6 +329,11 @@ void Editor::on_actionZoom_In_triggered()
 void Editor::on_actionZoom_Out_triggered()
 {
     zoomOut(); //Call zoom out.
+}
+
+void Editor::statusBarApperance(bool visibility)
+{
+    ui->statusbar->setVisible(visibility);
 }
 
 Editor::~Editor()

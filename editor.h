@@ -25,6 +25,7 @@ public:
     CodeEditor* currentEditor() const;
     void zoomIn();
     void zoomOut();
+    void statusBarApperance(bool Visibility);
     ~Editor();
 
 private slots:
@@ -50,6 +51,9 @@ private:
     QLabel *sizeStatus;
     QHash<CodeEditor*, QString> tabBaseNames;
     QHash<CodeEditor*, QString> filePaths;
+
+signals:
+    void toggleStatusBarReq(bool Visibility);
 };
 
 #endif // EDITOR_H
