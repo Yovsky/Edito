@@ -3,7 +3,9 @@
 #include <QTextBlock>
 #include <QColor>
 
-CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent)
+CodeEditor::CodeEditor(QWidget *parent)
+    : QPlainTextEdit(parent)
+    , CurrentZoomLevel(0)
 {
     setLineWrapMode(NoWrap);
 
@@ -107,15 +109,17 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
     painter.drawLine(lineNumberArea->width()-1, event->rect().top(), lineNumberArea->width()-1, event->rect().bottom()); //Draw the red margin line.
 }
 
-void CodeEditor::wheelEvent(QWheelEvent *event)
+void CodeEditor::setZoomLevel(int level)
 {
-    if (event->modifiers() & Qt::ControlModifier)
-    {
-        if (event->angleDelta().y() > 0)
-            zoomIn();
-        else
-            zoomOut();
-    }
-    else
-        QPlainTextEdit::wheelEvent(event);
+    QFont currentFont = font();
+    int baseSize = 10;
+    int newSize = baseSize + level;
+    currentFont.setPointSize(newSize);
+    setFont(currentFont);
+    CurrentZoomLevel = level;
+}
+
+int CodeEditor::getZoomLevel()
+{
+    return CurrentZoomLevel;
 }

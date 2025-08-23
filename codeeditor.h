@@ -17,10 +17,12 @@ public:
 
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();
+    void setZoomLevel(int level);
+    int getZoomLevel();
+
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
-    void wheelEvent(QWheelEvent *event) override; //For zoom shortcuts.
 
 private slots:
     void updateLineNumberAreaWidth(int newBlockCount);
@@ -29,9 +31,13 @@ private slots:
 
 private:
     QWidget *lineNumberArea;
+    int CurrentZoomLevel = 0;
+
+signals:
+    void zoomInRequested();
+    void zoomOutRequested();
 };
 
-// This is the small widget for the margin
 class LineNumberArea : public QWidget
 {
 public:

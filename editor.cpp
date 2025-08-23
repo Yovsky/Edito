@@ -15,15 +15,19 @@
 #include <QIcon>
 #include <QDialog>
 #include <QRegularExpression>
+#include <QSettings>
 
 Editor::Editor(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Editor)
     , posStatus(nullptr)
     , sizeStatus(nullptr)
+    , zoomLevel(0)
 {
     ui->setupUi(this);
     ui->editorTabs->removeTab(0); //Removing the default "Tab 1".
+
+    LoadSettings(); //Load saved settings.
 
     posStatus = new QLabel("Line 0, Col 0, Pos 0"); //Position label.
     sizeStatus = new QLabel("Size 0, Lines 0"); //Size label.
@@ -37,6 +41,25 @@ Editor::Editor(QWidget *parent)
     });
 
     UpdateStatusBar();
+}
+
+void Editor::SaveSettings()
+{
+    QSettings settings("Yovsky", "Edito");
+    settings.setValue("Zoom", zoomLevel);
+    qDebug() << "SAVING - Zoom level:" << zoomLevel;
+    qDebug() << "Settings file:" << settings.fileName();
+    settings.sync();
+    qDebug() << "Settings status:" << settings.status();
+}
+
+void Editor::LoadSettings()
+{
+    QSettings settings("Yovsky", "Edito");
+    zoomLevel = settings.value("Zoom", 0).toInt();
+    qDebug() << "LOADING - Zoom level:" << zoomLevel;
+    qDebug() << "Settings file:" << settings.fileName();
+    RestoreZoom(zoomLevel);
 }
 
 void Editor::UpdateStatusBar()
@@ -119,6 +142,8 @@ void Editor::OpenFile(const QString &FilePath)
     connect(editor, &QPlainTextEdit::cursorPositionChanged, this, &Editor::UpdateStatusBar); //Connecting signals for Status.
     connect(editor, &QPlainTextEdit::textChanged, this, &Editor::UpdateStatusBar);
     connect(editor, &QPlainTextEdit::modificationChanged, this, &Editor::FileEdited); //Connecting signal for Unsaved indicator.
+    connect(editor, &CodeEditor::zoomInRequested, this, &Editor::zoomIn);
+    connect(editor, &CodeEditor::zoomOutRequested, this, &Editor::zoomOut);
 
     editor->setPlainText(content); //Passing the file content to the text editor.
 
@@ -130,6 +155,8 @@ void Editor::OpenFile(const QString &FilePath)
     ui->editorTabs->addTab(editor, icon,QFileInfo(file).fileName()); //Set tab parameters.
     ui->editorTabs->setCurrentWidget(editor);
 
+    editor->setZoomLevel(zoomLevel);
+    RestoreZoom(zoomLevel); //Set zoom.
     UpdateStatusBar(); //Status update.
 }
 
@@ -140,6 +167,8 @@ void Editor::NewFile()
     connect(editor, &QPlainTextEdit::cursorPositionChanged, this, &Editor::UpdateStatusBar); //Connecting signals for Status.
     connect(editor, &QPlainTextEdit::textChanged, this, &Editor::UpdateStatusBar);
     connect(editor, &QPlainTextEdit::modificationChanged, this, &Editor::FileEdited); //Connecting signal for Unsaved indicator.
+    connect(editor, &CodeEditor::zoomInRequested, this, &Editor::zoomIn);
+    connect(editor, &CodeEditor::zoomOutRequested, this, &Editor::zoomOut);
 
     QIcon icon(":/icons/saved.png");
 
@@ -148,6 +177,8 @@ void Editor::NewFile()
     ui->editorTabs->addTab(editor, icon,"Untitled"); //Set tab parameters.
     ui->editorTabs->setCurrentWidget(editor);
 
+    editor->setZoomLevel(zoomLevel);
+    RestoreZoom(zoomLevel); //Set zoom.
     UpdateStatusBar(); //Status update.
 }
 
@@ -250,7 +281,7 @@ void Editor::on_actionOpen_triggered()
     if(!FileOpened.isEmpty()) //Safety.
     {
         qDebug() << "opended: " << FileOpened;
-        this->OpenFile(FileOpened);
+        OpenFile(FileOpened);
     }
     else QMessageBox::critical(this, "Error", "Failed to open from a file."); //Handle opening errors.
 }
@@ -258,17 +289,7 @@ void Editor::on_actionOpen_triggered()
 
 void Editor::on_actionNew_triggered()
 {
-    CodeEditor *editor = new CodeEditor(); //Handle CreateNew from menus bar.
-
-    connect(editor, &QPlainTextEdit::cursorPositionChanged, this, &Editor::UpdateStatusBar);
-    connect(editor, &QPlainTextEdit::textChanged, this, &Editor::UpdateStatusBar); //Connecting the signals for Status.
-
-    QIcon icon(":/icons/saved.png");
-    tabBaseNames.insert(editor, "Untitled");
-
-    ui->editorTabs->addTab(editor, icon, "Untitled"); //Set tab parameters.
-    ui->editorTabs->setCurrentWidget(editor);
-    UpdateStatusBar();
+    NewFile();
 }
 
 
@@ -299,25 +320,59 @@ CodeEditor* Editor::currentEditor() const
 void Editor::on_actionPreferences_triggered()
 {
     PreferencesDialog dialog(this);
-    connect(&dialog, &PreferencesDialog::toggleStatusBarReq, this, &Editor::statusBarApperance);
-    dialog.exec();
+    connect(&dialog, &PreferencesDialog::toggleStatusBarReq, this, &Editor::statusBarApperance); //Signal to toggle the status bar.
+    dialog.exec(); //Open preferences.
+}
+
+void Editor::RestoreZoom(int zoom)
+{
+    for (int i = 0; i < ui->editorTabs->count(); i++)
+    {
+        CodeEditor *editor = qobject_cast<CodeEditor*>(ui->editorTabs->widget(i));
+        if (editor) //Safety.
+            editor->setZoomLevel(zoom);
+    }
 }
 
 void Editor::zoomIn()
 {
-    CodeEditor *editor = currentEditor();
-    if (editor) //Safety.
+    zoomLevel++; //Track zoom level to save.
+    for (int i = 0; i < ui->editorTabs->count(); i++)
     {
-        editor->zoomIn(1);
+        CodeEditor *editor = qobject_cast<CodeEditor*>(ui->editorTabs->widget(i));
+        if (editor) //Safety.
+        {
+            editor->setZoomLevel(zoomLevel);
+        }
     }
+    SaveSettings();
 }
 
 void Editor::zoomOut()
 {
-    CodeEditor *editor = currentEditor();
-    if (editor) //Safety.
+    zoomLevel--; //Track zoom level to save.
+    for (int i = 0; i < ui->editorTabs->count(); i++)
     {
-        editor->zoomOut(1);
+        CodeEditor *editor = qobject_cast<CodeEditor*>(ui->editorTabs->widget(i));
+        if (editor) //Safety.
+        {
+            editor->setZoomLevel(zoomLevel);
+        }
+    }
+    SaveSettings();
+}
+
+void Editor::wheelEvent(QWheelEvent *event)
+{
+    if (event->modifiers() & Qt::ControlModifier) {
+        if (event->angleDelta().y() > 0) {
+            zoomIn();  // This updates ALL editors and saves
+        } else {
+            zoomOut(); // This updates ALL editors and saves
+        }
+        event->accept();
+    } else {
+        QMainWindow::wheelEvent(event);
     }
 }
 
@@ -338,13 +393,9 @@ void Editor::statusBarApperance(bool visibility)
 
 Editor::~Editor()
 {
+    SaveSettings(); //Save current configuration.
+
     delete posStatus;
     delete sizeStatus;
     delete ui;
 }
-
-
-
-
-
-

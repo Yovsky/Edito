@@ -16,6 +16,8 @@ class Editor : public QMainWindow
 public:
     explicit Editor(QWidget *parent = nullptr);
     void OpenFile(const QString &FilePath);
+    void SaveSettings();
+    void LoadSettings();
     void UpdateStatusBar();
     void NewFile();
     void CloseTab(int index);
@@ -23,8 +25,10 @@ public:
     bool SaveAs(CodeEditor* editor);
     bool Save(CodeEditor* editor);
     CodeEditor* currentEditor() const;
+    void RestoreZoom(int zoom);
     void zoomIn();
     void zoomOut();
+    void wheelEvent(QWheelEvent *event);
     void statusBarApperance(bool Visibility);
     ~Editor();
 
@@ -51,6 +55,7 @@ private:
     QLabel *sizeStatus;
     QHash<CodeEditor*, QString> tabBaseNames;
     QHash<CodeEditor*, QString> filePaths;
+    int zoomLevel;
 
 signals:
     void toggleStatusBarReq(bool Visibility);
