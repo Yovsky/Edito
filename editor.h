@@ -53,6 +53,7 @@ private:
     Ui::Editor *ui;
     QLabel *posStatus;
     QLabel *sizeStatus;
+    QLabel *zoomStatus;
     QHash<CodeEditor*, QString> tabBaseNames;
     QHash<CodeEditor*, QString> filePaths;
     int zoomLevel;

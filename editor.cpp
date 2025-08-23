@@ -31,9 +31,12 @@ Editor::Editor(QWidget *parent)
 
     posStatus = new QLabel("Line 0, Col 0, Pos 0"); //Position label.
     sizeStatus = new QLabel("Size 0, Lines 0"); //Size label.
+    zoomStatus = new QLabel("100%"); //Zoom label.
 
-    ui->statusbar->addPermanentWidget(posStatus, 2); //Assign the blocks with their sizes.
-    ui->statusbar->addPermanentWidget(sizeStatus, 1);
+    ui->statusbar->addPermanentWidget(zoomStatus,1);
+    ui->statusbar->addPermanentWidget(posStatus, 6); //Assign the blocks with their sizes.
+    ui->statusbar->addPermanentWidget(sizeStatus,3);
+
 
     connect(ui->editorTabs, &QTabWidget::currentChanged, this, [this](int index) { //Connecting when swiching tabs.
         Q_UNUSED(index);
@@ -93,6 +96,10 @@ void Editor::UpdateStatusBar()
         sizeStatus->setText("Size " + QString::number(chCount) //Character count.
                             + ", Words " + QString::number(wCount) //Word count.
                             + ", Lines " + QString::number(lnCount)); //Line count.
+    }
+    if (zoomStatus)
+    {
+        zoomStatus->setText(QString::number(100 + zoomLevel * 10) + "%");
     }
 }
 
@@ -337,29 +344,18 @@ void Editor::RestoreZoom(int zoom)
 void Editor::zoomIn()
 {
     zoomLevel++; //Track zoom level to save.
-    for (int i = 0; i < ui->editorTabs->count(); i++)
-    {
-        CodeEditor *editor = qobject_cast<CodeEditor*>(ui->editorTabs->widget(i));
-        if (editor) //Safety.
-        {
-            editor->setZoomLevel(zoomLevel);
-        }
-    }
+    RestoreZoom(zoomLevel);
     SaveSettings();
+    UpdateStatusBar();
 }
 
 void Editor::zoomOut()
 {
     zoomLevel--; //Track zoom level to save.
-    for (int i = 0; i < ui->editorTabs->count(); i++)
-    {
-        CodeEditor *editor = qobject_cast<CodeEditor*>(ui->editorTabs->widget(i));
-        if (editor) //Safety.
-        {
-            editor->setZoomLevel(zoomLevel);
-        }
-    }
+    if (zoomLevel < -9) zoomLevel = -9; //Nothing below 10%.
+    RestoreZoom(zoomLevel);
     SaveSettings();
+    UpdateStatusBar();
 }
 
 void Editor::wheelEvent(QWheelEvent *event)
@@ -374,6 +370,7 @@ void Editor::wheelEvent(QWheelEvent *event)
     } else {
         QMainWindow::wheelEvent(event);
     }
+    UpdateStatusBar();
 }
 
 void Editor::on_actionZoom_In_triggered()
