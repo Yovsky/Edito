@@ -52,6 +52,8 @@ private slots:
 
     void on_actionToggle_Read_Only_toggled(bool arg1);
 
+    void on_actionAlways_On_Top_toggled(bool arg1);
+
 private:
     Ui::Editor *ui;
     QLabel *posStatus;
