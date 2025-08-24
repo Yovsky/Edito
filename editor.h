@@ -30,6 +30,7 @@ public:
     void zoomOut();
     void wheelEvent(QWheelEvent *event);
     void statusBarApperance(bool Visibility);
+    void applyReadOnly(bool isRO);
     ~Editor();
 
 private slots:
@@ -49,6 +50,8 @@ private slots:
 
     void on_actionZoom_Out_triggered();
 
+    void on_actionToggle_Read_Only_toggled(bool arg1);
+
 private:
     Ui::Editor *ui;
     QLabel *posStatus;
@@ -58,6 +61,7 @@ private:
     QHash<CodeEditor*, QString> filePaths;
     int zoomLevel;
     bool statBarVisibility;
+    bool isReadOnly;
 
 signals:
     void toggleStatusBarReq(bool Visibility);

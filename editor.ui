@@ -78,6 +78,7 @@
     <property name="title">
      <string>Edit</string>
     </property>
+    <addaction name="actionToggle_Read_Only"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -228,6 +229,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+-</string>
+   </property>
+  </action>
+  <action name="actionToggle_Read_Only">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Toggle Read-Only</string>
    </property>
   </action>
  </widget>

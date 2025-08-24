@@ -59,12 +59,12 @@ void Edito::on_createNew_clicked()
 void Edito::on_Options_clicked()
 {
     QSettings settings("Yovsky", "Edito");
-    bool isVisible = settings.value("ToggleStatBar", true).toBool();
+    bool isVisible = settings.value("ToggleStatBar", true).toBool(); //Load visibility settings.
     PreferencesDialog dialog(isVisible ,this);
 
-    dialog.setVisible(isVisible);
+    dialog.setVisible(isVisible); //Set according to loaded settings.
 
-    connect(&dialog, &PreferencesDialog::toggleStatusBarReq, this, [](bool visible) {
+    connect(&dialog, &PreferencesDialog::toggleStatusBarReq, this, [](bool visible) { //Connect for setting the visibility.
         QSettings settings("Yovsky", "Edito");
         settings.setValue("ToggleStatBar", visible);
     });

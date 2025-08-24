@@ -24,6 +24,7 @@ Editor::Editor(QWidget *parent)
     , sizeStatus(nullptr)
     , zoomLevel(0)
     , statBarVisibility(true)
+    , isReadOnly(false)
 {
     ui->setupUi(this);
     ui->editorTabs->removeTab(0); //Removing the default "Tab 1".
@@ -53,7 +54,8 @@ void Editor::SaveSettings()
     QSettings settings("Yovsky", "Edito");
     settings.setValue("Zoom", zoomLevel);
     settings.setValue("ToggleStatBar", statBarVisibility);
-    qDebug() << "SAVING - Zoom level:" << zoomLevel;
+    settings.setValue("ToggleReadOnly", isReadOnly);
+    qDebug() << "SAVING - ReadOnly:" << isReadOnly;
     qDebug() << "Settings file:" << settings.fileName();
     settings.sync();
     qDebug() << "Settings status:" << settings.status();
@@ -64,6 +66,12 @@ void Editor::LoadSettings()
     QSettings settings("Yovsky", "Edito");
     zoomLevel = settings.value("Zoom", 0).toInt();
     statBarVisibility = settings.value("ToggleStatBar", true).toBool();
+    isReadOnly = settings.value("ToggleReadOnly", false).toBool();
+    applyReadOnly(isReadOnly);
+    ui->actionToggle_Read_Only->setChecked(isReadOnly);
+
+    qDebug() << "Loaded ReadOnly:" << isReadOnly;
+
     qDebug() << "LOADING - Zoom level:" << zoomLevel;
     qDebug() << "Settings file:" << settings.fileName();
     RestoreZoom(zoomLevel);
@@ -157,6 +165,7 @@ void Editor::OpenFile(const QString &FilePath)
     connect(editor, &CodeEditor::zoomOutRequested, this, &Editor::zoomOut);
 
     editor->setPlainText(content); //Passing the file content to the text editor.
+    editor->setReadOnly(isReadOnly); //Read-Only state.
 
     QIcon icon(":/icons/saved"); //Setting the icon.
 
@@ -188,7 +197,9 @@ void Editor::NewFile()
     ui->editorTabs->addTab(editor, icon,"Untitled"); //Set tab parameters.
     ui->editorTabs->setCurrentWidget(editor);
 
-    editor->setZoomLevel(zoomLevel);
+    editor->setZoomLevel(zoomLevel); //Set Zoom.
+    editor->setReadOnly(isReadOnly); //Read-Only state.
+
     RestoreZoom(zoomLevel); //Set zoom.
     UpdateStatusBar(); //Status update.
 }
@@ -393,6 +404,25 @@ void Editor::statusBarApperance(bool Visibility)
     statBarVisibility = Visibility;
 }
 
+void Editor::on_actionToggle_Read_Only_toggled(bool arg1)
+{
+    applyReadOnly(arg1);
+    if (arg1) isReadOnly = true;
+    else if (!arg1) isReadOnly = false;
+    SaveSettings();
+}
+
+void Editor::applyReadOnly(bool isRO)
+{
+    for (int i = 0; i < ui->editorTabs->count(); i++)
+    {
+        QWidget *currentWidget = ui->editorTabs->widget(i);
+        CodeEditor *editor = qobject_cast<CodeEditor*>(currentWidget);
+        editor->setReadOnly(isRO);
+    }
+    ui->actionToggle_Read_Only->setChecked(isRO);
+}
+
 Editor::~Editor()
 {
     SaveSettings(); //Save current configuration.
@@ -401,3 +431,6 @@ Editor::~Editor()
     delete sizeStatus;
     delete ui;
 }
+
+
+
