@@ -8,6 +8,7 @@
 #include <QStandardPaths>
 #include <QMessageBox>
 #include <QIcon>
+#include <QSettings>
 
 Edito::Edito(QWidget *parent)
     : QMainWindow(parent)
@@ -57,7 +58,10 @@ void Edito::on_createNew_clicked()
 
 void Edito::on_Options_clicked()
 {
-    PreferencesDialog dialog(this);
+    QSettings settings("Yovsky", "Edito");
+    bool isVisible = settings.value("ToggleStatBar", true).toBool();
+    PreferencesDialog dialog(isVisible ,this);
+    dialog.toggleStatusBarReq(isVisible);
     dialog.exec();
 }
 
