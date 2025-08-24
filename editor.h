@@ -57,6 +57,7 @@ private:
     QHash<CodeEditor*, QString> tabBaseNames;
     QHash<CodeEditor*, QString> filePaths;
     int zoomLevel;
+    bool statBarVisibility;
 
 signals:
     void toggleStatusBarReq(bool Visibility);

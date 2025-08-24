@@ -23,12 +23,14 @@ Editor::Editor(QWidget *parent)
     , posStatus(nullptr)
     , sizeStatus(nullptr)
     , zoomLevel(0)
+    , statBarVisibility(true)
 {
     ui->setupUi(this);
     ui->editorTabs->removeTab(0); //Removing the default "Tab 1".
 
     LoadSettings(); //Load saved settings.
 
+    statusBarApperance(statBarVisibility); //Show/Hide status bar on beggining.
     posStatus = new QLabel("Line 0, Col 0, Pos 0"); //Position label.
     sizeStatus = new QLabel("Size 0, Lines 0"); //Size label.
     zoomStatus = new QLabel("100%"); //Zoom label.
@@ -50,6 +52,7 @@ void Editor::SaveSettings()
 {
     QSettings settings("Yovsky", "Edito");
     settings.setValue("Zoom", zoomLevel);
+    settings.setValue("ToggleStatBar", statBarVisibility);
     qDebug() << "SAVING - Zoom level:" << zoomLevel;
     qDebug() << "Settings file:" << settings.fileName();
     settings.sync();
@@ -60,6 +63,7 @@ void Editor::LoadSettings()
 {
     QSettings settings("Yovsky", "Edito");
     zoomLevel = settings.value("Zoom", 0).toInt();
+    statBarVisibility = settings.value("ToggleStatBar", true).toBool();
     qDebug() << "LOADING - Zoom level:" << zoomLevel;
     qDebug() << "Settings file:" << settings.fileName();
     RestoreZoom(zoomLevel);
@@ -326,7 +330,7 @@ CodeEditor* Editor::currentEditor() const
 
 void Editor::on_actionPreferences_triggered()
 {
-    PreferencesDialog dialog(this);
+    PreferencesDialog dialog(statBarVisibility, this);
     connect(&dialog, &PreferencesDialog::toggleStatusBarReq, this, &Editor::statusBarApperance); //Signal to toggle the status bar.
     dialog.exec(); //Open preferences.
 }
@@ -383,9 +387,10 @@ void Editor::on_actionZoom_Out_triggered()
     zoomOut(); //Call zoom out.
 }
 
-void Editor::statusBarApperance(bool visibility)
+void Editor::statusBarApperance(bool Visibility)
 {
-    ui->statusbar->setVisible(visibility);
+    ui->statusbar->setVisible(Visibility);
+    statBarVisibility = Visibility;
 }
 
 Editor::~Editor()

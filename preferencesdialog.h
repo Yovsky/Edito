@@ -12,7 +12,7 @@ class PreferencesDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit PreferencesDialog(QWidget *parent = nullptr);
+    explicit PreferencesDialog(bool isStatVisible, QWidget *parent = nullptr);
     ~PreferencesDialog();
 
 private slots:
@@ -22,7 +22,7 @@ private slots:
 
     void on_Show_clicked();
 
-    void on_radioButton_2_clicked();
+    void on_Hide_clicked();
 
     void on_buttonBox_accepted();
 

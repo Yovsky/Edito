@@ -64,6 +64,9 @@
           </property>
          </widget>
          <widget class="QRadioButton" name="Show">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
           <property name="geometry">
            <rect>
             <x>70</x>
@@ -75,8 +78,11 @@
           <property name="text">
            <string>Show</string>
           </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
          </widget>
-         <widget class="QRadioButton" name="radioButton_2">
+         <widget class="QRadioButton" name="Hide">
           <property name="geometry">
            <rect>
             <x>150</x>
