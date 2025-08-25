@@ -254,10 +254,7 @@ bool Editor::SaveAs(CodeEditor* editor)
     QString filePath = QFileDialog::getSaveFileName(this, tr("Save As..."), Deflocation, tr("Text Files (*.txt)")); //Obtaining new file path.
 
     if (filePath.isEmpty())
-    {
-        QMessageBox::warning(this, "Warning", "File not saved." + filePath);
         return false; //File not saved.
-    }
 
     filePaths.insert(editor, filePath); //Registering file path for later use.
     tabBaseNames.insert(editor, QFileInfo(filePath).fileName());
@@ -273,11 +270,7 @@ bool Editor::SaveAs(CodeEditor* editor)
         editor->document()->setModified(false); //Set file as saved.
         return true; //File saved.
     }
-    else
-    {
-        QMessageBox::critical(this, "Error", "Failed to save as " + filePath);
-        return false; //Save failed.
-    }
+    return false; //Save failed.
 }
 
 bool Editor::Save(CodeEditor* editor)
@@ -285,7 +278,11 @@ bool Editor::Save(CodeEditor* editor)
     if(filePaths.value(editor).isEmpty()) //If the file does not exist (no path).
     {
         if(!SaveAs(editor))
-            return false; //In case of SaveAs failed.
+        {
+            QMessageBox::critical(this, "Error", "Failed to save file."); //Error handling.
+            return false; //SaveAs failed.
+        }
+        return true; //SaveAs passed.
     }
     else
     {
@@ -300,9 +297,12 @@ bool Editor::Save(CodeEditor* editor)
             editor->document()->setModified(false); //Set file as saved.
             return true; //Save sucessful.
         }
+        else
+        {
+            QMessageBox::critical(this, "Error", "Failed to save file."); //Error handling.
+            return false; //Save failed.
+        }
     }
-    QMessageBox::critical(this, "Error", "Failed to save file."); //Error handling.
-    return false; //Save failed.
 }
 
 void Editor::on_actionOpen_triggered()
