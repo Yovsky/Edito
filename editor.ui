@@ -92,6 +92,7 @@
      <addaction name="actionZoom_Out"/>
     </widget>
     <addaction name="menuZoom"/>
+    <addaction name="actionWord_Wrap"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -243,7 +244,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Toggle Read-Only</string>
+    <string>Read-Only</string>
    </property>
   </action>
   <action name="actionAlways_On_Top">
@@ -252,6 +253,14 @@
    </property>
    <property name="text">
     <string>Always On Top</string>
+   </property>
+  </action>
+  <action name="actionWord_Wrap">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Word Wrap</string>
    </property>
   </action>
  </widget>

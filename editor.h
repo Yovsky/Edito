@@ -31,6 +31,7 @@ public:
     void wheelEvent(QWheelEvent *event);
     void statusBarApperance(bool Visibility);
     void applyReadOnly(bool isRO);
+    void toggleWordWrap(bool Wrap);
     ~Editor();
 
 private slots:
@@ -54,6 +55,8 @@ private slots:
 
     void on_actionAlways_On_Top_toggled(bool arg1);
 
+    void on_actionWord_Wrap_toggled(bool arg1);
+
 private:
     Ui::Editor *ui;
     QLabel *posStatus;
@@ -64,6 +67,7 @@ private:
     int zoomLevel;
     bool statBarVisibility;
     bool isReadOnly;
+    bool wordWrap;
 
 signals:
     void toggleStatusBarReq(bool Visibility);

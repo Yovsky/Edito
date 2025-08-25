@@ -25,6 +25,7 @@ Editor::Editor(QWidget *parent)
     , zoomLevel(0)
     , statBarVisibility(true)
     , isReadOnly(false)
+    , wordWrap(false)
 {
     ui->setupUi(this);
     ui->editorTabs->removeTab(0); //Removing the default "Tab 1".
@@ -55,6 +56,7 @@ void Editor::SaveSettings()
     settings.setValue("Zoom", zoomLevel);
     settings.setValue("ToggleStatBar", statBarVisibility);
     settings.setValue("ToggleReadOnly", isReadOnly);
+    settings.setValue("Word Wrap", wordWrap);
     qDebug() << "SAVING - ReadOnly:" << isReadOnly;
     qDebug() << "Settings file:" << settings.fileName();
     settings.sync();
@@ -68,7 +70,8 @@ void Editor::LoadSettings()
     statBarVisibility = settings.value("ToggleStatBar", true).toBool();
     isReadOnly = settings.value("ToggleReadOnly", false).toBool();
     applyReadOnly(isReadOnly);
-    ui->actionToggle_Read_Only->setChecked(isReadOnly);
+    wordWrap = settings.value("Word Wrap", false).toBool();
+    toggleWordWrap(wordWrap);
 
     qDebug() << "Loaded ReadOnly:" << isReadOnly;
 
@@ -166,6 +169,7 @@ void Editor::OpenFile(const QString &FilePath)
 
     editor->setPlainText(content); //Passing the file content to the text editor.
     editor->setReadOnly(isReadOnly); //Read-Only state.
+    editor->setLineWrapMode(wordWrap? QPlainTextEdit::WidgetWidth : QPlainTextEdit::NoWrap); //Word Wrap state.
 
     QIcon icon(":/icons/saved"); //Setting the icon.
 
@@ -199,6 +203,7 @@ void Editor::NewFile()
 
     editor->setZoomLevel(zoomLevel); //Set Zoom.
     editor->setReadOnly(isReadOnly); //Read-Only state.
+    editor->setLineWrapMode(wordWrap? QPlainTextEdit::WidgetWidth : QPlainTextEdit::NoWrap);
 
     RestoreZoom(zoomLevel); //Set zoom.
     UpdateStatusBar(); //Status update.
@@ -407,8 +412,7 @@ void Editor::statusBarApperance(bool Visibility)
 void Editor::on_actionToggle_Read_Only_toggled(bool arg1)
 {
     applyReadOnly(arg1);
-    if (arg1) isReadOnly = true;
-    else if (!arg1) isReadOnly = false;
+    isReadOnly = arg1;
     SaveSettings();
 }
 
@@ -437,5 +441,23 @@ void Editor::on_actionAlways_On_Top_toggled(bool arg1)
 {
     setWindowFlag(Qt::WindowStaysOnTopHint, arg1); //Always On Top feature.
     show();
+}
+
+void Editor::toggleWordWrap(bool Wrap)
+{
+    for (int i = 0; i < ui->editorTabs->count(); i++)
+    {
+        CodeEditor *editor = qobject_cast<CodeEditor*>(ui->editorTabs->widget(i));
+        if (Wrap) editor->setLineWrapMode(QPlainTextEdit::WidgetWidth);
+        else editor->setLineWrapMode(QPlainTextEdit::NoWrap);
+    }
+    ui->actionWord_Wrap->setChecked(Wrap);
+}
+
+void Editor::on_actionWord_Wrap_toggled(bool arg1)
+{
+    toggleWordWrap(arg1);
+    wordWrap = arg1;
+    SaveSettings();
 }
 
