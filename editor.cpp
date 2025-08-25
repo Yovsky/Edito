@@ -513,3 +513,21 @@ void Editor::on_actionDate_and_Time_Long_triggered()
     }
 }
 
+
+void Editor::on_actionDuplicate_Line_triggered()
+{
+    CodeEditor *editor = currentEditor();
+    if (editor)
+    {
+        QTextCursor line = editor->textCursor();
+        int pos = line.position();
+        line.select(QTextCursor::LineUnderCursor);
+        QString text = line.selectedText();
+
+        line.movePosition(QTextCursor::EndOfLine); //Start printing next line.
+        line.insertText("\n" + text);
+        line.setPosition(pos);
+        editor->setTextCursor(line);
+    }
+}
+

@@ -86,6 +86,7 @@
      <addaction name="actionDate_and_Time_Long"/>
     </widget>
     <addaction name="actionCopy"/>
+    <addaction name="actionDuplicate_Line"/>
     <addaction name="actionSelect_All"/>
     <addaction name="separator"/>
     <addaction name="menuInsert"/>
@@ -305,6 +306,14 @@
   <action name="actionDate_and_Time_Long">
    <property name="text">
     <string>Date and Time (Long)</string>
+   </property>
+  </action>
+  <action name="actionDuplicate_Line">
+   <property name="text">
+    <string>Duplicate Line</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+D</string>
    </property>
   </action>
  </widget>

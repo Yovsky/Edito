@@ -66,6 +66,8 @@ private slots:
 
     void on_actionDate_and_Time_Long_triggered();
 
+    void on_actionDuplicate_Line_triggered();
+
 private:
     Ui::Editor *ui;
     QLabel *posStatus;
