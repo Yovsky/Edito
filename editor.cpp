@@ -490,3 +490,26 @@ void Editor::on_actionSelect_All_triggered()
     editor->selectAll();
 }
 
+void Editor::on_actionDate_and_Time_Short_triggered()
+{
+    CodeEditor *editor = currentEditor();
+    if (editor) //Safety.
+    {
+        QDateTime current = QDateTime::currentDateTime();
+        QString dateTime = current.toString("hh:mm d/M/yyyy");
+        editor->insertPlainText(dateTime);
+    }
+}
+
+
+void Editor::on_actionDate_and_Time_Long_triggered()
+{
+    CodeEditor *editor = currentEditor();
+    if (editor) //Safety.
+    {
+        QDateTime current = QDateTime::currentDateTime();
+        QString dateTime = current.toString("hh:mm AP dddd, MMMM dd, yyyy");
+        editor->insertPlainText(dateTime);
+    }
+}
+

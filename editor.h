@@ -62,6 +62,10 @@ private slots:
 
     void on_actionSelect_All_triggered();
 
+    void on_actionDate_and_Time_Short_triggered();
+
+    void on_actionDate_and_Time_Long_triggered();
+
 private:
     Ui::Editor *ui;
     QLabel *posStatus;

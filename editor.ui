@@ -78,8 +78,17 @@
     <property name="title">
      <string>Edit</string>
     </property>
+    <widget class="QMenu" name="menuInsert">
+     <property name="title">
+      <string>Insert</string>
+     </property>
+     <addaction name="actionDate_and_Time_Short"/>
+     <addaction name="actionDate_and_Time_Long"/>
+    </widget>
     <addaction name="actionCopy"/>
     <addaction name="actionSelect_All"/>
+    <addaction name="separator"/>
+    <addaction name="menuInsert"/>
     <addaction name="separator"/>
     <addaction name="actionToggle_Read_Only"/>
    </widget>
@@ -286,6 +295,16 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+A</string>
+   </property>
+  </action>
+  <action name="actionDate_and_Time_Short">
+   <property name="text">
+    <string>Date and Time (Short)</string>
+   </property>
+  </action>
+  <action name="actionDate_and_Time_Long">
+   <property name="text">
+    <string>Date and Time (Long)</string>
    </property>
   </action>
  </widget>
