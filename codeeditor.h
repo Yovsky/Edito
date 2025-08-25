@@ -23,6 +23,7 @@ public:
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 
 private slots:
     void updateLineNumberAreaWidth(int newBlockCount);
@@ -36,6 +37,7 @@ private:
 signals:
     void zoomInRequested();
     void zoomOutRequested();
+    void copyRequested();
 };
 
 class LineNumberArea : public QWidget

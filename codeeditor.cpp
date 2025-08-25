@@ -123,3 +123,14 @@ int CodeEditor::getZoomLevel()
 {
     return CurrentZoomLevel;
 }
+
+void CodeEditor::keyPressEvent(QKeyEvent *event)
+{
+    if (event->matches(QKeySequence::Copy))
+    {
+        emit copyRequested();
+        event->accept();
+        return;
+    }
+    QPlainTextEdit::keyPressEvent(event);
+}

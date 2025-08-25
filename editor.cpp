@@ -16,6 +16,7 @@
 #include <QDialog>
 #include <QRegularExpression>
 #include <QSettings>
+#include <QClipboard>
 
 Editor::Editor(QWidget *parent)
     : QMainWindow(parent)
@@ -164,8 +165,9 @@ void Editor::OpenFile(const QString &FilePath)
     connect(editor, &QPlainTextEdit::cursorPositionChanged, this, &Editor::UpdateStatusBar); //Connecting signals for Status.
     connect(editor, &QPlainTextEdit::textChanged, this, &Editor::UpdateStatusBar);
     connect(editor, &QPlainTextEdit::modificationChanged, this, &Editor::FileEdited); //Connecting signal for Unsaved indicator.
-    connect(editor, &CodeEditor::zoomInRequested, this, &Editor::zoomIn);
+    connect(editor, &CodeEditor::zoomInRequested, this, &Editor::zoomIn); //Connecting signals for zoom feature.
     connect(editor, &CodeEditor::zoomOutRequested, this, &Editor::zoomOut);
+    connect(editor, &CodeEditor::copyRequested, this, &Editor::copySelection); //Connecting signals for selection copy.
 
     editor->setPlainText(content); //Passing the file content to the text editor.
     editor->setReadOnly(isReadOnly); //Read-Only state.
@@ -191,8 +193,9 @@ void Editor::NewFile()
     connect(editor, &QPlainTextEdit::cursorPositionChanged, this, &Editor::UpdateStatusBar); //Connecting signals for Status.
     connect(editor, &QPlainTextEdit::textChanged, this, &Editor::UpdateStatusBar);
     connect(editor, &QPlainTextEdit::modificationChanged, this, &Editor::FileEdited); //Connecting signal for Unsaved indicator.
-    connect(editor, &CodeEditor::zoomInRequested, this, &Editor::zoomIn);
+    connect(editor, &CodeEditor::zoomInRequested, this, &Editor::zoomIn); //Connecting signals for zoom feature.
     connect(editor, &CodeEditor::zoomOutRequested, this, &Editor::zoomOut);
+    connect(editor, &CodeEditor::copyRequested, this, &Editor::copySelection); //Connecting signal for selection copy.
 
     QIcon icon(":/icons/saved.png");
 
@@ -270,8 +273,11 @@ bool Editor::SaveAs(CodeEditor* editor)
         editor->document()->setModified(false); //Set file as saved.
         return true; //File saved.
     }
-    QMessageBox::critical(this, "Error", "Failed to save as " + filePath);
-    return false; //Save failed.
+    else
+    {
+        QMessageBox::critical(this, "Error", "Failed to save as " + filePath);
+        return false; //Save failed.
+    }
 }
 
 bool Editor::Save(CodeEditor* editor)
@@ -426,17 +432,6 @@ void Editor::applyReadOnly(bool isRO)
     }
     ui->actionToggle_Read_Only->setChecked(isRO);
 }
-
-Editor::~Editor()
-{
-    SaveSettings(); //Save current configuration.
-
-    delete posStatus;
-    delete sizeStatus;
-    delete ui;
-}
-
-
 void Editor::on_actionAlways_On_Top_toggled(bool arg1)
 {
     setWindowFlag(Qt::WindowStaysOnTopHint, arg1); //Always On Top feature.
@@ -459,5 +454,34 @@ void Editor::on_actionWord_Wrap_toggled(bool arg1)
     toggleWordWrap(arg1);
     wordWrap = arg1;
     SaveSettings();
+}
+
+void Editor::copySelection()
+{
+    CodeEditor *editor = currentEditor();
+    if(editor)
+    {
+        QTextCursor cursor = editor->textCursor();
+        if (!cursor.hasSelection())
+        {
+            cursor.select(QTextCursor::LineUnderCursor);
+        }
+        QString text = cursor.selectedText();
+        QApplication::clipboard()->setText(text);
+        cursor.clearSelection();
+    }
+}
+
+Editor::~Editor()
+{
+    SaveSettings(); //Save current configuration.
+
+    delete posStatus;
+    delete sizeStatus;
+    delete ui;
+}
+void Editor::on_actionCopy_triggered()
+{
+    copySelection();
 }
 

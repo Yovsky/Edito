@@ -32,6 +32,7 @@ public:
     void statusBarApperance(bool Visibility);
     void applyReadOnly(bool isRO);
     void toggleWordWrap(bool Wrap);
+    void copySelection();
     ~Editor();
 
 private slots:
@@ -56,6 +57,8 @@ private slots:
     void on_actionAlways_On_Top_toggled(bool arg1);
 
     void on_actionWord_Wrap_toggled(bool arg1);
+
+    void on_actionCopy_triggered();
 
 private:
     Ui::Editor *ui;
