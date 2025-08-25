@@ -468,7 +468,6 @@ void Editor::copySelection()
         }
         QString text = cursor.selectedText();
         QApplication::clipboard()->setText(text);
-        cursor.clearSelection();
     }
 }
 
@@ -483,5 +482,11 @@ Editor::~Editor()
 void Editor::on_actionCopy_triggered()
 {
     copySelection();
+}
+
+void Editor::on_actionSelect_All_triggered()
+{
+    CodeEditor *editor = currentEditor();
+    editor->selectAll();
 }
 

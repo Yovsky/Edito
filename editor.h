@@ -33,6 +33,7 @@ public:
     void applyReadOnly(bool isRO);
     void toggleWordWrap(bool Wrap);
     void copySelection();
+    void selectAll();
     ~Editor();
 
 private slots:
@@ -59,6 +60,8 @@ private slots:
     void on_actionWord_Wrap_toggled(bool arg1);
 
     void on_actionCopy_triggered();
+
+    void on_actionSelect_All_triggered();
 
 private:
     Ui::Editor *ui;

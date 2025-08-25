@@ -79,6 +79,7 @@
      <string>Edit</string>
     </property>
     <addaction name="actionCopy"/>
+    <addaction name="actionSelect_All"/>
     <addaction name="separator"/>
     <addaction name="actionToggle_Read_Only"/>
    </widget>
@@ -274,6 +275,17 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+C</string>
+   </property>
+  </action>
+  <action name="actionSelect_All">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::EditSelectAll"/>
+   </property>
+   <property name="text">
+    <string>Select All</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
    </property>
   </action>
  </widget>
