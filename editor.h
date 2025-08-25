@@ -33,7 +33,6 @@ public:
     void applyReadOnly(bool isRO);
     void toggleWordWrap(bool Wrap);
     void copySelection();
-    void selectAll();
     ~Editor();
 
 private slots:
