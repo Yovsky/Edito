@@ -581,3 +581,17 @@ void Editor::on_actionDelete_Word_triggered()
     }
 }
 
+
+void Editor::on_actionDelete_to_End_of_Line_triggered()
+{
+    if (CodeEditor *editor = currentEditor())
+    {
+        QTextCursor cursor = editor->textCursor();
+
+        cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+        cursor.removeSelectedText();
+
+        editor->setTextCursor(cursor);
+    }
+}
+

@@ -93,6 +93,7 @@
     <addaction name="actionDelete"/>
     <addaction name="actionDelete_Word"/>
     <addaction name="actionDelete_line"/>
+    <addaction name="actionDelete_to_End_of_Line"/>
     <addaction name="separator"/>
     <addaction name="menuInsert"/>
     <addaction name="separator"/>
@@ -328,7 +329,7 @@
     <string>Delete line</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+Del</string>
+    <string>Shift+Del</string>
    </property>
   </action>
   <action name="actionSelect_Line">
@@ -350,6 +351,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Del</string>
+   </property>
+  </action>
+  <action name="actionDelete_to_End_of_Line">
+   <property name="text">
+    <string>Delete to End of Line</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+Del</string>
    </property>
   </action>
  </widget>

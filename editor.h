@@ -74,6 +74,8 @@ private slots:
 
     void on_actionDelete_Word_triggered();
 
+    void on_actionDelete_to_End_of_Line_triggered();
+
 private:
     Ui::Editor *ui;
     QLabel *posStatus;
