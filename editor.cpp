@@ -171,6 +171,8 @@ void Editor::OpenFile(const QString &FilePath)
     QString content = in.readAll();
     CodeEditor *editor = new CodeEditor();
 
+    editor->editorActions(ui->actionCopy, ui->actionSelect_All, ui->actionUPPERCASE, ui->actionLowercase); //Pass actions for context menu.
+
     connect(editor, &QPlainTextEdit::cursorPositionChanged, this, &Editor::UpdateStatusBar); //Connecting signals for Status.
     connect(editor, &QPlainTextEdit::textChanged, this, &Editor::UpdateStatusBar);
     connect(editor, &QPlainTextEdit::modificationChanged, this, &Editor::FileEdited); //Connecting signal for Unsaved indicator.
@@ -199,6 +201,8 @@ void Editor::OpenFile(const QString &FilePath)
 void Editor::NewFile()
 {
     CodeEditor *editor = new CodeEditor(); //Handle the CreateNew from external windows.
+
+    editor->editorActions(ui->actionCopy, ui->actionSelect_All, ui->actionUPPERCASE, ui->actionLowercase); //Pass actions for context menu.
 
     connect(editor, &QPlainTextEdit::cursorPositionChanged, this, &Editor::UpdateStatusBar); //Connecting signals for Status.
     connect(editor, &QPlainTextEdit::textChanged, this, &Editor::UpdateStatusBar);

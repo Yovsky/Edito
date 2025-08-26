@@ -1,7 +1,9 @@
 #include "codeeditor.h"
+#include "editor.h"
 #include <QPainter>
 #include <QTextBlock>
 #include <QColor>
+#include <QMenu>
 
 CodeEditor::CodeEditor(QWidget *parent)
     : QPlainTextEdit(parent)
@@ -25,6 +27,33 @@ CodeEditor::CodeEditor(QWidget *parent)
 
     updateLineNumberAreaWidth(0);
     highlightCurrentLine();
+}
+
+void CodeEditor::editorActions(QAction *copy, QAction *selectAll, QAction *upper, QAction *lower)
+{
+    a_copy = copy;
+    a_selectAll = selectAll;
+
+    a_upper = upper;
+    a_lower = lower;
+}
+
+void CodeEditor::contextMenuEvent(QContextMenuEvent *event)
+{
+    QMenu *menu = new QMenu(this);
+
+    menu->addAction(tr("Cut"), this, &QPlainTextEdit::cut);
+    menu->addAction(a_copy);
+    menu->addAction(tr("Paste"), this, &QPlainTextEdit::paste);
+    menu->addAction(a_selectAll);
+    menu->addSeparator();
+
+    menu->addAction(a_upper);
+    menu->addAction(a_lower);
+    menu->addSeparator();
+
+    menu->exec(event->globalPos());
+    delete menu;
 }
 
 void CodeEditor::onSelectionChanged()

@@ -15,6 +15,8 @@ class CodeEditor : public QPlainTextEdit
 public:
     explicit CodeEditor(QWidget *parent = nullptr);
 
+    void editorActions(QAction *copy, QAction *selectAll, QAction *upper, QAction *lower);
+
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();
     void setZoomLevel(int level);
@@ -24,6 +26,7 @@ public:
 protected:
     void resizeEvent(QResizeEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
+    void contextMenuEvent(QContextMenuEvent *event) override;
 
 private slots:
     void updateLineNumberAreaWidth(int newBlockCount);
@@ -31,6 +34,9 @@ private slots:
     void updateLineNumberArea(const QRect &, int);
 
 private:
+    QAction *a_copy, *a_selectAll;
+    QAction *a_upper, *a_lower;
+
     QWidget *lineNumberArea;
     int CurrentZoomLevel = 0;
     void onSelectionChanged();
