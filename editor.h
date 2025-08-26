@@ -81,6 +81,10 @@ private slots:
 
     void on_actionLowercase_triggered();
 
+    void on_actionPaste_triggered();
+
+    void on_actionCut_triggered();
+
 private:
     Ui::Editor *ui;
     QLabel *posStatus;

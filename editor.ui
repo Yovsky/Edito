@@ -92,9 +92,10 @@
      <addaction name="actionUPPERCASE"/>
      <addaction name="actionLowercase"/>
     </widget>
+    <addaction name="actionCut"/>
     <addaction name="actionCopy"/>
+    <addaction name="actionPaste"/>
     <addaction name="actionDuplicate_Line"/>
-    <addaction name="separator"/>
     <addaction name="actionSelect_All"/>
     <addaction name="separator"/>
     <addaction name="actionDelete"/>
@@ -383,6 +384,28 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+U</string>
+   </property>
+  </action>
+  <action name="actionCut">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::EditCut"/>
+   </property>
+   <property name="text">
+    <string>Cut</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
+  </action>
+  <action name="actionPaste">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::EditPaste"/>
+   </property>
+   <property name="text">
+    <string>Paste</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
    </property>
   </action>
  </widget>

@@ -29,9 +29,11 @@ CodeEditor::CodeEditor(QWidget *parent)
     highlightCurrentLine();
 }
 
-void CodeEditor::editorActions(QAction *copy, QAction *selectAll, QAction *upper, QAction *lower)
+void CodeEditor::editorActions(QAction *cut, QAction *copy, QAction *paste, QAction *selectAll, QAction *upper, QAction *lower)
 {
+    a_cut = cut;
     a_copy = copy;
+    a_paste = paste;
     a_selectAll = selectAll;
 
     a_upper = upper;
@@ -42,9 +44,9 @@ void CodeEditor::contextMenuEvent(QContextMenuEvent *event)
 {
     QMenu *menu = new QMenu(this);
 
-    menu->addAction(tr("Cut"), this, &QPlainTextEdit::cut);
+    menu->addAction(a_cut);
     menu->addAction(a_copy);
-    menu->addAction(tr("Paste"), this, &QPlainTextEdit::paste);
+    menu->addAction(a_paste);
     menu->addAction(a_selectAll);
     menu->addSeparator();
 

@@ -171,7 +171,7 @@ void Editor::OpenFile(const QString &FilePath)
     QString content = in.readAll();
     CodeEditor *editor = new CodeEditor();
 
-    editor->editorActions(ui->actionCopy, ui->actionSelect_All, ui->actionUPPERCASE, ui->actionLowercase); //Pass actions for context menu.
+    editor->editorActions(ui->actionCut, ui->actionCopy, ui->actionPaste, ui->actionSelect_All, ui->actionUPPERCASE, ui->actionLowercase); //Pass actions for context menu.
 
     connect(editor, &QPlainTextEdit::cursorPositionChanged, this, &Editor::UpdateStatusBar); //Connecting signals for Status.
     connect(editor, &QPlainTextEdit::textChanged, this, &Editor::UpdateStatusBar);
@@ -202,7 +202,7 @@ void Editor::NewFile()
 {
     CodeEditor *editor = new CodeEditor(); //Handle the CreateNew from external windows.
 
-    editor->editorActions(ui->actionCopy, ui->actionSelect_All, ui->actionUPPERCASE, ui->actionLowercase); //Pass actions for context menu.
+    editor->editorActions(ui->actionCut, ui->actionCopy, ui->actionPaste, ui->actionSelect_All, ui->actionUPPERCASE, ui->actionLowercase); //Pass actions for context menu.
 
     connect(editor, &QPlainTextEdit::cursorPositionChanged, this, &Editor::UpdateStatusBar); //Connecting signals for Status.
     connect(editor, &QPlainTextEdit::textChanged, this, &Editor::UpdateStatusBar);
@@ -647,6 +647,36 @@ void Editor::on_actionLowercase_triggered()
         cursor.setPosition(selectionEnd, QTextCursor::KeepAnchor);
 
         editor->setTextCursor(cursor);
+    }
+}
+
+
+void Editor::on_actionPaste_triggered()
+{
+    if (CodeEditor *editor = currentEditor())
+    {
+        QTextCursor cursor = editor->textCursor();
+        QString text = QApplication::clipboard()->text();
+
+        cursor.insertText(text);
+        editor->setTextCursor(cursor);
+    }
+}
+
+
+void Editor::on_actionCut_triggered()
+{
+    if (CodeEditor *editor = currentEditor())
+    {
+        QTextCursor cursor = editor->textCursor();
+
+        if(cursor.hasSelection())
+        {
+            QString text = cursor.selectedText();
+            cursor.removeSelectedText();
+            QApplication::clipboard()->setText(text);
+            editor->setTextCursor(cursor);
+        }
     }
 }
 
