@@ -92,6 +92,12 @@
      <addaction name="actionUPPERCASE"/>
      <addaction name="actionLowercase"/>
     </widget>
+    <widget class="QMenu" name="menuOn_Selection">
+     <property name="title">
+      <string>On Selection</string>
+     </property>
+     <addaction name="actionSearch_on_Web"/>
+    </widget>
     <addaction name="actionCut"/>
     <addaction name="actionCopy"/>
     <addaction name="actionPaste"/>
@@ -105,6 +111,7 @@
     <addaction name="separator"/>
     <addaction name="menuInsert"/>
     <addaction name="menuConvert_Case_to"/>
+    <addaction name="menuOn_Selection"/>
     <addaction name="separator"/>
     <addaction name="actionToggle_Read_Only"/>
     <addaction name="actionSelect_Line"/>
@@ -182,6 +189,10 @@
    <addaction name="actionOpen"/>
    <addaction name="actionSave"/>
    <addaction name="actionSave_As"/>
+   <addaction name="separator"/>
+   <addaction name="actionCut"/>
+   <addaction name="actionCopy"/>
+   <addaction name="actionPaste"/>
    <addaction name="separator"/>
    <addaction name="actionPreferences"/>
    <addaction name="separator"/>
@@ -406,6 +417,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+V</string>
+   </property>
+  </action>
+  <action name="actionSearch_on_Web">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::NetworkWireless"/>
+   </property>
+   <property name="text">
+    <string>Search on Web</string>
    </property>
   </action>
  </widget>

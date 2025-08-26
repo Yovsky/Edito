@@ -29,7 +29,7 @@ CodeEditor::CodeEditor(QWidget *parent)
     highlightCurrentLine();
 }
 
-void CodeEditor::editorActions(QAction *cut, QAction *copy, QAction *paste, QAction *selectAll, QAction *upper, QAction *lower)
+void CodeEditor::editorActions(QAction *cut, QAction *copy, QAction *paste, QAction *selectAll, QAction *upper, QAction *lower, QAction *webSearch)
 {
     a_cut = cut;
     a_copy = copy;
@@ -38,6 +38,8 @@ void CodeEditor::editorActions(QAction *cut, QAction *copy, QAction *paste, QAct
 
     a_upper = upper;
     a_lower = lower;
+
+    a_searchOnWeb = webSearch;
 }
 
 void CodeEditor::contextMenuEvent(QContextMenuEvent *event)
@@ -52,6 +54,9 @@ void CodeEditor::contextMenuEvent(QContextMenuEvent *event)
 
     menu->addAction(a_upper);
     menu->addAction(a_lower);
+    menu->addSeparator();
+
+    menu->addAction(a_searchOnWeb);
     menu->addSeparator();
 
     menu->exec(event->globalPos());

@@ -85,6 +85,8 @@ private slots:
 
     void on_actionCut_triggered();
 
+    void on_actionSearch_on_Web_triggered();
+
 private:
     Ui::Editor *ui;
     QLabel *posStatus;
