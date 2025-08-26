@@ -87,11 +87,18 @@
     </widget>
     <addaction name="actionCopy"/>
     <addaction name="actionDuplicate_Line"/>
+    <addaction name="separator"/>
     <addaction name="actionSelect_All"/>
+    <addaction name="separator"/>
+    <addaction name="actionDelete"/>
+    <addaction name="actionDelete_Word"/>
+    <addaction name="actionDelete_line"/>
     <addaction name="separator"/>
     <addaction name="menuInsert"/>
     <addaction name="separator"/>
     <addaction name="actionToggle_Read_Only"/>
+    <addaction name="actionSelect_Line"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -314,6 +321,35 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+D</string>
+   </property>
+  </action>
+  <action name="actionDelete_line">
+   <property name="text">
+    <string>Delete line</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+Del</string>
+   </property>
+  </action>
+  <action name="actionSelect_Line">
+   <property name="text">
+    <string>Select Line</string>
+   </property>
+  </action>
+  <action name="actionDelete">
+   <property name="text">
+    <string>Delete</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
+   </property>
+  </action>
+  <action name="actionDelete_Word">
+   <property name="text">
+    <string>Delete Word</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Del</string>
    </property>
   </action>
  </widget>

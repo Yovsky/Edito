@@ -68,6 +68,12 @@ private slots:
 
     void on_actionDuplicate_Line_triggered();
 
+    void on_actionDelete_line_triggered();
+
+    void on_actionDelete_triggered();
+
+    void on_actionDelete_Word_triggered();
+
 private:
     Ui::Editor *ui;
     QLabel *posStatus;

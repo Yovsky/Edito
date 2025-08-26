@@ -1,5 +1,6 @@
 #include "editor.h"
 #include "preferencesdialog.h"
+#include "qtextobject.h"
 #include "ui_editor.h"
 #include <QString>
 #include <QFile>
@@ -17,6 +18,7 @@
 #include <QRegularExpression>
 #include <QSettings>
 #include <QClipboard>
+#include <QAction>
 
 Editor::Editor(QWidget *parent)
     : QMainWindow(parent)
@@ -501,7 +503,6 @@ void Editor::on_actionDate_and_Time_Short_triggered()
     }
 }
 
-
 void Editor::on_actionDate_and_Time_Long_triggered()
 {
     CodeEditor *editor = currentEditor();
@@ -513,21 +514,70 @@ void Editor::on_actionDate_and_Time_Long_triggered()
     }
 }
 
-
 void Editor::on_actionDuplicate_Line_triggered()
+{
+    if (CodeEditor *editor = currentEditor())
+    {
+        QTextCursor cursor = editor->textCursor();
+        cursor.select(QTextCursor::LineUnderCursor);
+        cursor.removeSelectedText();
+        editor->setTextCursor(cursor);
+    }
+}
+
+void Editor::on_actionDelete_line_triggered()
 {
     CodeEditor *editor = currentEditor();
     if (editor)
     {
-        QTextCursor line = editor->textCursor();
-        int pos = line.position();
-        line.select(QTextCursor::LineUnderCursor);
-        QString text = line.selectedText();
+        QTextCursor cursor = editor->textCursor();
+        cursor.select(QTextCursor::LineUnderCursor);
+        cursor.removeSelectedText();
+        editor->setTextCursor(cursor);
+    }
+}
 
-        line.movePosition(QTextCursor::EndOfLine); //Start printing next line.
-        line.insertText("\n" + text);
-        line.setPosition(pos);
-        editor->setTextCursor(line);
+void Editor::on_actionDelete_triggered()
+{
+    if (CodeEditor *editor = currentEditor())
+        editor->textCursor().deleteChar();
+}
+
+
+void Editor::on_actionDelete_Word_triggered()
+{
+    if (CodeEditor *editor = currentEditor())
+    {
+        QTextCursor cursor = editor->textCursor();
+
+        QString originalTrimmed = cursor.block().text().trimmed();
+        int originalPos = cursor.position();
+
+        cursor.select(QTextCursor::WordUnderCursor);
+        cursor.removeSelectedText();
+
+        cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor);
+        while(cursor.selectedText() == " ")
+        {
+            cursor.removeSelectedText();
+            cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor);
+        }
+
+        cursor.setPosition(originalPos);
+        if ((cursor.block().text().isEmpty() || cursor.block().text().trimmed().isEmpty()) && originalTrimmed.isEmpty())
+        {
+            cursor.movePosition(QTextCursor::StartOfBlock);
+            cursor.select(QTextCursor::BlockUnderCursor);
+            cursor.removeSelectedText();
+            cursor.deleteChar();
+        }
+        else
+        {
+            cursor.clearSelection();
+            cursor.movePosition(QTextCursor::Left);
+        }
+
+        editor->setTextCursor(cursor);
     }
 }
 
