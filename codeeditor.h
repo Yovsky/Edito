@@ -44,7 +44,10 @@ private:
 signals:
     void zoomInRequested();
     void zoomOutRequested();
+    void cutRequested();
     void copyRequested();
+    void pasteRequested();
+    void selectAllRequested();
     void selectionStateChanged(bool isSelected);
 };
 

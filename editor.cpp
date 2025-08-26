@@ -178,7 +178,10 @@ void Editor::OpenFile(const QString &FilePath)
     connect(editor, &QPlainTextEdit::modificationChanged, this, &Editor::FileEdited); //Connecting signal for Unsaved indicator.
     connect(editor, &CodeEditor::zoomInRequested, this, &Editor::zoomIn); //Connecting signals for zoom feature.
     connect(editor, &CodeEditor::zoomOutRequested, this, &Editor::zoomOut);
-    connect(editor, &CodeEditor::copyRequested, this, &Editor::copySelection); //Connecting signal for selection copy.
+    connect(editor, &CodeEditor::cutRequested, this, &Editor::on_actionCut_triggered); //Connecting signal for shortcuts.
+    connect(editor, &CodeEditor::copyRequested, this, &Editor::copySelection);
+    connect(editor, &CodeEditor::pasteRequested, this, &Editor::on_actionPaste_triggered);
+    connect(editor, &CodeEditor::selectAllRequested, this, &Editor::on_actionSelect_All_triggered);
     connect(editor, &CodeEditor::selectionStateChanged, this, &Editor::selectionTrack); //Connecting signal for selection track.
 
     editor->setPlainText(content); //Passing the file content to the text editor.
@@ -209,7 +212,10 @@ void Editor::NewFile()
     connect(editor, &QPlainTextEdit::modificationChanged, this, &Editor::FileEdited); //Connecting signal for Unsaved indicator.
     connect(editor, &CodeEditor::zoomInRequested, this, &Editor::zoomIn); //Connecting signals for zoom feature.
     connect(editor, &CodeEditor::zoomOutRequested, this, &Editor::zoomOut);
-    connect(editor, &CodeEditor::copyRequested, this, &Editor::copySelection); //Connecting signal for selection copy.
+    connect(editor, &CodeEditor::cutRequested, this, &Editor::on_actionCut_triggered); //Connecting signal for shortcuts.
+    connect(editor, &CodeEditor::copyRequested, this, &Editor::copySelection);
+    connect(editor, &CodeEditor::pasteRequested, this, &Editor::on_actionPaste_triggered);
+    connect(editor, &CodeEditor::selectAllRequested, this, &Editor::on_actionSelect_All_triggered);
     connect(editor, &CodeEditor::selectionStateChanged, this, &Editor::selectionTrack); //Connecting signal for selection track.
 
     QIcon icon(":/icons/saved.png");
@@ -672,6 +678,14 @@ void Editor::on_actionCut_triggered()
 
         if(cursor.hasSelection())
         {
+            QString text = cursor.selectedText();
+            cursor.removeSelectedText();
+            QApplication::clipboard()->setText(text);
+            editor->setTextCursor(cursor);
+        }
+        else
+        {
+            cursor.select(QTextCursor::LineUnderCursor);
             QString text = cursor.selectedText();
             cursor.removeSelectedText();
             QApplication::clipboard()->setText(text);

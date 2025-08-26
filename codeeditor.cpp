@@ -164,9 +164,27 @@ int CodeEditor::getZoomLevel()
 
 void CodeEditor::keyPressEvent(QKeyEvent *event)
 {
+    if (event->matches(QKeySequence::Cut))
+    {
+        emit cutRequested();
+        event->accept();
+        return;
+    }
     if (event->matches(QKeySequence::Copy))
     {
         emit copyRequested();
+        event->accept();
+        return;
+    }
+    if (event->matches(QKeySequence::Paste))
+    {
+        emit pasteRequested();
+        event->accept();
+        return;
+    }
+    if (event->matches(QKeySequence::SelectAll))
+    {
+        emit selectAllRequested();
         event->accept();
         return;
     }
