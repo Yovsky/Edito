@@ -33,6 +33,7 @@ public:
     void applyReadOnly(bool isRO);
     void toggleWordWrap(bool Wrap);
     void copySelection();
+    void selectionTrack(bool hasSelection);
     ~Editor();
 
 private slots:
@@ -75,6 +76,10 @@ private slots:
     void on_actionDelete_Word_triggered();
 
     void on_actionDelete_to_End_of_Line_triggered();
+
+    void on_actionUPPERCASE_triggered();
+
+    void on_actionLowercase_triggered();
 
 private:
     Ui::Editor *ui;

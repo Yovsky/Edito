@@ -85,6 +85,13 @@
      <addaction name="actionDate_and_Time_Short"/>
      <addaction name="actionDate_and_Time_Long"/>
     </widget>
+    <widget class="QMenu" name="menuConvert_Case_to">
+     <property name="title">
+      <string>Convert Case to</string>
+     </property>
+     <addaction name="actionUPPERCASE"/>
+     <addaction name="actionLowercase"/>
+    </widget>
     <addaction name="actionCopy"/>
     <addaction name="actionDuplicate_Line"/>
     <addaction name="separator"/>
@@ -96,6 +103,7 @@
     <addaction name="actionDelete_to_End_of_Line"/>
     <addaction name="separator"/>
     <addaction name="menuInsert"/>
+    <addaction name="menuConvert_Case_to"/>
     <addaction name="separator"/>
     <addaction name="actionToggle_Read_Only"/>
     <addaction name="actionSelect_Line"/>
@@ -359,6 +367,22 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+Del</string>
+   </property>
+  </action>
+  <action name="actionUPPERCASE">
+   <property name="text">
+    <string>UPPERCASE</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+U</string>
+   </property>
+  </action>
+  <action name="actionLowercase">
+   <property name="text">
+    <string>lowercase</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+U</string>
    </property>
   </action>
  </widget>

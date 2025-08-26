@@ -21,9 +21,16 @@ CodeEditor::CodeEditor(QWidget *parent)
     connect(this, &CodeEditor::blockCountChanged, this, &CodeEditor::updateLineNumberAreaWidth);
     connect(this, &CodeEditor::updateRequest, this, &CodeEditor::updateLineNumberArea);
     connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
+    connect(this, &CodeEditor::selectionChanged, this, &CodeEditor::onSelectionChanged);
 
     updateLineNumberAreaWidth(0);
     highlightCurrentLine();
+}
+
+void CodeEditor::onSelectionChanged()
+{
+    bool hasSelection = textCursor().hasSelection();
+    emit selectionStateChanged(hasSelection);
 }
 
 int CodeEditor::lineNumberAreaWidth()

@@ -33,11 +33,13 @@ private slots:
 private:
     QWidget *lineNumberArea;
     int CurrentZoomLevel = 0;
+    void onSelectionChanged();
 
 signals:
     void zoomInRequested();
     void zoomOutRequested();
     void copyRequested();
+    void selectionStateChanged(bool isSelected);
 };
 
 class LineNumberArea : public QWidget

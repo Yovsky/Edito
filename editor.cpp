@@ -83,6 +83,13 @@ void Editor::LoadSettings()
     RestoreZoom(zoomLevel);
 }
 
+void Editor::selectionTrack(bool hasSelection)
+{
+    qDebug() << "selection track called";
+    ui->actionUPPERCASE->setEnabled(hasSelection);
+    ui->actionLowercase->setEnabled(hasSelection);
+}
+
 void Editor::UpdateStatusBar()
 {
     QWidget *currentWidget = ui->editorTabs->currentWidget();
@@ -169,7 +176,8 @@ void Editor::OpenFile(const QString &FilePath)
     connect(editor, &QPlainTextEdit::modificationChanged, this, &Editor::FileEdited); //Connecting signal for Unsaved indicator.
     connect(editor, &CodeEditor::zoomInRequested, this, &Editor::zoomIn); //Connecting signals for zoom feature.
     connect(editor, &CodeEditor::zoomOutRequested, this, &Editor::zoomOut);
-    connect(editor, &CodeEditor::copyRequested, this, &Editor::copySelection); //Connecting signals for selection copy.
+    connect(editor, &CodeEditor::copyRequested, this, &Editor::copySelection); //Connecting signal for selection copy.
+    connect(editor, &CodeEditor::selectionStateChanged, this, &Editor::selectionTrack); //Connecting signal for selection track.
 
     editor->setPlainText(content); //Passing the file content to the text editor.
     editor->setReadOnly(isReadOnly); //Read-Only state.
@@ -198,6 +206,7 @@ void Editor::NewFile()
     connect(editor, &CodeEditor::zoomInRequested, this, &Editor::zoomIn); //Connecting signals for zoom feature.
     connect(editor, &CodeEditor::zoomOutRequested, this, &Editor::zoomOut);
     connect(editor, &CodeEditor::copyRequested, this, &Editor::copySelection); //Connecting signal for selection copy.
+    connect(editor, &CodeEditor::selectionStateChanged, this, &Editor::selectionTrack); //Connecting signal for selection track.
 
     QIcon icon(":/icons/saved.png");
 
@@ -590,6 +599,48 @@ void Editor::on_actionDelete_to_End_of_Line_triggered()
 
         cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
         cursor.removeSelectedText();
+
+        editor->setTextCursor(cursor);
+    }
+}
+
+
+void Editor::on_actionUPPERCASE_triggered()
+{
+    if (CodeEditor *editor = currentEditor())
+    {
+        QTextCursor cursor = editor->textCursor();
+        if (cursor.hasSelection())
+        {
+            int selectionStart = cursor.selectionStart(); //Save user selection.
+            int selectionEnd = cursor.selectionEnd();
+
+            QString text = cursor.selectedText().toUpper();
+            cursor.insertText(text);
+
+            cursor.setPosition(selectionStart); //Restore user selection.
+            cursor.setPosition(selectionEnd, QTextCursor::KeepAnchor);
+
+            editor->setTextCursor(cursor);
+        }
+    }
+}
+
+
+void Editor::on_actionLowercase_triggered()
+{
+    if (CodeEditor *editor = currentEditor())
+    {
+        QTextCursor cursor = editor->textCursor();
+
+        int selectionStart = cursor.selectionStart(); //Save user selection.
+        int selectionEnd = cursor.selectionEnd();
+
+        QString text = cursor.selectedText().toLower();
+        cursor.insertText(text);
+
+        cursor.setPosition(selectionStart); //Restore user selection.
+        cursor.setPosition(selectionEnd, QTextCursor::KeepAnchor);
 
         editor->setTextCursor(cursor);
     }
