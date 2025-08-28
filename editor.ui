@@ -98,6 +98,14 @@
      </property>
      <addaction name="actionSearch_on_Web"/>
     </widget>
+    <widget class="QMenu" name="menuCopy_to_Clipboard">
+     <property name="title">
+      <string>Copy to Clipboard</string>
+     </property>
+     <addaction name="actionCopy_Current_File_Path"/>
+     <addaction name="actionCopy_Current_Filename"/>
+     <addaction name="actionCopy_Current_Dir"/>
+    </widget>
     <addaction name="actionCut"/>
     <addaction name="actionCopy"/>
     <addaction name="actionPaste"/>
@@ -110,6 +118,7 @@
     <addaction name="actionDelete_to_End_of_Line"/>
     <addaction name="separator"/>
     <addaction name="menuInsert"/>
+    <addaction name="menuCopy_to_Clipboard"/>
     <addaction name="menuConvert_Case_to"/>
     <addaction name="menuOn_Selection"/>
     <addaction name="separator"/>
@@ -425,6 +434,21 @@
    </property>
    <property name="text">
     <string>Search on Web</string>
+   </property>
+  </action>
+  <action name="actionCopy_Current_File_Path">
+   <property name="text">
+    <string>Copy Current File Path</string>
+   </property>
+  </action>
+  <action name="actionCopy_Current_Filename">
+   <property name="text">
+    <string>Copy Current Filename</string>
+   </property>
+  </action>
+  <action name="actionCopy_Current_Dir">
+   <property name="text">
+    <string>Copy Current Dir. Path</string>
    </property>
   </action>
  </widget>

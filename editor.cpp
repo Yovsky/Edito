@@ -728,3 +728,10 @@ void Editor::on_actionSearch_on_Web_triggered()
         QDesktopServices::openUrl(url);
     }
 }
+
+void Editor::on_actionCopy_Current_File_Path_triggered()
+{
+    CodeEditor *editor = currentEditor();
+    QApplication::clipboard()->setText(filePaths.value(editor));
+}
+
