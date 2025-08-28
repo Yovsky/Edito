@@ -571,7 +571,6 @@ void Editor::on_actionDelete_triggered()
         editor->textCursor().deleteChar();
 }
 
-
 void Editor::on_actionDelete_Word_triggered()
 {
     if (CodeEditor *editor = currentEditor())
@@ -609,7 +608,6 @@ void Editor::on_actionDelete_Word_triggered()
     }
 }
 
-
 void Editor::on_actionDelete_to_End_of_Line_triggered()
 {
     if (CodeEditor *editor = currentEditor())
@@ -622,7 +620,6 @@ void Editor::on_actionDelete_to_End_of_Line_triggered()
         editor->setTextCursor(cursor);
     }
 }
-
 
 void Editor::on_actionUPPERCASE_triggered()
 {
@@ -645,7 +642,6 @@ void Editor::on_actionUPPERCASE_triggered()
     }
 }
 
-
 void Editor::on_actionLowercase_triggered()
 {
     if (CodeEditor *editor = currentEditor())
@@ -665,7 +661,6 @@ void Editor::on_actionLowercase_triggered()
     }
 }
 
-
 void Editor::on_actionPaste_triggered()
 {
     if (CodeEditor *editor = currentEditor())
@@ -677,7 +672,6 @@ void Editor::on_actionPaste_triggered()
         editor->setTextCursor(cursor);
     }
 }
-
 
 void Editor::on_actionCut_triggered()
 {
@@ -733,5 +727,11 @@ void Editor::on_actionCopy_Current_File_Path_triggered()
 {
     CodeEditor *editor = currentEditor();
     QApplication::clipboard()->setText(filePaths.value(editor));
+}
+
+void Editor::on_actionCopy_Current_Filename_triggered()
+{
+    CodeEditor *editor = currentEditor();
+    QApplication::clipboard()->setText(QFileInfo(filePaths.value(editor)).fileName());
 }
 
