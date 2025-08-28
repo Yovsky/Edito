@@ -287,6 +287,7 @@ bool Editor::SaveAs(CodeEditor* editor)
 
     filePaths.insert(editor, filePath); //Registering file path for later use.
     tabBaseNames.insert(editor, QFileInfo(filePath).fileName());
+    ui->editorTabs->setTabText(ui->editorTabs->currentIndex(), QFileInfo(filePath).fileName()); //Changes tab title to new file name.
 
     QFile file(filePath);
     if (file.open(QIODevice::WriteOnly | QIODevice::Text)) //File opening.
