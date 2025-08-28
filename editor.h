@@ -4,6 +4,7 @@
 #include "codeeditor.h"
 #include <QMainWindow>
 #include <QLabel>
+#include <QSettings>
 
 namespace Ui {
 class Editor;
@@ -98,6 +99,7 @@ private:
     bool statBarVisibility;
     bool isReadOnly;
     bool wordWrap;
+    QSettings *m_settings;
 
 signals:
     void toggleStatusBarReq(bool Visibility);

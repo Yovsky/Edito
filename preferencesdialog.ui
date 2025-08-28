@@ -35,12 +35,17 @@
        <string>Appearance</string>
       </property>
      </item>
+     <item>
+      <property name="text">
+       <string>Search Engine</string>
+      </property>
+     </item>
     </widget>
    </item>
    <item row="0" column="1">
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="General"/>
      <widget class="QWidget" name="View">
@@ -177,6 +182,199 @@
           </property>
           <property name="text">
            <string>System Default</string>
+          </property>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="searchEngine">
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="1">
+        <widget class="QGroupBox" name="groupBox_3">
+         <property name="title">
+          <string>Search Engine</string>
+         </property>
+         <widget class="QLabel" name="label_3">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>30</y>
+            <width>171</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Select the default search engine:</string>
+          </property>
+         </widget>
+         <widget class="QRadioButton" name="google">
+          <property name="geometry">
+           <rect>
+            <x>200</x>
+            <y>30</y>
+            <width>90</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Google.com</string>
+          </property>
+         </widget>
+         <widget class="QRadioButton" name="dDGo">
+          <property name="geometry">
+           <rect>
+            <x>200</x>
+            <y>50</y>
+            <width>121</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Duckduckgo.com</string>
+          </property>
+         </widget>
+         <widget class="QRadioButton" name="yahoo">
+          <property name="geometry">
+           <rect>
+            <x>200</x>
+            <y>90</y>
+            <width>121</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Yahoo.com</string>
+          </property>
+         </widget>
+         <widget class="QRadioButton" name="bing">
+          <property name="geometry">
+           <rect>
+            <x>200</x>
+            <y>70</y>
+            <width>121</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Bing.com</string>
+          </property>
+         </widget>
+         <widget class="QRadioButton" name="brave">
+          <property name="geometry">
+           <rect>
+            <x>200</x>
+            <y>110</y>
+            <width>121</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Brave.com</string>
+          </property>
+         </widget>
+         <widget class="QRadioButton" name="stackOF">
+          <property name="geometry">
+           <rect>
+            <x>200</x>
+            <y>130</y>
+            <width>131</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Stackoverflow.com</string>
+          </property>
+         </widget>
+         <widget class="QRadioButton" name="gitHub">
+          <property name="geometry">
+           <rect>
+            <x>200</x>
+            <y>150</y>
+            <width>121</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Github.com</string>
+          </property>
+         </widget>
+         <widget class="QRadioButton" name="deMo">
+          <property name="geometry">
+           <rect>
+            <x>200</x>
+            <y>170</y>
+            <width>141</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>developer.mozilla.org</string>
+          </property>
+         </widget>
+         <widget class="QRadioButton" name="devDocs">
+          <property name="geometry">
+           <rect>
+            <x>200</x>
+            <y>190</y>
+            <width>121</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Devdocs.io</string>
+          </property>
+         </widget>
+         <widget class="QRadioButton" name="sExchange">
+          <property name="geometry">
+           <rect>
+            <x>200</x>
+            <y>210</y>
+            <width>131</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Stackexchange.com</string>
+          </property>
+         </widget>
+         <widget class="QRadioButton" name="sourceGr">
+          <property name="geometry">
+           <rect>
+            <x>200</x>
+            <y>230</y>
+            <width>121</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Sourcegraph.com</string>
+          </property>
+         </widget>
+         <widget class="QRadioButton" name="grep">
+          <property name="geometry">
+           <rect>
+            <x>200</x>
+            <y>250</y>
+            <width>121</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Grep.app</string>
+          </property>
+         </widget>
+         <widget class="QRadioButton" name="searchCode">
+          <property name="geometry">
+           <rect>
+            <x>200</x>
+            <y>270</y>
+            <width>121</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Searchcode.com</string>
           </property>
          </widget>
         </widget>

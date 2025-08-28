@@ -30,9 +30,18 @@ Editor::Editor(QWidget *parent)
     , statBarVisibility(true)
     , isReadOnly(false)
     , wordWrap(false)
+    , m_settings(nullptr)
 {
     ui->setupUi(this);
     ui->editorTabs->removeTab(0); //Removing the default "Tab 1".
+
+    m_settings = new QSettings("Yovsky", "Edito");
+    if (!m_settings->contains("SE"))
+    {
+        m_settings->setValue("SE", "https://www.google.com/search?q=");
+        m_settings->setValue("SEToggled", 1);
+        m_settings->sync();
+    }
 
     LoadSettings(); //Load saved settings.
 
@@ -56,31 +65,29 @@ Editor::Editor(QWidget *parent)
 
 void Editor::SaveSettings()
 {
-    QSettings settings("Yovsky", "Edito");
-    settings.setValue("Zoom", zoomLevel);
-    settings.setValue("ToggleStatBar", statBarVisibility);
-    settings.setValue("ToggleReadOnly", isReadOnly);
-    settings.setValue("Word Wrap", wordWrap);
+    m_settings->setValue("Zoom", zoomLevel);
+    m_settings->setValue("ToggleStatBar", statBarVisibility);
+    m_settings->setValue("ToggleReadOnly", isReadOnly);
+    m_settings->setValue("Word Wrap", wordWrap);
     qDebug() << "SAVING - ReadOnly:" << isReadOnly;
-    qDebug() << "Settings file:" << settings.fileName();
-    settings.sync();
-    qDebug() << "Settings status:" << settings.status();
+    qDebug() << "Settings file:" << m_settings->fileName();
+    m_settings->sync();
+    qDebug() << "Settings status:" << m_settings->status();
 }
 
 void Editor::LoadSettings()
 {
-    QSettings settings("Yovsky", "Edito");
-    zoomLevel = settings.value("Zoom", 0).toInt();
-    statBarVisibility = settings.value("ToggleStatBar", true).toBool();
-    isReadOnly = settings.value("ToggleReadOnly", false).toBool();
+    zoomLevel = m_settings->value("Zoom", 0).toInt();
+    statBarVisibility = m_settings->value("ToggleStatBar", true).toBool();
+    isReadOnly = m_settings->value("ToggleReadOnly", false).toBool();
     applyReadOnly(isReadOnly);
-    wordWrap = settings.value("Word Wrap", false).toBool();
+    wordWrap = m_settings->value("Word Wrap", false).toBool();
     toggleWordWrap(wordWrap);
 
     qDebug() << "Loaded ReadOnly:" << isReadOnly;
 
     qDebug() << "LOADING - Zoom level:" << zoomLevel;
-    qDebug() << "Settings file:" << settings.fileName();
+    qDebug() << "Settings file:" << m_settings->fileName();
     RestoreZoom(zoomLevel);
 }
 
@@ -374,7 +381,7 @@ CodeEditor* Editor::currentEditor() const
 
 void Editor::on_actionPreferences_triggered()
 {
-    PreferencesDialog dialog(statBarVisibility, this);
+    PreferencesDialog dialog(m_settings, statBarVisibility, this);
     connect(&dialog, &PreferencesDialog::toggleStatusBarReq, this, &Editor::statusBarApperance); //Signal to toggle the status bar.
     dialog.exec(); //Open preferences.
 }
@@ -714,7 +721,9 @@ void Editor::on_actionSearch_on_Web_triggered()
                 text = cursor.selectedText();
             }
         }
-        QUrl url("https://www.google.com/search?q=" + QUrl::toPercentEncoding(text));
+        QString URL = m_settings->value("SE", "https://www.google.com/search?q=").toString();
+
+        QUrl url(URL + QUrl::toPercentEncoding(text));
         QDesktopServices::openUrl(url);
     }
 }

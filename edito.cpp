@@ -60,7 +60,7 @@ void Edito::on_Options_clicked()
 {
     QSettings settings("Yovsky", "Edito");
     bool isVisible = settings.value("ToggleStatBar", true).toBool(); //Load visibility settings.
-    PreferencesDialog dialog(isVisible ,this);
+    PreferencesDialog dialog(&settings, isVisible, this);
 
     dialog.setVisible(isVisible); //Set according to loaded settings.
 
