@@ -735,3 +735,10 @@ void Editor::on_actionCopy_Current_Filename_triggered()
     QApplication::clipboard()->setText(QFileInfo(filePaths.value(editor)).fileName());
 }
 
+
+void Editor::on_actionCopy_Current_Dir_triggered()
+{
+    CodeEditor *editor = currentEditor();
+    QApplication::clipboard()->setText(QFileInfo(filePaths.value(editor)).absolutePath());
+}
+

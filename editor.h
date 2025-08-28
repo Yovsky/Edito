@@ -92,6 +92,8 @@ private slots:
 
     void on_actionCopy_Current_Filename_triggered();
 
+    void on_actionCopy_Current_Dir_triggered();
+
 private:
     Ui::Editor *ui;
     QLabel *posStatus;
