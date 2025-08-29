@@ -117,6 +117,10 @@ private:
     QSettings *m_settings;
     int openedTabs;
 
+protected:
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dropEvent(QDropEvent *event) override;
+
 signals:
     void toggleStatusBarReq(bool Visibility);
 };

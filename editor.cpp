@@ -20,6 +20,9 @@
 #include <QClipboard>
 #include <QAction>
 #include <QDesktopServices>
+#include <QMimeData>
+#include <QDragEnterEvent>
+#include <QDropEvent>
 
 Editor::Editor(QWidget *parent)
     : QMainWindow(parent)
@@ -35,6 +38,7 @@ Editor::Editor(QWidget *parent)
 {
     ui->setupUi(this);
     ui->editorTabs->removeTab(0); //Removing the default "Tab 1".
+    setAcceptDrops(true);
 
     m_settings = new QSettings("Yovsky", "Edito");
     if (!m_settings->contains("SE"))
@@ -91,6 +95,29 @@ void Editor::LoadSettings()
     qDebug() << "LOADING - Zoom level:" << zoomLevel;
     qDebug() << "Settings file:" << m_settings->fileName();
     RestoreZoom(zoomLevel);
+}
+
+void Editor::dragEnterEvent(QDragEnterEvent *event)
+{
+    if(event->mimeData()->hasUrls())
+        event->acceptProposedAction();
+}
+
+void Editor::dropEvent(QDropEvent *event)
+{
+    const QMimeData *data = event->mimeData();
+    if (data->hasUrls())
+    {
+        QList<QUrl> urls = data->urls();
+
+        for(const QUrl &url : urls)
+        {
+            QString path = url.toLocalFile();
+            if (!path.isEmpty())
+                OpenFile(path);
+        }
+        event->acceptProposedAction();
+    }
 }
 
 void Editor::selectionTrack(bool hasSelection)

@@ -10,6 +10,7 @@ CodeEditor::CodeEditor(QWidget *parent)
     , CurrentZoomLevel(0)
 {
     setLineWrapMode(NoWrap);
+    setAcceptDrops(false);
 
     QFont f("Consolas"); //Setting the font parameters.
     f.setStyleHint(QFont::Monospace);
