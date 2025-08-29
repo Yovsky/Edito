@@ -134,10 +134,19 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
     int top = (int) blockBoundingGeometry(block).translated(contentOffset()).top();
     int bottom = top + (int) blockBoundingRect(block).height();
 
+    int currentLine = textCursor().blockNumber();
+
     while (block.isValid() && top <= event->rect().bottom()) {
         if (block.isVisible() && bottom >= event->rect().top()) {
             QString number = QString::number(blockNumber + 1);
-            painter.setPen(Qt::gray); //Set the numbers parameters.
+            if (blockNumber == currentLine)
+            {
+                painter.setPen(Qt::green); //Set the numbers parameters.
+            }
+            else
+            {
+                painter.setPen(Qt::gray); //Set the numbers parameters.
+            }
             painter.drawText(2, top, lineNumberArea->width() - 7, fontMetrics().height(),
                              Qt::AlignRight, number); //Draw the numbers.
         }
