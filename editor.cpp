@@ -55,7 +55,8 @@ Editor::Editor(QWidget *parent)
     ui->statusbar->addPermanentWidget(sizeStatus,3);
 
 
-    connect(ui->editorTabs, &QTabWidget::currentChanged, this, [this](int index) { //Connecting when swiching tabs.
+    connect(ui->editorTabs, &QTabWidget::currentChanged, this, [this](int index) //Connecting when swiching tabs.
+    {
         Q_UNUSED(index);
         this->UpdateStatusBar();
     });
@@ -780,5 +781,11 @@ void Editor::on_actionSave_All_triggered()
         CodeEditor *editor = qobject_cast<CodeEditor*>(current);
         Save(editor);
     }
+}
+
+
+void Editor::on_actionExit_triggered()
+{
+    close();
 }
 

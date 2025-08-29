@@ -101,6 +101,8 @@ private slots:
 
     void on_actionSave_All_triggered();
 
+    void on_actionExit_triggered();
+
 private:
     Ui::Editor *ui;
     QLabel *posStatus;
