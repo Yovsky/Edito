@@ -23,6 +23,7 @@ public:
     void NewFile();
     void CloseTab(int index);
     void FileEdited(bool edited);
+    void resetTabState(CodeEditor *editor, bool edited);
     bool SaveAs(CodeEditor* editor);
     bool Save(CodeEditor* editor);
     CodeEditor* currentEditor() const;
@@ -93,6 +94,12 @@ private slots:
     void on_actionCopy_Current_Filename_triggered();
 
     void on_actionCopy_Current_Dir_triggered();
+
+    void on_actionClose_triggered();
+
+    void on_actionClose_All_triggered();
+
+    void on_actionSave_All_triggered();
 
 private:
     Ui::Editor *ui;

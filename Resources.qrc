@@ -1,10 +1,27 @@
 <RCC>
-    <qresource prefix="/icons">
-        <file>notsaved.png</file>
-        <file>saved.png</file>
-        <file>saveico.png</file>
-        <file>settings.png</file>
-        <file>settings_w.png</file>
-        <file>editoIco.png</file>
+    <qresource prefix="/">
+        <file>icons/close.png</file>
+        <file>icons/closeAll.png</file>
+        <file>icons/copy.png</file>
+        <file>icons/editoIco.png</file>
+        <file>icons/new.png</file>
+        <file>icons/notsaved.png</file>
+        <file>icons/paste.png</file>
+        <file>icons/save.png</file>
+        <file>icons/saveAll.png</file>
+        <file>icons/saved.png</file>
+        <file>icons/settings.png</file>
+        <file>icons/settings_w.png</file>
+        <file>icons/zoomIn.png</file>
+        <file>icons/zoomOut.png</file>
+        <file>icons/open.png</file>
+        <file>icons/redo.png</file>
+        <file>icons/undo.png</file>
+        <file>icons/cut.png</file>
+        <file>icons/web.png</file>
+        <file>icons/upper.png</file>
+        <file>icons/lower.png</file>
+        <file>icons/delete.png</file>
+        <file>icons/exit.png</file>
     </qresource>
 </RCC>

@@ -138,31 +138,35 @@ void Editor::UpdateStatusBar()
 
 void Editor::FileEdited(bool modified)
 {
-    QWidget *current = ui->editorTabs->currentWidget();
-    CodeEditor *editor = qobject_cast<CodeEditor*>(current);
+    CodeEditor *editor = qobject_cast<CodeEditor*>(sender());
 
-    if (!editor) //Safety.
-    {
-        editor = qobject_cast<CodeEditor*>(ui->editorTabs->currentWidget());
-        if (!editor) return; //Safety.
-    }
+    if (!editor) return;
+
+    resetTabState(editor, modified);
+}
+
+void Editor::resetTabState(CodeEditor *editor,bool modified)
+{
+    if (!editor) return; //Safety.
+
+    int tabIndex = ui->editorTabs->indexOf(editor);
+    if (tabIndex == -1) return; //Safety.
 
     if(editor || ui->editorTabs->count() != 0) //Safety.
     {
-        int currentTab = ui->editorTabs->currentIndex(); //Setting variables.
-        QIcon icon(":/icons/saved.png");
+        QIcon icon(":/icons/saved.png"); //Setting variables.
         QIcon nicon(":/icons/notsaved.png");
         QString fileName = tabBaseNames.value(editor, "Unknown");
 
         if(modified)
         {
-            ui->editorTabs->setTabIcon(currentTab, nicon); //Changing the icon (Red).
-            ui->editorTabs->setTabText(currentTab, fileName + "*"); //Adding "*" to the name.
+            ui->editorTabs->setTabIcon(tabIndex, nicon); //Changing the icon (Red).
+            ui->editorTabs->setTabText(tabIndex, fileName + "*"); //Adding "*" to the name.
         }
         else
         {
-            ui->editorTabs->setTabIcon(currentTab, icon); //Changing the icon (Green).
-            ui->editorTabs->setTabText(currentTab, fileName); //Returning to default name.
+            ui->editorTabs->setTabIcon(tabIndex, icon); //Changing the icon (Green).
+            ui->editorTabs->setTabText(tabIndex, fileName); //Returning to default name.
         }
     }
 }
@@ -206,6 +210,10 @@ void Editor::OpenFile(const QString &FilePath)
 
     editor->setZoomLevel(zoomLevel);
     RestoreZoom(zoomLevel); //Set zoom.
+
+    resetTabState(editor, false);
+    editor->document()->setModified(false);
+
     UpdateStatusBar(); //Status update.
 }
 
@@ -238,6 +246,10 @@ void Editor::NewFile()
     editor->setLineWrapMode(wordWrap? QPlainTextEdit::WidgetWidth : QPlainTextEdit::NoWrap);
 
     RestoreZoom(zoomLevel); //Set zoom.
+
+    editor->document()->setModified(false);
+    resetTabState(editor, false);
+
     UpdateStatusBar(); //Status update.
 }
 
@@ -287,7 +299,9 @@ bool Editor::SaveAs(CodeEditor* editor)
 
     filePaths.insert(editor, filePath); //Registering file path for later use.
     tabBaseNames.insert(editor, QFileInfo(filePath).fileName());
-    ui->editorTabs->setTabText(ui->editorTabs->currentIndex(), QFileInfo(filePath).fileName()); //Changes tab title to new file name.
+
+    int tabIndex = ui->editorTabs->indexOf(editor);
+    ui->editorTabs->setTabText(tabIndex, QFileInfo(filePath).fileName()); //Changes tab title to new file name.
 
     QFile file(filePath);
     if (file.open(QIODevice::WriteOnly | QIODevice::Text)) //File opening.
@@ -298,6 +312,7 @@ bool Editor::SaveAs(CodeEditor* editor)
         file.close();
 
         editor->document()->setModified(false); //Set file as saved.
+        resetTabState(editor, false);
         return true; //File saved.
     }
     return false; //Save failed.
@@ -325,6 +340,7 @@ bool Editor::Save(CodeEditor* editor)
             file.close();
 
             editor->document()->setModified(false); //Set file as saved.
+            resetTabState(editor, false);
             return true; //Save sucessful.
         }
         else
@@ -740,5 +756,29 @@ void Editor::on_actionCopy_Current_Dir_triggered()
 {
     CodeEditor *editor = currentEditor();
     QApplication::clipboard()->setText(QFileInfo(filePaths.value(editor)).absolutePath());
+}
+
+
+void Editor::on_actionClose_triggered()
+{
+    CloseTab(ui->editorTabs->currentIndex());
+}
+
+
+void Editor::on_actionClose_All_triggered()
+{
+    while (ui->editorTabs->count() > 0)
+        CloseTab(0);
+}
+
+
+void Editor::on_actionSave_All_triggered()
+{
+    for (int i = 0; i < ui->editorTabs->count(); i++)
+    {
+        QWidget *current = ui->editorTabs->widget(i);
+        CodeEditor *editor = qobject_cast<CodeEditor*>(current);
+        Save(editor);
+    }
 }
 
