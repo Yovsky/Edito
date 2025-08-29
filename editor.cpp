@@ -828,3 +828,12 @@ void Editor::on_actionExit_triggered()
     close();
 }
 
+
+void Editor::on_actionFull_Screen_toggled(bool arg1)
+{
+    if (arg1)
+        this->setWindowState(Qt::WindowFullScreen);
+    else
+        this->setWindowState(Qt::WindowNoState);
+}
+

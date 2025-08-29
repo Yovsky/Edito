@@ -103,6 +103,8 @@ private slots:
 
     void on_actionExit_triggered();
 
+    void on_actionFull_Screen_toggled(bool arg1);
+
 private:
     Ui::Editor *ui;
     QLabel *posStatus;

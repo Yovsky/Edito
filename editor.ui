@@ -145,8 +145,11 @@
      <addaction name="actionZoom_In"/>
      <addaction name="actionZoom_Out"/>
     </widget>
+    <addaction name="actionAlways_On_Top"/>
     <addaction name="menuZoom"/>
+    <addaction name="separator"/>
     <addaction name="actionWord_Wrap"/>
+    <addaction name="actionFull_Screen"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -163,7 +166,6 @@
     <property name="title">
      <string>Window</string>
     </property>
-    <addaction name="actionAlways_On_Top"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -541,6 +543,17 @@
    </property>
    <property name="text">
     <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionFull_Screen">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Full Screen Mode</string>
+   </property>
+   <property name="shortcut">
+    <string>F11</string>
    </property>
   </action>
  </widget>
