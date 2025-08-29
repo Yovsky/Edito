@@ -20,6 +20,7 @@ public:
     void SaveSettings();
     void LoadSettings();
     void UpdateStatusBar();
+    void UpdateUndoRedo();
     void NewFile();
     void CloseTab(int index);
     void FileEdited(bool edited);
@@ -36,6 +37,8 @@ public:
     void toggleWordWrap(bool Wrap);
     void copySelection();
     void selectionTrack(bool hasSelection);
+    void UndoApperance(bool ava);
+    void RedoApperance(bool ava);
     ~Editor();
 
 private slots:
@@ -104,6 +107,10 @@ private slots:
     void on_actionExit_triggered();
 
     void on_actionFull_Screen_toggled(bool arg1);
+
+    void on_actionUndo_triggered();
+
+    void on_actionRedo_triggered();
 
 private:
     Ui::Editor *ui;

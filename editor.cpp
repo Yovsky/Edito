@@ -64,6 +64,7 @@ Editor::Editor(QWidget *parent)
     {
         Q_UNUSED(index);
         this->UpdateStatusBar();
+        this->UpdateUndoRedo();
     });
 
     UpdateStatusBar();
@@ -165,6 +166,21 @@ void Editor::UpdateStatusBar()
     }
 }
 
+void Editor::UpdateUndoRedo()
+{
+    CodeEditor *editor = currentEditor();
+    if (editor)
+    {
+        UndoApperance(editor->document()->isUndoAvailable());
+        RedoApperance(editor->document()->isRedoAvailable());
+    }
+    else
+    {
+        ui->actionUndo->setDisabled(true);
+        ui->actionRedo->setDisabled(true);
+    }
+}
+
 void Editor::FileEdited(bool modified)
 {
     CodeEditor *editor = qobject_cast<CodeEditor*>(sender());
@@ -217,6 +233,8 @@ void Editor::OpenFile(const QString &FilePath)
     connect(editor, &QPlainTextEdit::cursorPositionChanged, this, &Editor::UpdateStatusBar); //Connecting signals for Status.
     connect(editor, &QPlainTextEdit::textChanged, this, &Editor::UpdateStatusBar);
     connect(editor, &QPlainTextEdit::modificationChanged, this, &Editor::FileEdited); //Connecting signal for Unsaved indicator.
+    connect(editor, &QPlainTextEdit::undoAvailable, this, &Editor::UndoApperance);
+    connect(editor, &QPlainTextEdit::redoAvailable, this, &Editor::RedoApperance);
     connect(editor, &CodeEditor::zoomInRequested, this, &Editor::zoomIn); //Connecting signals for zoom feature.
     connect(editor, &CodeEditor::zoomOutRequested, this, &Editor::zoomOut);
     connect(editor, &CodeEditor::cutRequested, this, &Editor::on_actionCut_triggered); //Connecting signal for shortcuts.
@@ -255,6 +273,8 @@ void Editor::NewFile()
     connect(editor, &QPlainTextEdit::cursorPositionChanged, this, &Editor::UpdateStatusBar); //Connecting signals for Status.
     connect(editor, &QPlainTextEdit::textChanged, this, &Editor::UpdateStatusBar);
     connect(editor, &QPlainTextEdit::modificationChanged, this, &Editor::FileEdited); //Connecting signal for Unsaved indicator.
+    connect(editor, &QPlainTextEdit::undoAvailable, this, &Editor::UndoApperance);
+    connect(editor, &QPlainTextEdit::redoAvailable, this, &Editor::RedoApperance);
     connect(editor, &CodeEditor::zoomInRequested, this, &Editor::zoomIn); //Connecting signals for zoom feature.
     connect(editor, &CodeEditor::zoomOutRequested, this, &Editor::zoomOut);
     connect(editor, &CodeEditor::cutRequested, this, &Editor::on_actionCut_triggered); //Connecting signal for shortcuts.
@@ -791,26 +811,22 @@ void Editor::on_actionCopy_Current_Filename_triggered()
     QApplication::clipboard()->setText(QFileInfo(filePaths.value(editor)).fileName());
 }
 
-
 void Editor::on_actionCopy_Current_Dir_triggered()
 {
     CodeEditor *editor = currentEditor();
     QApplication::clipboard()->setText(QFileInfo(filePaths.value(editor)).absolutePath());
 }
 
-
 void Editor::on_actionClose_triggered()
 {
     CloseTab(ui->editorTabs->currentIndex());
 }
-
 
 void Editor::on_actionClose_All_triggered()
 {
     while (ui->editorTabs->count() > 0)
         CloseTab(0);
 }
-
 
 void Editor::on_actionSave_All_triggered()
 {
@@ -822,12 +838,10 @@ void Editor::on_actionSave_All_triggered()
     }
 }
 
-
 void Editor::on_actionExit_triggered()
 {
     close();
 }
-
 
 void Editor::on_actionFull_Screen_toggled(bool arg1)
 {
@@ -837,3 +851,32 @@ void Editor::on_actionFull_Screen_toggled(bool arg1)
         this->setWindowState(Qt::WindowNoState);
 }
 
+void Editor::UndoApperance(bool ava)
+{
+    if (ava)
+        ui->actionUndo->setEnabled(true);
+    else
+        ui->actionUndo->setDisabled(true);
+}
+
+void Editor::RedoApperance(bool ava)
+{
+    if (ava)
+        ui->actionRedo->setEnabled(true);
+    else
+        ui->actionRedo->setDisabled(true);
+}
+
+void Editor::on_actionUndo_triggered()
+{
+    CodeEditor *editor = currentEditor();
+    if (editor)
+        editor->undo();
+}
+
+void Editor::on_actionRedo_triggered()
+{
+    CodeEditor *editor = currentEditor();
+    if (editor)
+        editor->redo();
+}

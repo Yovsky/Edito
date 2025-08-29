@@ -118,6 +118,8 @@
     <addaction name="actionCopy"/>
     <addaction name="actionPaste"/>
     <addaction name="actionDuplicate_Line"/>
+    <addaction name="separator"/>
+    <addaction name="actionSelect_Line"/>
     <addaction name="actionSelect_All"/>
     <addaction name="separator"/>
     <addaction name="actionDelete"/>
@@ -131,7 +133,6 @@
     <addaction name="menuOn_Selection"/>
     <addaction name="separator"/>
     <addaction name="actionToggle_Read_Only"/>
-    <addaction name="actionSelect_Line"/>
     <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuView">
@@ -381,6 +382,10 @@
    </property>
   </action>
   <action name="actionSelect_Line">
+   <property name="icon">
+    <iconset resource="Resources.qrc">
+     <normaloff>:/icons/selectLine.png</normaloff>:/icons/selectLine.png</iconset>
+   </property>
    <property name="text">
     <string>Select Line</string>
    </property>

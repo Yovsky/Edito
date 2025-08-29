@@ -23,5 +23,6 @@
         <file>icons/delete.png</file>
         <file>icons/exit.png</file>
         <file>icons/selectAll.png</file>
+        <file>icons/selectLine.png</file>
     </qresource>
 </RCC>
