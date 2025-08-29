@@ -11,7 +11,6 @@
         <file>icons/saveAll.png</file>
         <file>icons/saved.png</file>
         <file>icons/settings.png</file>
-        <file>icons/settings_w.png</file>
         <file>icons/zoomIn.png</file>
         <file>icons/zoomOut.png</file>
         <file>icons/open.png</file>
@@ -23,5 +22,6 @@
         <file>icons/lower.png</file>
         <file>icons/delete.png</file>
         <file>icons/exit.png</file>
+        <file>icons/selectAll.png</file>
     </qresource>
 </RCC>

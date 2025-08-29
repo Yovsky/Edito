@@ -115,6 +115,7 @@ private:
     bool isReadOnly;
     bool wordWrap;
     QSettings *m_settings;
+    int openedTabs;
 
 signals:
     void toggleStatusBarReq(bool Visibility);

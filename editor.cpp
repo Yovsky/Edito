@@ -31,6 +31,7 @@ Editor::Editor(QWidget *parent)
     , isReadOnly(false)
     , wordWrap(false)
     , m_settings(nullptr)
+    , openedTabs(0)
 {
     ui->setupUi(this);
     ui->editorTabs->removeTab(0); //Removing the default "Tab 1".
@@ -237,9 +238,20 @@ void Editor::NewFile()
 
     QIcon icon(":/icons/saved.png");
 
-    tabBaseNames.insert(editor, "Untitled"); //Registering the tab name for later use.
+    if(openedTabs == 0)
+    {
+        tabBaseNames.insert(editor, "Untitled"); //Registering the tab name for later use.
 
-    ui->editorTabs->addTab(editor, icon,"Untitled"); //Set tab parameters.
+        ui->editorTabs->addTab(editor, icon,"Untitled"); //Set tab parameters.
+    }
+    else
+    {
+        tabBaseNames.insert(editor, "Untitled-" + QString::number(openedTabs)); //Registering the tab name for later use.
+
+        ui->editorTabs->addTab(editor, icon,"Untitled-" + QString::number(openedTabs)); //Set tab parameters.
+    }
+    openedTabs++;
+
     ui->editorTabs->setCurrentWidget(editor);
 
     editor->setZoomLevel(zoomLevel); //Set Zoom.

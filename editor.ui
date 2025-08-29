@@ -274,7 +274,7 @@
   <action name="actionPreferences">
    <property name="icon">
     <iconset resource="Resources.qrc">
-     <normaloff>:/icons/settings_w.png</normaloff>:/icons/settings_w.png</iconset>
+     <normaloff>:/icons/settings.png</normaloff>:/icons/settings.png</iconset>
    </property>
    <property name="text">
     <string>Preferences</string>
@@ -342,7 +342,8 @@
   </action>
   <action name="actionSelect_All">
    <property name="icon">
-    <iconset theme="QIcon::ThemeIcon::EditSelectAll"/>
+    <iconset resource="Resources.qrc">
+     <normaloff>:/icons/selectAll.png</normaloff>:/icons/selectAll.png</iconset>
    </property>
    <property name="text">
     <string>Select All</string>
