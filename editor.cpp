@@ -1,4 +1,5 @@
 #include "editor.h"
+#include "edito.h"
 #include "preferencesdialog.h"
 #include "qtextobject.h"
 #include "ui_editor.h"
@@ -1041,5 +1042,16 @@ void Editor::closeEvent(QCloseEvent *event)
     SaveSettings();
     saveCurrentTabs();
     event->accept();
+}
+
+
+void Editor::on_actionHome_triggered()
+{
+    this->close();
+    Edito *edito = new Edito();
+    edito->setAttribute(Qt::WA_DeleteOnClose);
+    edito->show();
+    edito->raise();
+    edito->activateWindow();
 }
 

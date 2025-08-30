@@ -117,6 +117,8 @@ private slots:
 
     void on_actionRedo_triggered();
 
+    void on_actionHome_triggered();
+
 private:
     Ui::Editor *ui;
     QLabel *posStatus;

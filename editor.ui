@@ -77,6 +77,7 @@
     <addaction name="actionClose"/>
     <addaction name="actionClose_All"/>
     <addaction name="separator"/>
+    <addaction name="actionHome"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
@@ -220,6 +221,7 @@
    <addaction name="actionRedo"/>
    <addaction name="separator"/>
    <addaction name="actionPreferences"/>
+   <addaction name="actionHome"/>
    <addaction name="separator"/>
    <addaction name="actionZoom_In"/>
    <addaction name="actionZoom_Out"/>
@@ -559,6 +561,15 @@
    </property>
    <property name="shortcut">
     <string>F11</string>
+   </property>
+  </action>
+  <action name="actionHome">
+   <property name="icon">
+    <iconset resource="Resources.qrc">
+     <normaloff>:/icons/home.png</normaloff>:/icons/home.png</iconset>
+   </property>
+   <property name="text">
+    <string>Home</string>
    </property>
   </action>
  </widget>
