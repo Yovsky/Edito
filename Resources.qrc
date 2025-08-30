@@ -24,5 +24,7 @@
         <file>icons/exit.png</file>
         <file>icons/selectAll.png</file>
         <file>icons/selectLine.png</file>
+        <file>icons/home.png</file>
+        <file>icons/noFile.png</file>
     </qresource>
 </RCC>

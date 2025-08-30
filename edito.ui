@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>568</width>
+    <width>599</width>
     <height>374</height>
    </rect>
   </property>
@@ -21,9 +21,9 @@
    <widget class="QPushButton" name="createNew">
     <property name="geometry">
      <rect>
-      <x>449</x>
-      <y>60</y>
-      <width>91</width>
+      <x>470</x>
+      <y>120</y>
+      <width>101</width>
       <height>51</height>
      </rect>
     </property>
@@ -36,39 +36,51 @@
     <property name="text">
      <string>Create New</string>
     </property>
+    <property name="icon">
+     <iconset resource="Resources.qrc">
+      <normaloff>:/icons/new.png</normaloff>:/icons/new.png</iconset>
+    </property>
    </widget>
    <widget class="QPushButton" name="Open">
     <property name="geometry">
      <rect>
-      <x>449</x>
-      <y>120</y>
-      <width>91</width>
+      <x>470</x>
+      <y>180</y>
+      <width>101</width>
       <height>51</height>
      </rect>
     </property>
     <property name="text">
      <string>Open From</string>
     </property>
+    <property name="icon">
+     <iconset resource="Resources.qrc">
+      <normaloff>:/icons/open.png</normaloff>:/icons/open.png</iconset>
+    </property>
    </widget>
    <widget class="QPushButton" name="Options">
     <property name="geometry">
      <rect>
-      <x>449</x>
+      <x>469</x>
       <y>240</y>
-      <width>91</width>
+      <width>101</width>
       <height>24</height>
      </rect>
     </property>
     <property name="text">
      <string>Options</string>
     </property>
+    <property name="icon">
+     <iconset resource="Resources.qrc">
+      <normaloff>:/icons/settings.png</normaloff>:/icons/settings.png</iconset>
+    </property>
    </widget>
    <widget class="QPushButton" name="pushButton_4">
     <property name="geometry">
      <rect>
-      <x>449</x>
+      <x>469</x>
       <y>270</y>
-      <width>91</width>
+      <width>101</width>
       <height>24</height>
      </rect>
     </property>
@@ -79,7 +91,7 @@
    <widget class="Line" name="line">
     <property name="geometry">
      <rect>
-      <x>430</x>
+      <x>450</x>
       <y>50</y>
       <width>20</width>
       <height>261</height>
@@ -134,15 +146,19 @@
    <widget class="QPushButton" name="EmptyFile">
     <property name="geometry">
      <rect>
-      <x>449</x>
-      <y>180</y>
-      <width>91</width>
+      <x>470</x>
+      <y>60</y>
+      <width>101</width>
       <height>51</height>
      </rect>
     </property>
     <property name="text">
      <string>Open Without
  A File</string>
+    </property>
+    <property name="icon">
+     <iconset resource="Resources.qrc">
+      <normaloff>:/icons/noFile.png</normaloff>:/icons/noFile.png</iconset>
     </property>
    </widget>
   </widget>
