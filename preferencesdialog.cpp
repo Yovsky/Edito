@@ -9,6 +9,8 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, bool isStatVisible, QW
 {
     ui->setupUi(this);
 
+    this->setWindowIcon(QIcon(":/icons/settings.png"));
+
     if (isStatVisible) ui->Show->setChecked(true); //Check the Show button on Visible.
     else if (!isStatVisible) ui->Hide->setChecked(true); //Check the Hide button on Hidden.
     checkcorrectSE();
