@@ -14,12 +14,15 @@
    <string>Preferences</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="Resources.qrc">
+   <iconset>
     <normaloff>:/icons/settings_w.png</normaloff>:/icons/settings_w.png</iconset>
   </property>
   <layout class="QFormLayout" name="formLayout">
    <item row="0" column="0">
     <widget class="QListWidget" name="PrefList">
+     <property name="lineWidth">
+      <number>15</number>
+     </property>
      <item>
       <property name="text">
        <string>General</string>
@@ -392,8 +395,6 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="Resources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
