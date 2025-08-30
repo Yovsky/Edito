@@ -39,6 +39,11 @@ public:
     void selectionTrack(bool hasSelection);
     void UndoApperance(bool ava);
     void RedoApperance(bool ava);
+    void saveCurrentTabs();
+    QString saveTempFiles(CodeEditor *editor);
+    void restoreTabs(const QStringList &tabsData);
+    void restoreSeccionFile(const QString &tempPath, const QString &originalPath, const bool &isModified, const QString &tabName);
+    void cleanupTempFiles();
     ~Editor();
 
 private slots:
@@ -125,10 +130,13 @@ private:
     bool wordWrap;
     QSettings *m_settings;
     int openedTabs;
+    QHash<CodeEditor*, bool> isSaved;
+    QVector<QString> seccionTabs;
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
+    void closeEvent(QCloseEvent *event) override;
 
 signals:
     void toggleStatusBarReq(bool Visibility);

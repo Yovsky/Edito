@@ -23,6 +23,8 @@
 #include <QMimeData>
 #include <QDragEnterEvent>
 #include <QDropEvent>
+#include <QDateTime>
+#include <QCloseEvent>
 
 Editor::Editor(QWidget *parent)
     : QMainWindow(parent)
@@ -76,6 +78,7 @@ void Editor::SaveSettings()
     m_settings->setValue("ToggleStatBar", statBarVisibility);
     m_settings->setValue("ToggleReadOnly", isReadOnly);
     m_settings->setValue("Word Wrap", wordWrap);
+    m_settings->setValue("SeccionTabs", seccionTabs);
     qDebug() << "SAVING - ReadOnly:" << isReadOnly;
     qDebug() << "Settings file:" << m_settings->fileName();
     m_settings->sync();
@@ -90,6 +93,8 @@ void Editor::LoadSettings()
     applyReadOnly(isReadOnly);
     wordWrap = m_settings->value("Word Wrap", false).toBool();
     toggleWordWrap(wordWrap);
+    seccionTabs = m_settings->value("SeccionTabs").toStringList();
+    restoreTabs(seccionTabs);
 
     qDebug() << "Loaded ReadOnly:" << isReadOnly;
 
@@ -187,6 +192,7 @@ void Editor::FileEdited(bool modified)
 
     if (!editor) return;
 
+    isSaved.insert(editor, !modified);
     resetTabState(editor, modified);
 }
 
@@ -228,6 +234,8 @@ void Editor::OpenFile(const QString &FilePath)
     QString content = in.readAll();
     CodeEditor *editor = new CodeEditor();
 
+    isSaved.insert(editor, true);
+
     editor->editorActions(ui->actionCut, ui->actionCopy, ui->actionPaste, ui->actionSelect_All, ui->actionUPPERCASE, ui->actionLowercase, ui->actionSearch_on_Web); //Pass actions for context menu.
 
     connect(editor, &QPlainTextEdit::cursorPositionChanged, this, &Editor::UpdateStatusBar); //Connecting signals for Status.
@@ -267,6 +275,8 @@ void Editor::OpenFile(const QString &FilePath)
 void Editor::NewFile()
 {
     CodeEditor *editor = new CodeEditor(); //Handle the CreateNew from external windows.
+
+    isSaved.insert(editor, false);
 
     editor->editorActions(ui->actionCut, ui->actionCopy, ui->actionPaste, ui->actionSelect_All, ui->actionUPPERCASE, ui->actionLowercase, ui->actionSearch_on_Web); //Pass actions for context menu.
 
@@ -580,6 +590,7 @@ void Editor::copySelection()
 Editor::~Editor()
 {
     SaveSettings(); //Save current configuration.
+    saveCurrentTabs();
 
     delete posStatus;
     delete sizeStatus;
@@ -880,3 +891,155 @@ void Editor::on_actionRedo_triggered()
     if (editor)
         editor->redo();
 }
+
+void Editor::saveCurrentTabs()
+{
+    seccionTabs.clear();
+
+    for (int i = 0; i < ui->editorTabs->count(); i++)
+    {
+        CodeEditor *editor = qobject_cast<CodeEditor*>(ui->editorTabs->widget(i));
+        if (editor && editor->document()->isModified())
+        {
+            QString tempPath = saveTempFiles(editor);
+
+            QString seccionData = tempPath + "|";
+
+            if(filePaths.contains(editor) && !filePaths.value(editor).isEmpty())
+                seccionData += filePaths.value(editor) + "|";
+            else
+                seccionData += "|";
+
+            if(editor->document()->isModified())
+                seccionData += "1|";
+            else
+                seccionData += "0|";
+
+            seccionData += tabBaseNames.value(editor, "Unknown");
+
+            seccionTabs.push_back(seccionData);
+        }
+    }
+}
+
+QString Editor::saveTempFiles(CodeEditor *editor)
+{
+    QString baseName;
+    if (filePaths.contains(editor) && !filePaths.value(editor).isEmpty())
+    {
+        baseName = QFileInfo(filePaths.value(editor)).fileName();
+    }
+    else
+    {
+        baseName = tabBaseNames.value(editor, "Untitled");
+    }
+
+    QString filePath = QStandardPaths::writableLocation(QStandardPaths::TempLocation) +
+                       "/edito_temp_" + QString::number(QDateTime::currentSecsSinceEpoch()) +
+                       "_" + tabBaseNames.value(editor);
+    QFile file(filePath);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) //File opening.
+    {
+        QTextStream stream(&file);
+        stream.setEncoding(QStringConverter::Utf8);
+        stream << editor->toPlainText();
+        file.close();
+        return filePath;
+    }
+    return QString();
+}
+
+void Editor::restoreTabs(const QStringList &tabsData)
+{
+    for (QString seccionData : tabsData)
+    {
+        QStringList Data = seccionData.split("|");
+        if (Data.size() == 4)
+        {
+            QString tempPath = Data[0];
+            QString originalPath = Data[1];
+            bool isModified = (Data[2] == "1");
+            QString tabName = Data[3];
+
+            restoreSeccionFile(tempPath, originalPath, isModified, tabName);
+        }
+    }
+}
+
+void Editor::restoreSeccionFile(const QString &tempPath, const QString &originalPath, const bool &isModified, const QString &tabName)
+{
+    QFile file(tempPath);
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QTextStream in(&file);
+        in.setEncoding(QStringConverter::Utf8);
+        QString content = in.readAll();
+        file.close();
+
+        // Create editor with restored content
+        CodeEditor *editor = new CodeEditor();
+        editor->setPlainText(content);
+        editor->document()->setModified(isModified); // Restore modified state
+
+        // Set up editor connections
+        editor->editorActions(ui->actionCut, ui->actionCopy, ui->actionPaste,
+                              ui->actionSelect_All, ui->actionUPPERCASE,
+                              ui->actionLowercase, ui->actionSearch_on_Web);
+
+        connect(editor, &QPlainTextEdit::cursorPositionChanged, this, &Editor::UpdateStatusBar);
+        connect(editor, &QPlainTextEdit::textChanged, this, &Editor::UpdateStatusBar);
+        connect(editor, &QPlainTextEdit::modificationChanged, this, &Editor::FileEdited);
+        connect(editor, &QPlainTextEdit::undoAvailable, this, &Editor::UndoApperance);
+        connect(editor, &QPlainTextEdit::redoAvailable, this, &Editor::RedoApperance);
+        connect(editor, &CodeEditor::zoomInRequested, this, &Editor::zoomIn);
+        connect(editor, &CodeEditor::zoomOutRequested, this, &Editor::zoomOut);
+        connect(editor, &CodeEditor::cutRequested, this, &Editor::on_actionCut_triggered);
+        connect(editor, &CodeEditor::copyRequested, this, &Editor::copySelection);
+        connect(editor, &CodeEditor::pasteRequested, this, &Editor::on_actionPaste_triggered);
+        connect(editor, &CodeEditor::selectAllRequested, this, &Editor::on_actionSelect_All_triggered);
+        connect(editor, &CodeEditor::selectionStateChanged, this, &Editor::selectionTrack);
+
+        // Restore file metadata
+        if (!originalPath.isEmpty()) {
+            filePaths.insert(editor, originalPath);
+            tabBaseNames.insert(editor, tabName);
+        } else {
+            tabBaseNames.insert(editor, tabName);
+        }
+
+        // Set editor properties
+        editor->setReadOnly(isReadOnly);
+        editor->setLineWrapMode(wordWrap ? QPlainTextEdit::WidgetWidth : QPlainTextEdit::NoWrap);
+        editor->setZoomLevel(zoomLevel);
+
+        // Add to tabs with correct icon and name
+        QIcon icon = isModified ? QIcon(":/icons/notsaved.png") : QIcon(":/icons/saved.png");
+        QString displayName = isModified ? tabName + "*" : tabName;
+
+        ui->editorTabs->addTab(editor, icon, displayName);
+
+        // Clean up temp file
+        QFile::remove(tempPath);
+    }
+}
+
+void Editor::cleanupTempFiles()
+{
+    QDir tempDir(QStandardPaths::writableLocation(QStandardPaths::TempLocation));
+    QStringList filePaths = tempDir.entryList(QStringList() << "edito_temp_*", QDir::Files);
+
+    for (const QString &file : filePaths)
+    {
+        QFileInfo fileInfo(tempDir.filePath(file));
+        if(fileInfo.lastModified().daysTo(QDateTime::currentDateTime()) > 1)
+            tempDir.remove(file);
+    }
+}
+
+void Editor::closeEvent(QCloseEvent *event)
+{
+    SaveSettings();
+    saveCurrentTabs();
+    event->accept();
+}
+
