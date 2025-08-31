@@ -146,6 +146,7 @@
      </property>
      <addaction name="actionZoom_In"/>
      <addaction name="actionZoom_Out"/>
+     <addaction name="actionRestore_Default_Zoom"/>
     </widget>
     <addaction name="actionAlways_On_Top"/>
     <addaction name="menuZoom"/>
@@ -570,6 +571,14 @@
    </property>
    <property name="text">
     <string>Home</string>
+   </property>
+  </action>
+  <action name="actionRestore_Default_Zoom">
+   <property name="text">
+    <string>Restore Default Zoom</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+/</string>
    </property>
   </action>
  </widget>

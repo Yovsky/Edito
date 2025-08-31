@@ -1055,3 +1055,16 @@ void Editor::on_actionHome_triggered()
     edito->activateWindow();
 }
 
+
+void Editor::on_actionRestore_Default_Zoom_triggered()
+{
+    zoomLevel = 0;
+    for (int i = 0; i < ui->editorTabs->count(); i++)
+    {
+        CodeEditor *editor = qobject_cast<CodeEditor*>(ui->editorTabs->widget(i));
+        if(editor)
+            editor->setZoomLevel(0);
+    }
+    UpdateStatusBar();
+}
+

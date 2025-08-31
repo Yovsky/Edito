@@ -119,6 +119,8 @@ private slots:
 
     void on_actionHome_triggered();
 
+    void on_actionRestore_Default_Zoom_triggered();
+
 private:
     Ui::Editor *ui;
     QLabel *posStatus;
