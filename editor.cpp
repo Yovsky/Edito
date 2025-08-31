@@ -1,3 +1,21 @@
+/*
+ * Edito - A modern, cross-platform text editor
+ * Copyright (C) 2025 Yovsky <Yovsky@proton.me>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 #include "editor.h"
 #include "edito.h"
 #include "gotodialog.h"
@@ -33,6 +51,7 @@ Editor::Editor(QWidget *parent)
     , ui(new Ui::Editor)
     , posStatus(nullptr)
     , sizeStatus(nullptr)
+    , encStatus(nullptr)
     , zoomLevel(0)
     , statBarVisibility(true)
     , isReadOnly(false)
@@ -57,11 +76,13 @@ Editor::Editor(QWidget *parent)
     statusBarApperance(statBarVisibility); //Show/Hide status bar on beggining.
     posStatus = new QLabel("Line 0, Col 0, Pos 0"); //Position label.
     sizeStatus = new QLabel("Size 0, Lines 0"); //Size label.
+    encStatus = new QLabel("UTF-8");
     zoomStatus = new QLabel("100%"); //Zoom label.
 
     ui->statusbar->addPermanentWidget(zoomStatus,1);
     ui->statusbar->addPermanentWidget(posStatus, 6); //Assign the blocks with their sizes.
     ui->statusbar->addPermanentWidget(sizeStatus,3);
+    ui->statusbar->addPermanentWidget(encStatus, 2);
 
 
     connect(ui->editorTabs, &QTabWidget::currentChanged, this, [this](int index) //Connecting when swiching tabs.
@@ -97,11 +118,6 @@ void Editor::LoadSettings()
     toggleWordWrap(wordWrap);
     seccionTabs = m_settings->value("SeccionTabs").toStringList();
     restoreTabs(seccionTabs);
-
-    qDebug() << "Loaded ReadOnly:" << isReadOnly;
-
-    qDebug() << "LOADING - Zoom level:" << zoomLevel;
-    qDebug() << "Settings file:" << m_settings->fileName();
     RestoreZoom(zoomLevel);
 }
 
@@ -170,6 +186,10 @@ void Editor::UpdateStatusBar()
     if (zoomStatus)
     {
         zoomStatus->setText(QString::number(100 + zoomLevel * 10) + "%");
+    }
+    if (encStatus)
+    {
+
     }
 }
 
