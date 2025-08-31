@@ -1,5 +1,6 @@
 #include "editor.h"
 #include "edito.h"
+#include "gotodialog.h"
 #include "preferencesdialog.h"
 #include "qtextobject.h"
 #include "ui_editor.h"
@@ -1044,7 +1045,6 @@ void Editor::closeEvent(QCloseEvent *event)
     event->accept();
 }
 
-
 void Editor::on_actionHome_triggered()
 {
     this->close();
@@ -1054,7 +1054,6 @@ void Editor::on_actionHome_triggered()
     edito->raise();
     edito->activateWindow();
 }
-
 
 void Editor::on_actionRestore_Default_Zoom_triggered()
 {
@@ -1066,5 +1065,11 @@ void Editor::on_actionRestore_Default_Zoom_triggered()
             editor->setZoomLevel(0);
     }
     UpdateStatusBar();
+}
+
+void Editor::on_actionGo_To_triggered()
+{
+    gotodialog dialog(this);
+    dialog.exec();
 }
 

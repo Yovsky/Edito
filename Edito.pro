@@ -13,6 +13,7 @@ RC_ICONS = edito.ico
 SOURCES += \
     codeeditor.cpp \
     editor.cpp \
+    gotodialog.cpp \
     main.cpp \
     edito.cpp \
     preferencesdialog.cpp
@@ -21,11 +22,13 @@ HEADERS += \
     codeeditor.h \
     edito.h \
     editor.h \
+    gotodialog.h \
     preferencesdialog.h
 
 FORMS += \
     edito.ui \
     editor.ui \
+    gotodialog.ui \
     preferencesdialog.ui
 
 TRANSLATIONS += \
