@@ -1,4 +1,4 @@
-# Edito - Advanced Text Editor.
+# Edito - Modern Text Editor.
 
 ![QT VERSION](https://img.shields.io/badge/Qt-6.0+-41CD52?logo=qt)
 ![LICENSE](https://img.shields.io/badge/License-GPLv3-2E86AB)
