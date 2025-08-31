@@ -1069,7 +1069,11 @@ void Editor::on_actionRestore_Default_Zoom_triggered()
 
 void Editor::on_actionGo_To_triggered()
 {
-    gotodialog dialog(this);
+    CodeEditor *editor = currentEditor();
+    int lineCount = editor->document()->lineCount();
+    int charCount = editor->document()->characterCount();
+
+    gotodialog dialog(lineCount, charCount, this);
     dialog.exec();
 }
 
