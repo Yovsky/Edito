@@ -1,35 +1,46 @@
 #include "gotodialog.h"
 #include "ui_gotodialog.h"
 #include <QRegularExpressionValidator>
-
-gotodialog::gotodialog(const int &lineCount, const int &charCount, QWidget *parent)
+#include <QMessageBox>
+gotodialog::gotodialog(CodeEditor *editor, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::gotodialog)
+    , editor(editor)
     , lengthChar(0)
     , lengthLine(0)
+    , line_M(true)
 {
     ui->setupUi(this);
-    lengthLine = lineCount;
-    lengthChar = charCount;
-
     ui->Line_m->setChecked(true);
-    toggleLineOffs(true);
+    ui->Ok->setDefault(true);
+
+    connect(editor, &CodeEditor::selectionChanged, this, [this]() {
+        toggleLineOffs();
+    });
+
+    lengthLine = editor->document()->lineCount();
+    lengthChar = editor->document()->characterCount();
+
+    toggleLineOffs();
 }
 
-void gotodialog::toggleLineOffs(bool used)
+void gotodialog::toggleLineOffs()
 {
     ui->Go_to->clear();
-    if (used)
+
+    if (line_M)
     {
         QRegularExpressionValidator *validator = new QRegularExpressionValidator(QRegularExpression("\\d{0," + QString::number(QString::number(lengthLine).length()) + "}"), this);
         ui->Go_to->setValidator(validator);
-        ui->Max->setText(QString::number(lengthLine));
+        ui->Max->setText(QString::number(lengthLine + 1));
+        ui->Current->setText(QString::number(editor->textCursor().blockNumber() + 1));
     }
     else
     {
         QRegularExpressionValidator *validator = new QRegularExpressionValidator(QRegularExpression("\\d{0," + QString::number(QString::number(lengthChar).length()) + "}"), this);
         ui->Go_to->setValidator(validator);
-        ui->Max->setText(QString::number(lengthChar));
+        ui->Max->setText(QString::number(lengthChar + 1));
+        ui->Current->setText(QString::number(editor->textCursor().position() + 1));
     }
 }
 
@@ -43,15 +54,42 @@ void gotodialog::on_Cancel_clicked()
     this->close();
 }
 
+void gotodialog::on_Line_m_toggled(bool checked)
+{
+    line_M = checked;
+    toggleLineOffs();
+}
 
 void gotodialog::on_Off_m_toggled(bool checked)
 {
-    toggleLineOffs(!checked);
+    line_M = !checked;
+    toggleLineOffs();
 }
 
-
-void gotodialog::on_Line_m_toggled(bool checked)
+void gotodialog::executeGoTo()
 {
-    toggleLineOffs(checked);
+    QTextCursor cursor = editor->textCursor();
+    int target = ui->Go_to->text().toInt() - 1;
+    if(line_M && target <= lengthLine)
+    {
+        cursor.setPosition(0);
+        cursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor, target);
+    }
+    else if(!line_M && target + 1 <= lengthChar)
+        cursor.setPosition(target + 1);
+    else
+        cursor.setPosition(lengthChar - 1);
+    editor->setTextCursor(cursor);
+}
+
+void gotodialog::on_Ok_clicked()
+{
+    if(ui->Go_to->text() != "")
+    {
+        executeGoTo();
+        this->close();
+    }
+    else
+        QMessageBox::warning(this, "Warning", "Target line empty.");
 }
 

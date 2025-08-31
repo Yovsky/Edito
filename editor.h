@@ -146,6 +146,7 @@ protected:
 
 signals:
     void toggleStatusBarReq(bool Visibility);
+    void selectionChanged();
 };
 
 #endif // EDITOR_H
