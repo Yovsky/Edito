@@ -49,7 +49,6 @@ public:
     void RestoreZoom(int zoom);
     void zoomIn();
     void zoomOut();
-    void wheelEvent(QWheelEvent *event);
     void statusBarApperance(bool Visibility);
     void applyReadOnly(bool isRO);
     void toggleWordWrap(bool Wrap);
@@ -162,6 +161,7 @@ protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
     void closeEvent(QCloseEvent *event) override;
+    void wheelEvent(QWheelEvent *event) override;
 
 signals:
     void toggleStatusBarReq(bool Visibility);
