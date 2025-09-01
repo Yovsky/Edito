@@ -79,10 +79,10 @@ Editor::Editor(QWidget *parent)
     encStatus = new QLabel("UTF-8");
     zoomStatus = new QLabel("100%"); //Zoom label.
 
-    ui->statusbar->addPermanentWidget(zoomStatus,1);
-    ui->statusbar->addPermanentWidget(posStatus, 6); //Assign the blocks with their sizes.
-    ui->statusbar->addPermanentWidget(sizeStatus,3);
-    ui->statusbar->addPermanentWidget(encStatus, 2);
+    ui->statusbar->addPermanentWidget(zoomStatus,2);
+    ui->statusbar->addPermanentWidget(posStatus, 18); //Assign the blocks with their sizes.
+    ui->statusbar->addPermanentWidget(sizeStatus,9);
+    ui->statusbar->addPermanentWidget(encStatus, 3);
 
 
     connect(ui->editorTabs, &QTabWidget::currentChanged, this, [this](int index) //Connecting when swiching tabs.
@@ -189,7 +189,7 @@ void Editor::UpdateStatusBar()
     }
     if (encStatus)
     {
-
+        encStatus->setText(currentEncodings.value(editor, "Unknown"));
     }
 }
 
@@ -249,13 +249,29 @@ void Editor::OpenFile(const QString &FilePath)
     QFile file(FilePath);
 
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) //File opening.
+    {
         QMessageBox::critical(this, "Error", "Failed to open file " + FilePath); //Error handling.
+        return;
+    }
 
-    QTextStream in(&file); //Text setup.
-    in.setEncoding(QStringConverter::Utf8);//Setting the encoding.
-    QString content = in.readAll();
+    //Read content.
+    QByteArray data = file.readAll();
+    file.close();
+
+    //Detect Encoding.
+    encdetector::encodingResult result = encdetector::detectEncoding(data);
+
+    QStringDecoder decoder = QStringDecoder(result.converterEnc);
+    QString content = decoder.decode(data);
+
+    if (decoder.hasError())
+    {
+        QMessageBox::warning(this, "Warning", "Detected encoding may be incorrect, Using fallback encoding.");
+        QStringDecoder fallBackDec = QStringDecoder(QStringConverter::Encoding::Latin1);
+        content = fallBackDec.decode(data);
+    }
+
     CodeEditor *editor = new CodeEditor();
-
     isSaved.insert(editor, true);
 
     editor->editorActions(ui->actionCut, ui->actionCopy, ui->actionPaste, ui->actionSelect_All, ui->actionUPPERCASE, ui->actionLowercase, ui->actionSearch_on_Web); //Pass actions for context menu.
@@ -281,6 +297,7 @@ void Editor::OpenFile(const QString &FilePath)
 
     tabBaseNames.insert(editor, QFileInfo(file).fileName()); //Registering the tab name for later use.
     filePaths.insert(editor,FilePath); //Registering the file path for later use.
+    currentEncodings.insert(editor, result.encoding);
 
     ui->editorTabs->addTab(editor, icon,QFileInfo(file).fileName()); //Set tab parameters.
     ui->editorTabs->setCurrentWidget(editor);
@@ -341,6 +358,7 @@ void Editor::NewFile()
 
     editor->document()->setModified(false);
     resetTabState(editor, false);
+
 
     UpdateStatusBar(); //Status update.
 }

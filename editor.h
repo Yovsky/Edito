@@ -20,6 +20,7 @@
  */
 
 #include "codeeditor.h"
+#include "encdetector.h"
 #include <QMainWindow>
 #include <QLabel>
 #include <QSettings>
@@ -54,6 +55,7 @@ public:
     void toggleWordWrap(bool Wrap);
     void copySelection();
     void selectionTrack(bool hasSelection);
+    void encodingTrack();
     void UndoApperance(bool ava);
     void RedoApperance(bool ava);
     void saveCurrentTabs();
@@ -156,6 +158,8 @@ private:
     int openedTabs;
     QHash<CodeEditor*, bool> isSaved;
     QVector<QString> seccionTabs;
+    QHash<CodeEditor*, QString> currentEncodings;
+    QHash<CodeEditor*, bool> hasBOM;
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
