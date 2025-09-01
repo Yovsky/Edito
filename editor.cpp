@@ -91,28 +91,41 @@ Editor::Editor(QWidget *parent)
     {
         Q_UNUSED(index);
         CodeEditor *editor = currentEditor();
-        if (editor && currentEncodings.contains(editor)) {
-            QString encoding = currentEncodings.value(editor);
-
-            // Uncheck all encoding actions first
-            ui->actionUTF_8->setChecked(false);
-            ui->actionUTF_16LE->setChecked(false);
-            ui->actionUTF_16BE->setChecked(false);
-            ui->actionUTF_32LE->setChecked(false);
-            ui->actionUTF_32BE->setChecked(false);
-
-            // Check the appropriate action
-            if (encoding == "UTF-8") ui->actionUTF_8->setChecked(true);
-            else if (encoding == "UTF-16LE") ui->actionUTF_16LE->setChecked(true);
-            else if (encoding == "UTF-16BE") ui->actionUTF_16BE->setChecked(true);
-            else if (encoding == "UTF-32LE") ui->actionUTF_32LE->setChecked(true);
-            else if (encoding == "UTF-32BE") ui->actionUTF_32BE->setChecked(true);
+        bool hasEditor = (editor != nullptr);
+        for (QAction *action : encMenu->actions())
+        {
+            action->setEnabled(hasEditor);
+            if (!hasEditor)
+            {
+                action->setChecked(false);
+            }
         }
+
+        if (editor && currentEncodings.contains(editor))
+        {
+            QString encoding = currentEncodings.value(editor);
+            for (QAction *action : encMenu->actions())
+            {
+                if (action->data().toString() == encoding)
+                {
+                    action->setChecked(true);
+                    break;
+                }
+            }
+        }
+
         this->UpdateStatusBar();
         this->UpdateUndoRedo();
     });
 
+    CreateEncMenu();
     UpdateStatusBar();
+
+    for (QAction *action : encMenu->actions())
+    {
+        action->setEnabled(false);
+        action->setChecked(false);
+    }
 }
 
 void Editor::SaveSettings()
@@ -213,6 +226,61 @@ void Editor::UpdateStatusBar()
     }
 }
 
+void Editor::CreateEncMenu()
+{
+    encMenu = menuBar()->addMenu(tr("&Encoding"));
+    menuBar()->insertMenu(ui->menuView->menuAction(), encMenu);
+
+    encActionGrp = new QActionGroup(this);
+    encActionGrp->setExclusive(true);
+    QStringList supportedEnc
+    {
+        "UTF-8",
+        "UTF-16LE",
+        "UTF-16BE",
+        "UTF-32LE",
+        "UTF-32BE",
+        "ISO-8859-1",
+        "System"
+    };
+    for (const QString &enc : supportedEnc)
+    {
+        QAction *action = encMenu->addAction(enc);
+
+        action->setCheckable(true);
+        action->setData(enc);
+
+        connect(action, &QAction::triggered, this, [action, this]() {
+            onEncodingActionSelected(action);
+        });
+
+        encActionGrp->addAction(action);
+    }
+
+    encMenu->actions().first()->setChecked(true);
+}
+
+void Editor::onEncodingActionSelected(QAction *selectedAction)
+{
+    CodeEditor *editor = currentEditor();
+    if (!editor)
+    {
+        for (QAction *action : encMenu->actions())
+        {
+            action->setChecked(false);
+            action->setEnabled(false);
+        }
+        return;
+    }
+
+    for (QAction *action : encMenu->actions())
+    {
+        action->setEnabled(true);
+    }
+    currentEncodings.insert(editor, selectedAction->data().toString());
+    encStatus->setText(selectedAction->data().toString());
+}
+
 void Editor::UpdateUndoRedo()
 {
     CodeEditor *editor = currentEditor();
@@ -268,7 +336,7 @@ void Editor::OpenFile(const QString &FilePath)
 {
     QFile file(FilePath);
 
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) //File opening.
+    if(!file.open(QIODevice::ReadOnly)) //File opening.
     {
         QMessageBox::critical(this, "Error", "Failed to open file " + FilePath); //Error handling.
         return;
@@ -287,8 +355,13 @@ void Editor::OpenFile(const QString &FilePath)
     if (decoder.hasError())
     {
         QMessageBox::warning(this, "Warning", "Detected encoding may be incorrect, Using fallback encoding.");
-        QStringDecoder fallBackDec = QStringDecoder(QStringConverter::Encoding::Latin1);
+        QStringDecoder fallBackDec = QStringDecoder(QStringConverter::Encoding::Utf8);
         content = fallBackDec.decode(data);
+        if (fallBackDec.hasError())
+        {
+            QStringDecoder latin1Dec = QStringDecoder(QStringConverter::Encoding::Latin1);
+            content = latin1Dec.decode(data);
+        }
     }
 
     CodeEditor *editor = new CodeEditor();
@@ -337,6 +410,15 @@ void Editor::NewFile()
 
     isSaved.insert(editor, false);
     currentEncodings.insert(editor, "UTF-8");
+
+    for (QAction *action : encMenu->actions())
+    {
+        action->setEnabled(true);
+        if (action->data().toString() == "UTF-8")
+        {
+            action->setChecked(true);
+        }
+    }
 
     editor->editorActions(ui->actionCut, ui->actionCopy, ui->actionPaste, ui->actionSelect_All, ui->actionUPPERCASE, ui->actionLowercase, ui->actionSearch_on_Web); //Pass actions for context menu.
     ui->actionUTF_8->setChecked(true);
@@ -1184,71 +1266,6 @@ void Editor::on_actionGo_To_triggered()
     gotodialog *dialog = new gotodialog(editor, this);
     dialog->setWindowModality(Qt::NonModal);
     dialog->show();
-}
-
-void Editor::on_actionUTF_8_toggled(bool arg1)
-{
-    ui->actionUTF_16BE->setChecked(false);
-    ui->actionUTF_16LE->setChecked(false);
-    ui->actionUTF_32BE->setChecked(false);
-    ui->actionUTF_32LE->setChecked(false);
-
-    CodeEditor *editor = currentEditor();
-    currentEncodings.insert(editor, "UTF-8");
-
-    UpdateStatusBar();
-}
-
-void Editor::on_actionUTF_16LE_toggled(bool arg1)
-{
-    ui->actionUTF_16BE->setChecked(false);
-    ui->actionUTF_8->setChecked(false);
-    ui->actionUTF_32BE->setChecked(false);
-    ui->actionUTF_32LE->setChecked(false);
-
-    CodeEditor *editor = currentEditor();
-    currentEncodings.insert(editor, "UTF-16LE");
-
-    UpdateStatusBar();
-}
-
-void Editor::on_actionUTF_16BE_toggled(bool arg1)
-{
-    ui->actionUTF_8->setChecked(false);
-    ui->actionUTF_16LE->setChecked(false);
-    ui->actionUTF_32BE->setChecked(false);
-    ui->actionUTF_32LE->setChecked(false);
-
-    CodeEditor *editor = currentEditor();
-    currentEncodings.insert(editor, "UTF-16BE");
-
-    UpdateStatusBar();
-}
-
-void Editor::on_actionUTF_32LE_toggled(bool arg1)
-{
-    ui->actionUTF_16BE->setChecked(false);
-    ui->actionUTF_16LE->setChecked(false);
-    ui->actionUTF_32BE->setChecked(false);
-    ui->actionUTF_8->setChecked(false);
-
-    CodeEditor *editor = currentEditor();
-    currentEncodings.insert(editor, "UTF-32LE");
-
-    UpdateStatusBar();
-}
-
-void Editor::on_actionUTF_32BE_toggled(bool arg1)
-{
-    ui->actionUTF_16BE->setChecked(false);
-    ui->actionUTF_16LE->setChecked(false);
-    ui->actionUTF_8->setChecked(false);
-    ui->actionUTF_32LE->setChecked(false);
-
-    CodeEditor *editor = currentEditor();
-    currentEncodings.insert(editor, "UTF-32BE");
-
-    UpdateStatusBar();
 }
 
 QStringConverter::Encoding Editor::textToEnc(const QString &encname)

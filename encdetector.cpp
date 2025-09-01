@@ -18,22 +18,35 @@
 
 #include "encdetector.h"
 #include <QFile>
+#include <QDebug>
 
 encdetector::encodingResult encdetector::detectEncoding(const QByteArray &data)
 {
     encdetector::encodingResult res;
     res.hasBOM = false;
 
+    qDebug() << "Data size:" << data.size() << "bytes";
+
     //Try detecting by BOM.
     if(data.startsWith("\xEF\xBB\xBF"))
     {
+        qDebug() << "detected UTF-8";
         res.encoding = "UTF-8";
         res.converterEnc = QStringConverter::Encoding::Utf8;
         res.hasBOM = true;
         return res;
     }
+    else if(data.startsWith("\xFF\xFE\x00\x00"))
+    {
+        qDebug() << "detected UTF-32LE";
+        res.encoding = "UTF-32LE";
+        res.converterEnc = QStringConverter::Encoding::Utf32LE;
+        res.hasBOM = true;
+        return res;
+    }
     else if(data.startsWith("\xFF\xFE"))
     {
+        qDebug() << "detected UTF-16LE";
         res.encoding = "UTF-16LE";
         res.converterEnc = QStringConverter::Encoding::Utf16LE;
         res.hasBOM = true;
@@ -41,20 +54,15 @@ encdetector::encodingResult encdetector::detectEncoding(const QByteArray &data)
     }
     else if(data.startsWith("\xFE\xFF"))
     {
+        qDebug() << "detected UTF-16BE";
         res.encoding = "UTF-16BE";
         res.converterEnc = QStringConverter::Encoding::Utf16BE;
         res.hasBOM = true;
         return res;
     }
-    else if(data.startsWith("\xFF\xFE\x00"))
-    {
-        res.encoding = "UTF-32LE";
-        res.converterEnc = QStringConverter::Encoding::Utf32LE;
-        res.hasBOM = true;
-        return res;
-    }
     else if(data.startsWith("\x00\x00\xFE\xFF"))
     {
+        qDebug() << "detected UTF-32BE";
         res.encoding = "UTF-32BE";
         res.converterEnc = QStringConverter::Encoding::Utf32BE;
         res.hasBOM = true;
@@ -67,14 +75,14 @@ encdetector::encodingResult encdetector::detectEncoding(const QByteArray &data)
     if (decoder.hasError())
     {
         QList<QStringConverter::Encoding> encToTest
-        {
-            QStringConverter::Encoding::Latin1,
-            QStringConverter::Encoding::System,
-            QStringConverter::Encoding::Utf16LE,
-            QStringConverter::Encoding::Utf16BE,
-            QStringConverter::Encoding::Utf32LE,
-            QStringConverter::Encoding::Utf32BE
-        };
+            {
+                QStringConverter::Encoding::Latin1,
+                QStringConverter::Encoding::System,
+                QStringConverter::Encoding::Utf16LE,
+                QStringConverter::Encoding::Utf16BE,
+                QStringConverter::Encoding::Utf32LE,
+                QStringConverter::Encoding::Utf32BE
+            };
 
         for (auto enc : encToTest)
         {
@@ -144,7 +152,7 @@ QList<QStringConverter::Encoding> encdetector::supportedEncodings()
         QStringConverter::Encoding::Utf16LE,
         QStringConverter::Encoding::Utf16BE,
         QStringConverter::Encoding::Utf32LE,
-        QStringConverter::Encoding::Utf32LE,
+        QStringConverter::Encoding::Utf32BE,
         QStringConverter::Encoding::Latin1,
         QStringConverter::Encoding::System
     };
