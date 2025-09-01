@@ -63,6 +63,7 @@ public:
     void restoreTabs(const QStringList &tabsData);
     void restoreSeccionFile(const QString &tempPath, const QString &originalPath, const bool &isModified, const QString &tabName);
     void cleanupTempFiles();
+    QStringConverter::Encoding textToEnc(const QString &encname);
     ~Editor();
 
 private slots:
@@ -141,6 +142,16 @@ private slots:
     void on_actionRestore_Default_Zoom_triggered();
 
     void on_actionGo_To_triggered();
+
+    void on_actionUTF_8_toggled(bool arg1);
+
+    void on_actionUTF_16LE_toggled(bool arg1);
+
+    void on_actionUTF_16BE_toggled(bool arg1);
+
+    void on_actionUTF_32LE_toggled(bool arg1);
+
+    void on_actionUTF_32BE_toggled(bool arg1);
 
 private:
     Ui::Editor *ui;

@@ -176,10 +176,21 @@
     </property>
     <addaction name="actionGo_To"/>
    </widget>
+   <widget class="QMenu" name="menuEncoding">
+    <property name="title">
+     <string>Encoding</string>
+    </property>
+    <addaction name="actionUTF_8"/>
+    <addaction name="actionUTF_16LE"/>
+    <addaction name="actionUTF_16BE"/>
+    <addaction name="actionUTF_32LE"/>
+    <addaction name="actionUTF_32BE"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuSearch"/>
    <addaction name="menuView"/>
+   <addaction name="menuEncoding"/>
    <addaction name="menuOptions"/>
    <addaction name="menuWindow"/>
    <addaction name="menuHelp"/>
@@ -594,6 +605,46 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+G</string>
+   </property>
+  </action>
+  <action name="actionUTF_8">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>UTF-8</string>
+   </property>
+  </action>
+  <action name="actionUTF_16LE">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>UTF-16LE</string>
+   </property>
+  </action>
+  <action name="actionUTF_16BE">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>UTF-16BE</string>
+   </property>
+  </action>
+  <action name="actionUTF_32LE">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>UTF-32LE</string>
+   </property>
+  </action>
+  <action name="actionUTF_32BE">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>UTF-32BE</string>
    </property>
   </action>
  </widget>

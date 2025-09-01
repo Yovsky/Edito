@@ -416,9 +416,14 @@ bool Editor::SaveAs(CodeEditor* editor)
     QFile file(filePath);
     if (file.open(QIODevice::WriteOnly | QIODevice::Text)) //File opening.
     {
-        QTextStream stream(&file);
-        stream.setEncoding(QStringConverter::Utf8);
-        stream << editor->toPlainText();
+        QStringConverter::Encoding enc = textToEnc(currentEncodings.value(editor));
+
+        QStringEncoder encoder(enc);
+        QByteArray data = encoder.encode(editor->toPlainText());
+        if (encoder.hasError())
+            return false;
+
+        file.write(data);
         file.close();
 
         editor->document()->setModified(false); //Set file as saved.
@@ -444,9 +449,14 @@ bool Editor::Save(CodeEditor* editor)
         QFile file(filePaths.value(editor)); //Pass the file path.
         if (file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
-            QTextStream stream(&file);
-            stream.setEncoding(QStringConverter::Utf8); //Encoding setting.
-            stream << editor->toPlainText(); //Writing text.
+            QStringConverter::Encoding enc = textToEnc(currentEncodings.value(editor));
+
+            QStringEncoder encoder(enc);
+            QByteArray data = encoder.encode(editor->toPlainText());
+            if(encoder.hasError())
+                return false;
+
+            file.write(data);
             file.close();
 
             editor->document()->setModified(false); //Set file as saved.
@@ -980,10 +990,20 @@ QString Editor::saveTempFiles(CodeEditor *editor)
     QFile file(filePath);
     if (file.open(QIODevice::WriteOnly | QIODevice::Text)) //File opening.
     {
-        QTextStream stream(&file);
-        stream.setEncoding(QStringConverter::Utf8);
-        stream << editor->toPlainText();
+        QStringConverter::Encoding enc = textToEnc(currentEncodings.value(editor));
+        QStringEncoder encoder = QStringEncoder(enc);
+
+        QByteArray data = encoder.encode(editor->toPlainText());
+
+        if(encoder.hasError())
+        {
+            QMessageBox::critical(this, "Encoding Error", "File " + tabBaseNames.value(editor) + "was not encoded succesfully, Data may be lost!");
+            return QString();
+        }
+
+        file.write(data);
         file.close();
+
         return filePath;
     }
     return QString();
@@ -1114,3 +1134,81 @@ void Editor::on_actionGo_To_triggered()
     dialog->show();
 }
 
+void Editor::on_actionUTF_8_toggled(bool arg1)
+{
+    ui->actionUTF_16BE->setChecked(false);
+    ui->actionUTF_16LE->setChecked(false);
+    ui->actionUTF_32BE->setChecked(false);
+    ui->actionUTF_32LE->setChecked(false);
+
+    CodeEditor *editor = currentEditor();
+    currentEncodings.insert(editor, "UTF-8");
+
+    UpdateStatusBar();
+}
+
+void Editor::on_actionUTF_16LE_toggled(bool arg1)
+{
+    ui->actionUTF_16BE->setChecked(false);
+    ui->actionUTF_8->setChecked(false);
+    ui->actionUTF_32BE->setChecked(false);
+    ui->actionUTF_32LE->setChecked(false);
+
+    CodeEditor *editor = currentEditor();
+    currentEncodings.insert(editor, "UTF-16LE");
+
+    UpdateStatusBar();
+}
+
+void Editor::on_actionUTF_16BE_toggled(bool arg1)
+{
+    ui->actionUTF_8->setChecked(false);
+    ui->actionUTF_16LE->setChecked(false);
+    ui->actionUTF_32BE->setChecked(false);
+    ui->actionUTF_32LE->setChecked(false);
+
+    CodeEditor *editor = currentEditor();
+    currentEncodings.insert(editor, "UTF-16BE");
+
+    UpdateStatusBar();
+}
+
+void Editor::on_actionUTF_32LE_toggled(bool arg1)
+{
+    ui->actionUTF_16BE->setChecked(false);
+    ui->actionUTF_16LE->setChecked(false);
+    ui->actionUTF_32BE->setChecked(false);
+    ui->actionUTF_8->setChecked(false);
+
+    CodeEditor *editor = currentEditor();
+    currentEncodings.insert(editor, "UTF-32LE");
+
+    UpdateStatusBar();
+}
+
+void Editor::on_actionUTF_32BE_toggled(bool arg1)
+{
+    ui->actionUTF_16BE->setChecked(false);
+    ui->actionUTF_16LE->setChecked(false);
+    ui->actionUTF_8->setChecked(false);
+    ui->actionUTF_32LE->setChecked(false);
+
+    CodeEditor *editor = currentEditor();
+    currentEncodings.insert(editor, "UTF-32BE");
+
+    UpdateStatusBar();
+}
+
+QStringConverter::Encoding Editor::textToEnc(const QString &encname)
+{
+
+    if (encname == "UTF-8") return QStringConverter::Utf8;
+    if (encname == "UTF-16LE") return QStringConverter::Utf16LE;
+    if (encname == "UTF-16BE") return QStringConverter::Utf16BE;
+    if (encname == "UTF-32LE") return QStringConverter::Utf32LE;
+    if (encname == "UTF-32BE") return QStringConverter::Utf32BE;
+    if (encname == "ISO-8859-1") return QStringConverter::Latin1;
+    if (encname == "System") return QStringConverter::System;
+
+    return QStringConverter::Utf8;
+}
