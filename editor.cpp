@@ -45,6 +45,8 @@
 #include <QDropEvent>
 #include <QDateTime>
 #include <QCloseEvent>
+#include <QStringDecoder>
+#include <QStringEncoder>
 
 Editor::Editor(QWidget *parent)
     : QMainWindow(parent)
@@ -76,7 +78,7 @@ Editor::Editor(QWidget *parent)
     statusBarApperance(statBarVisibility); //Show/Hide status bar on beggining.
     posStatus = new QLabel("Line 0, Col 0, Pos 0"); //Position label.
     sizeStatus = new QLabel("Size 0, Lines 0"); //Size label.
-    encStatus = new QLabel("UTF-8");
+    encStatus = new QLabel("");
     zoomStatus = new QLabel("100%"); //Zoom label.
 
     ui->statusbar->addPermanentWidget(zoomStatus,2);
@@ -88,6 +90,24 @@ Editor::Editor(QWidget *parent)
     connect(ui->editorTabs, &QTabWidget::currentChanged, this, [this](int index) //Connecting when swiching tabs.
     {
         Q_UNUSED(index);
+        CodeEditor *editor = currentEditor();
+        if (editor && currentEncodings.contains(editor)) {
+            QString encoding = currentEncodings.value(editor);
+
+            // Uncheck all encoding actions first
+            ui->actionUTF_8->setChecked(false);
+            ui->actionUTF_16LE->setChecked(false);
+            ui->actionUTF_16BE->setChecked(false);
+            ui->actionUTF_32LE->setChecked(false);
+            ui->actionUTF_32BE->setChecked(false);
+
+            // Check the appropriate action
+            if (encoding == "UTF-8") ui->actionUTF_8->setChecked(true);
+            else if (encoding == "UTF-16LE") ui->actionUTF_16LE->setChecked(true);
+            else if (encoding == "UTF-16BE") ui->actionUTF_16BE->setChecked(true);
+            else if (encoding == "UTF-32LE") ui->actionUTF_32LE->setChecked(true);
+            else if (encoding == "UTF-32BE") ui->actionUTF_32BE->setChecked(true);
+        }
         this->UpdateStatusBar();
         this->UpdateUndoRedo();
     });
@@ -316,8 +336,10 @@ void Editor::NewFile()
     CodeEditor *editor = new CodeEditor(); //Handle the CreateNew from external windows.
 
     isSaved.insert(editor, false);
+    currentEncodings.insert(editor, "UTF-8");
 
     editor->editorActions(ui->actionCut, ui->actionCopy, ui->actionPaste, ui->actionSelect_All, ui->actionUPPERCASE, ui->actionLowercase, ui->actionSearch_on_Web); //Pass actions for context menu.
+    ui->actionUTF_8->setChecked(true);
 
     connect(editor, &QPlainTextEdit::cursorPositionChanged, this, &Editor::UpdateStatusBar); //Connecting signals for Status.
     connect(editor, &QPlainTextEdit::textChanged, this, &Editor::UpdateStatusBar);
@@ -394,6 +416,8 @@ void Editor::CloseTab(int index)
         ui->editorTabs->removeTab(index); //Close the tab.
         tabBaseNames.remove(editor); //Remove tab data.
         filePaths.remove(editor);
+        currentEncodings.remove(editor);
+        isSaved.remove(editor);
         delete editor;
     }
 }
@@ -421,7 +445,12 @@ bool Editor::SaveAs(CodeEditor* editor)
         QStringEncoder encoder(enc);
         QByteArray data = encoder.encode(editor->toPlainText());
         if (encoder.hasError())
-            return false;
+        {
+            QStringEncoder fallBackEnc = QStringEncoder(QStringConverter::Encoding::Utf8);
+            data = fallBackEnc.encode(editor->toPlainText());
+            if (fallBackEnc.hasError())
+                return false;
+        }
 
         file.write(data);
         file.close();
@@ -454,7 +483,12 @@ bool Editor::Save(CodeEditor* editor)
             QStringEncoder encoder(enc);
             QByteArray data = encoder.encode(editor->toPlainText());
             if(encoder.hasError())
-                return false;
+            {
+                QStringEncoder fallBackEnc = QStringEncoder(QStringConverter::Encoding::Utf8);
+                data = fallBackEnc.encode(editor->toPlainText());
+                if (fallBackEnc.hasError())
+                    return false;
+            }
 
             file.write(data);
             file.close();
@@ -594,7 +628,8 @@ void Editor::applyReadOnly(bool isRO)
     {
         QWidget *currentWidget = ui->editorTabs->widget(i);
         CodeEditor *editor = qobject_cast<CodeEditor*>(currentWidget);
-        editor->setReadOnly(isRO);
+        if (editor)
+            editor->setReadOnly(isRO);
     }
     ui->actionToggle_Read_Only->setChecked(isRO);
 }
@@ -965,7 +1000,9 @@ void Editor::saveCurrentTabs()
             else
                 seccionData += "0|";
 
-            seccionData += tabBaseNames.value(editor, "Unknown");
+            seccionData += tabBaseNames.value(editor, "Unknown") + "|";
+
+            seccionData += currentEncodings.value(editor, "UTF-8");
 
             seccionTabs.push_back(seccionData);
         }
@@ -997,8 +1034,8 @@ QString Editor::saveTempFiles(CodeEditor *editor)
 
         if(encoder.hasError())
         {
-            QMessageBox::critical(this, "Encoding Error", "File " + tabBaseNames.value(editor) + "was not encoded succesfully, Data may be lost!");
-            return QString();
+            QStringEncoder fallBackenc = QStringEncoder(QStringConverter::Encoding::Utf8);
+            data = fallBackenc.encode(editor->toPlainText());
         }
 
         file.write(data);
@@ -1014,27 +1051,41 @@ void Editor::restoreTabs(const QStringList &tabsData)
     for (QString seccionData : tabsData)
     {
         QStringList Data = seccionData.split("|");
-        if (Data.size() == 4)
+        if (Data.size() == 5)
         {
             QString tempPath = Data[0];
             QString originalPath = Data[1];
             bool isModified = (Data[2] == "1");
             QString tabName = Data[3];
+            QString encoding = Data[4];
 
-            restoreSeccionFile(tempPath, originalPath, isModified, tabName);
+            restoreSeccionFile(tempPath, originalPath, isModified, tabName, encoding);
         }
     }
 }
 
-void Editor::restoreSeccionFile(const QString &tempPath, const QString &originalPath, const bool &isModified, const QString &tabName)
+void Editor::restoreSeccionFile(const QString &tempPath, const QString &originalPath, const bool &isModified, const QString &tabName, const QString &encoding)
 {
     QFile file(tempPath);
     if (file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        QTextStream in(&file);
-        in.setEncoding(QStringConverter::Utf8);
-        QString content = in.readAll();
-        file.close();
+        QByteArray data = file.readAll();
+        QStringDecoder decoder = QStringDecoder(textToEnc(encoding));
+        QString content = decoder.decode(data);
+
+        if (decoder.hasError())
+        {
+            QStringDecoder fallbackDecoder(QStringConverter::Utf8);
+            content = fallbackDecoder.decode(data);
+
+            if (fallbackDecoder.hasError())
+            {
+                QStringDecoder latin1Decoder(QStringConverter::Latin1);
+                content = latin1Decoder.decode(data);
+                if (latin1Decoder.hasError())
+                    QMessageBox::critical(this, "Decoding Error", "Error reading data from last seccion file " + tabName);
+            }
+        }
 
         // Create editor with restored content
         CodeEditor *editor = new CodeEditor();
@@ -1066,6 +1117,7 @@ void Editor::restoreSeccionFile(const QString &tempPath, const QString &original
         } else {
             tabBaseNames.insert(editor, tabName);
         }
+        currentEncodings.insert(editor, encoding);
 
         // Set editor properties
         editor->setReadOnly(isReadOnly);
