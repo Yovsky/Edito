@@ -24,8 +24,8 @@ A modern, cross-platform text editor built with Qt framework
 ### Building from Source
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/edito.git
-cd edito
+git clone https://github.com/Yovsky/Edito.git
+cd Edito
 
 # Create build directory
 mkdir build && cd build
