@@ -149,6 +149,8 @@ private slots:
 
     void on_actionToggle_Status_Bar_toggled(bool arg1);
 
+    void on_actionToggle_Tool_Bar_toggled(bool arg1);
+
 private:
     Ui::Editor *ui;
     QLabel *posStatus;

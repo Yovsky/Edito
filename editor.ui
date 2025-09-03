@@ -153,6 +153,8 @@
     <addaction name="separator"/>
     <addaction name="actionWord_Wrap"/>
     <addaction name="actionFull_Screen"/>
+    <addaction name="separator"/>
+    <addaction name="actionToggle_Tool_Bar"/>
     <addaction name="actionToggle_Status_Bar"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -643,6 +645,14 @@
    </property>
    <property name="text">
     <string>Toggle Status Bar</string>
+   </property>
+  </action>
+  <action name="actionToggle_Tool_Bar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Toggle Tool Bar</string>
    </property>
   </action>
  </widget>

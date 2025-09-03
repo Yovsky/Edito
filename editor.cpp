@@ -154,6 +154,8 @@ void Editor::LoadSettings()
     RestoreZoom(zoomLevel);
     ui->statusbar->setVisible(m_settings->value("StatusBar Apperance", true).toBool());
     ui->actionToggle_Status_Bar->setChecked(m_settings->value("StatusBar Apperance", true).toBool());
+    ui->toolBar->setVisible(m_settings->value("ToolBar Apperance", true).toBool());
+    ui->actionToggle_Tool_Bar->setChecked(m_settings->value("ToolBar Apperance", true).toBool());
 }
 
 void Editor::dragEnterEvent(QDragEnterEvent *event)
@@ -1290,3 +1292,8 @@ void Editor::on_actionToggle_Status_Bar_toggled(bool arg1)
     m_settings->setValue("StatusBar Apperance", arg1);
 }
 
+void Editor::on_actionToggle_Tool_Bar_toggled(bool arg1)
+{
+    ui->toolBar->setVisible(arg1);
+    m_settings->setValue("ToolBar Apperance", arg1);
+}
