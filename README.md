@@ -1,11 +1,11 @@
 # Edito - Modern Text Editor.
 
-![QT VERSION](https://img.shields.io/badge/Qt-6.0+-41CD52?logo=qt)
+![BUILD CI](https://img.shields.io/badge/Build-Passing-27AE60?logo=github)
+![VERSION](https://img.shields.io/badge/Version-0.0.2-F39C12)
 ![LICENSE](https://img.shields.io/badge/License-GPLv3-2E86AB)
 ![PLATFORMS](https://img.shields.io/badge/Platforms-Windows_Linux_macOS-FF6B6B)
-![BUILD CI](https://img.shields.io/badge/Build-Passing-27AE60)
-![VERSION](https://img.shields.io/badge/Version-0.0.2-F39C12)
-![C++ VERSION](https://img.shields.io/badge/C++-17-2980B9)
+![QT VERSION](https://img.shields.io/badge/Qt-6.0+-41CD52?logo=qt)
+![C++ VERSION](https://img.shields.io/badge/C++-17-2980B9?logo=c%2B%2B)
 
 A modern, cross-platform text editor built with Qt framework
 
@@ -13,6 +13,7 @@ A modern, cross-platform text editor built with Qt framework
 - **Cross-Platform support** : Runs seamlessly on Windows, Linux, and macOS
 - **Modern UI** : Clean, professional and easy interface
 - **File Operations** : Full support for new, open, save, save as operations.
+- **Encoding Support** : Support for UTF-8, UTF-16BE, UTF-16LE, UTF-32BE, UTF-32LE, ISO-8859-1 and System encoding.
 
 ## Instalation
 ### Prerequisites
@@ -23,8 +24,8 @@ A modern, cross-platform text editor built with Qt framework
 ### Building from Source
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/edito.git
-cd edito
+git clone https://github.com/Yovsky/Edito.git
+cd Edito
 
 # Create build directory
 mkdir build && cd build
