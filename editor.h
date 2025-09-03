@@ -157,6 +157,7 @@ private:
     QLabel *sizeStatus;
     QLabel *encStatus;
     QLabel *zoomStatus;
+    QLabel *fileInfo;
     QHash<CodeEditor*, QString> tabBaseNames;
     QHash<CodeEditor*, QString> filePaths;
     int zoomLevel;

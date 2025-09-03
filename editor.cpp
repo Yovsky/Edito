@@ -54,6 +54,7 @@ Editor::Editor(QWidget *parent)
     , posStatus(nullptr)
     , sizeStatus(nullptr)
     , encStatus(nullptr)
+    , fileInfo(nullptr)
     , zoomLevel(0)
     , statBarVisibility(true)
     , isReadOnly(false)
@@ -80,9 +81,11 @@ Editor::Editor(QWidget *parent)
     sizeStatus = new QLabel("Size 0, Lines 0"); //Size label.
     encStatus = new QLabel("");
     zoomStatus = new QLabel("100%"); //Zoom label.
+    fileInfo = new QLabel("File");
 
+    ui->statusbar->addPermanentWidget(fileInfo, 18);
     ui->statusbar->addPermanentWidget(zoomStatus,2);
-    ui->statusbar->addPermanentWidget(posStatus, 18); //Assign the blocks with their sizes.
+    ui->statusbar->addPermanentWidget(posStatus, 9); //Assign the blocks with their sizes.
     ui->statusbar->addPermanentWidget(sizeStatus,9);
     ui->statusbar->addPermanentWidget(encStatus, 3);
 
@@ -195,8 +198,11 @@ void Editor::UpdateStatusBar()
 
     if (!editor || ui->editorTabs->count() == 0) //Safety.
     {
-        posStatus->setText("No editor");
+        fileInfo->setText("No editor");
         sizeStatus->clear();
+        posStatus->clear();
+        encStatus->clear();
+        zoomStatus->clear();
         return;
     }
 
@@ -227,6 +233,10 @@ void Editor::UpdateStatusBar()
     if (encStatus)
     {
         encStatus->setText(currentEncodings.value(editor, "Unknown"));
+    }
+    if (fileInfo)
+    {
+        fileInfo->setText(tabBaseNames.value(editor));
     }
 }
 
