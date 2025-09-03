@@ -152,6 +152,8 @@ void Editor::LoadSettings()
     seccionTabs = m_settings->value("SeccionTabs").toStringList();
     restoreTabs(seccionTabs);
     RestoreZoom(zoomLevel);
+    ui->statusbar->setVisible(m_settings->value("StatusBar Apperance", true).toBool());
+    ui->actionToggle_Status_Bar->setChecked(m_settings->value("StatusBar Apperance", true).toBool());
 }
 
 void Editor::dragEnterEvent(QDragEnterEvent *event)
@@ -1281,3 +1283,10 @@ QStringConverter::Encoding Editor::textToEnc(const QString &encname)
 
     return QStringConverter::Utf8;
 }
+
+void Editor::on_actionToggle_Status_Bar_toggled(bool arg1)
+{
+    ui->statusbar->setVisible(arg1);
+    m_settings->setValue("StatusBar Apperance", arg1);
+}
+
