@@ -66,7 +66,7 @@ public:
     QString saveTempFiles(CodeEditor *editor);
     void restoreTabs(const QStringList &tabsData);
     void restoreSeccionFile(const QString &tempPath, const QString &originalPath, const bool &isModified, const QString &tabName, const QString &encoding);
-    void cleanupTempFiles();
+    void cleanupTempFiles(CodeEditor *editor);
     QStringConverter::Encoding textToEnc(const QString &encname);
     ~Editor();
 

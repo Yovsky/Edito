@@ -570,6 +570,8 @@ void Editor::CloseTab(int index)
             return; //User canceled
         }
 
+        cleanupTempFiles(editor);
+
         //cleaning.
         ui->editorTabs->removeTab(index); //Close the tab.
         tabBaseNames.remove(editor); //Remove tab data.
@@ -1327,15 +1329,15 @@ void Editor::restoreSeccionFile(const QString &tempPath, const QString &original
     }
 }
 
-void Editor::cleanupTempFiles()
+void Editor::cleanupTempFiles(CodeEditor *editor)
 {
     QDir tempDir(QStandardPaths::writableLocation(QStandardPaths::TempLocation));
     QStringList filePaths = tempDir.entryList(QStringList() << "edito_temp_*", QDir::Files);
 
     for (const QString &file : filePaths)
     {
-        QFileInfo fileInfo(tempDir.filePath(file));
-        if(fileInfo.lastModified().daysTo(QDateTime::currentDateTime()) > 1)
+        QString name = QFileInfo(tempDir.filePath(file)).fileName();
+        if(name.contains(tabBaseNames.value(editor)))
             tempDir.remove(file);
     }
 }
