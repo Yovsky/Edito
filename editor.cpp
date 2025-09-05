@@ -93,6 +93,9 @@ Editor::Editor(QWidget *parent)
     ui->statusbar->addPermanentWidget(endingStatus, 4);
     ui->statusbar->addPermanentWidget(encStatus, 4);
 
+    aSave = new QTimer(this);
+    aSave->setSingleShot(false);
+    connect(aSave, &QTimer::timeout, this, &Editor::AutoSave);
 
     connect(ui->editorTabs, &QTabWidget::currentChanged, this, [this](int index) //Connecting when swiching tabs.
     {
@@ -190,14 +193,23 @@ void Editor::LoadSettings()
 
 void Editor::AutoSaveTimer()
 {
-    QTimer *aSave = new QTimer(this);
-    aSave->setSingleShot(false);
-    connect(aSave, &QTimer::timeout, this, &Editor::AutoSave);
-    qDebug() << "za juice";
     if (m_settings->value("Auto Save", true).toBool())
     {
-
-        aSave->start(5000);
+        int time = m_settings->value("AS Time", 300).toInt();
+        switch (m_settings->value("AS Unit").toInt()) {
+        case 0:
+            time *= 1000;
+            break;
+        case 1:
+            time *= 60 * 1000;
+            break;
+        case 2:
+            time *= 60 * 60 * 1000;
+            break;
+        default:
+            break;
+        }
+        aSave->start(time);
     }
     else
     {

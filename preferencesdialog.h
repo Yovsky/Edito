@@ -32,6 +32,7 @@ class PreferencesDialog : public QDialog
 
 public:
     explicit PreferencesDialog(QSettings *settings, bool isStatVisible, QWidget *parent = nullptr);
+    void checkcorrectAS();
     void checkcorrectSE();
     ~PreferencesDialog();
 
@@ -75,6 +76,8 @@ private slots:
     void on_On_toggled(bool checked);
 
     void on_Off_toggled(bool checked);
+
+    void on_SetSave_clicked();
 
 private:
     Ui::PreferencesDialog *ui;

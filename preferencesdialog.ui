@@ -52,7 +52,7 @@
      </property>
      <widget class="QWidget" name="General">
       <layout class="QGridLayout" name="gridLayout_4">
-       <item row="0" column="0">
+       <item row="0" column="1">
         <widget class="QGroupBox" name="SaveOptions">
          <property name="title">
           <string>Save Options</string>
@@ -97,6 +97,67 @@
           </property>
           <property name="text">
            <string>Off</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="SaveLabel">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>60</y>
+            <width>91</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Auto Save Every:</string>
+          </property>
+         </widget>
+         <widget class="QLineEdit" name="SaveBox">
+          <property name="geometry">
+           <rect>
+            <x>100</x>
+            <y>60</y>
+            <width>131</width>
+            <height>19</height>
+           </rect>
+          </property>
+         </widget>
+         <widget class="QComboBox" name="SaveCombo">
+          <property name="geometry">
+           <rect>
+            <x>240</x>
+            <y>60</y>
+            <width>61</width>
+            <height>19</height>
+           </rect>
+          </property>
+          <item>
+           <property name="text">
+            <string>Sec</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Min</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Hr</string>
+           </property>
+          </item>
+         </widget>
+         <widget class="QPushButton" name="SetSave">
+          <property name="geometry">
+           <rect>
+            <x>309</x>
+            <y>60</y>
+            <width>71</width>
+            <height>19</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Set</string>
           </property>
          </widget>
         </widget>

@@ -33,12 +33,22 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, bool isStatVisible, QW
 
     ui->On->setChecked(m_settings->value("Auto Save", true).toBool());
     ui->Off->setChecked(!m_settings->value("Auto Save", true).toBool());
+    ui->SaveBox->setText(QString::number(m_settings->value("AS Time", 300).toInt()));
+    ui->SaveCombo->setCurrentIndex(m_settings->value("AS Unit", 0).toInt());
 
     if (isStatVisible) ui->Show->setChecked(true); //Check the Show button on Visible.
     else if (!isStatVisible) ui->Hide->setChecked(true); //Check the Hide button on Hidden.
     checkcorrectSE();
 
     connect(ui->PrefList, &QListWidget::currentRowChanged, ui->stackedWidget, &QStackedWidget::setCurrentIndex); //Change widgets on each item.
+}
+
+void PreferencesDialog::checkcorrectAS()
+{
+    ui->SaveBox->setDisabled(!m_settings->value("Auto Save", true).toBool());
+    ui->SaveLabel->setDisabled(!m_settings->value("Auto Save", true).toBool());
+    ui->SaveCombo->setDisabled(!m_settings->value("Auto Save", true).toBool());
+    ui->SetSave->setDisabled(!m_settings->value("Auto Save", true).toBool());
 }
 
 void PreferencesDialog::on_PrefList_currentRowChanged(int currentRow)
@@ -234,12 +244,36 @@ void PreferencesDialog::on_searchCode_toggled(bool checked)
 void PreferencesDialog::on_On_toggled(bool checked)
 {
     m_settings->setValue("Auto Save", true);
+    checkcorrectAS();
     emit AutoSaveChanged();
 }
 
 void PreferencesDialog::on_Off_toggled(bool checked)
 {
     m_settings->setValue("Auto Save", false);
+    checkcorrectAS();
+    emit AutoSaveChanged();
+}
+
+
+void PreferencesDialog::on_SetSave_clicked()
+{
+    int time = ui->SaveBox->text().toInt();
+    int unit = 0;
+    if (ui->SaveCombo->currentText() == "Sec")
+    {
+        unit = 0;
+    }
+    else if (ui->SaveCombo->currentText() == "Min")
+    {
+        unit = 1;
+    }
+    else if (ui->SaveCombo->currentText() == "Hr")
+    {
+        unit = 2;
+    }
+    m_settings->setValue("AS Time", time);
+    m_settings->setValue("AS Unit", unit);
     emit AutoSaveChanged();
 }
 

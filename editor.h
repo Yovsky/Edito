@@ -127,6 +127,7 @@ private:
     QLabel *endingStatus;
     QHash<CodeEditor*, QString> tabBaseNames;
     QHash<CodeEditor*, QString> filePaths;
+    QTimer *aSave;
     int zoomLevel;
     bool statBarVisibility;
     bool isReadOnly;
