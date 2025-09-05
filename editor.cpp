@@ -573,16 +573,33 @@ bool Editor::SaveAs(CodeEditor* editor)
     ui->editorTabs->setTabText(tabIndex, QFileInfo(filePath).fileName()); //Changes tab title to new file name.
 
     QFile file(filePath);
-    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) //File opening.
+    if (file.open(QIODevice::WriteOnly)) //File opening.
     {
         QStringConverter::Encoding enc = textToEnc(currentEncodings.value(editor));
 
+        QString text = editor->toPlainText();
+
+        if (lineEndings.value(editor) == "Windows (CR LF)" || lineEndings.value(editor) == "Unknown" || lineEndings.value(editor) == "Mixed")
+        {
+            text.replace("\r\n", "\n").replace("\r", "\n");
+            text.replace("\n", "\r\n");
+            lineEndings.insert(editor, "Windows (CR LF)");
+        }
+        else if (lineEndings.value(editor) == "Unix (LF)")
+        {
+            text.replace("\r\n", "\n").replace("\r", "\n");
+        }
+        else if (lineEndings.value(editor) == "Macintosh (CR)")
+        {
+            text.replace("\r\n", "\r").replace("\n", "\r");
+        }
+
         QStringEncoder encoder(enc);
-        QByteArray data = encoder.encode(editor->toPlainText());
+        QByteArray data = encoder.encode(text);
         if (encoder.hasError())
         {
             QStringEncoder fallBackEnc = QStringEncoder(QStringConverter::Encoding::Utf8);
-            data = fallBackEnc.encode(editor->toPlainText());
+            data = fallBackEnc.encode(text);
             if (fallBackEnc.hasError())
                 return false;
         }
@@ -611,16 +628,33 @@ bool Editor::Save(CodeEditor* editor)
     else
     {
         QFile file(filePaths.value(editor)); //Pass the file path.
-        if (file.open(QIODevice::WriteOnly | QIODevice::Text))
+        if (file.open(QIODevice::WriteOnly))
         {
             QStringConverter::Encoding enc = textToEnc(currentEncodings.value(editor));
 
+            QString text = editor->toPlainText();
+
+            if (lineEndings.value(editor) == "Windows (CR LF)" || lineEndings.value(editor) == "Unknown" || lineEndings.value(editor) == "Mixed")
+            {
+                text.replace("\r\n", "\n").replace("\r", "\n");
+                text.replace("\n", "\r\n");
+                lineEndings.insert(editor, "Windows (CR LF)");
+            }
+            else if (lineEndings.value(editor) == "Unix (LF)")
+            {
+                text.replace("\r\n", "\n").replace("\r", "\n");
+            }
+            else if (lineEndings.value(editor) == "Macintosh (CR)")
+            {
+                text.replace("\r\n", "\r").replace("\n", "\r");
+            }
+
             QStringEncoder encoder(enc);
-            QByteArray data = encoder.encode(editor->toPlainText());
+            QByteArray data = encoder.encode(text);
             if(encoder.hasError())
             {
                 QStringEncoder fallBackEnc = QStringEncoder(QStringConverter::Encoding::Utf8);
-                data = fallBackEnc.encode(editor->toPlainText());
+                data = fallBackEnc.encode(text);
                 if (fallBackEnc.hasError())
                     return false;
             }
