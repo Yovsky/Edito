@@ -31,6 +31,9 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, bool isStatVisible, QW
 
     ui->PrefList->setCurrentRow(0);
 
+    ui->On->setChecked(m_settings->value("Auto Save", true).toBool());
+    ui->Off->setChecked(!m_settings->value("Auto Save", true).toBool());
+
     if (isStatVisible) ui->Show->setChecked(true); //Check the Show button on Visible.
     else if (!isStatVisible) ui->Hide->setChecked(true); //Check the Hide button on Hidden.
     checkcorrectSE();
@@ -226,5 +229,17 @@ void PreferencesDialog::on_searchCode_toggled(bool checked)
         m_settings->setValue("SEToggled", 13);
         m_settings->setValue("SE", "https://searchcode.com/?q=");
     }
+}
+
+void PreferencesDialog::on_On_toggled(bool checked)
+{
+    m_settings->setValue("Auto Save", true);
+    emit AutoSaveChanged();
+}
+
+void PreferencesDialog::on_Off_toggled(bool checked)
+{
+    m_settings->setValue("Auto Save", false);
+    emit AutoSaveChanged();
 }
 

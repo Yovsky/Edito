@@ -76,11 +76,6 @@ Editor::Editor(QWidget *parent)
         m_settings->sync();
     }
 
-    QTimer *aSave = new QTimer(this);
-    aSave->setSingleShot(false);
-    connect(aSave, &QTimer::timeout, this, &Editor::AutoSave);
-    aSave->start(300000);
-
     LoadSettings(); //Load saved settings.
 
     statusBarApperance(statBarVisibility); //Show/Hide status bar on beggining.
@@ -154,6 +149,7 @@ Editor::Editor(QWidget *parent)
 
     CreateEncMenu();
     UpdateStatusBar();
+    AutoSaveTimer();
 
     for (QAction *action : encMenu->actions())
     {
@@ -190,6 +186,23 @@ void Editor::LoadSettings()
     ui->actionToggle_Status_Bar->setChecked(m_settings->value("StatusBar Apperance", true).toBool());
     ui->toolBar->setVisible(m_settings->value("ToolBar Apperance", true).toBool());
     ui->actionToggle_Tool_Bar->setChecked(m_settings->value("ToolBar Apperance", true).toBool());
+}
+
+void Editor::AutoSaveTimer()
+{
+    QTimer *aSave = new QTimer(this);
+    aSave->setSingleShot(false);
+    connect(aSave, &QTimer::timeout, this, &Editor::AutoSave);
+    qDebug() << "za juice";
+    if (m_settings->value("Auto Save", true).toBool())
+    {
+
+        aSave->start(5000);
+    }
+    else
+    {
+        aSave->stop();
+    }
 }
 
 void Editor::dragEnterEvent(QDragEnterEvent *event)
@@ -593,7 +606,7 @@ void Editor::AutoSave()
     for(int i = 0; i < ui->editorTabs->count(); i++)
     {
         CodeEditor *editor = qobject_cast<CodeEditor*>(ui->editorTabs->widget(i));
-        if (editor && filePaths.value(editor).isEmpty() && editor->document()->isModified())
+        if (editor && !filePaths.value(editor).isEmpty() && editor->document()->isModified())
             Save(editor);
     }
 }
@@ -764,6 +777,7 @@ void Editor::on_actionPreferences_triggered()
 {
     PreferencesDialog dialog(m_settings, statBarVisibility, this);
     connect(&dialog, &PreferencesDialog::toggleStatusBarReq, this, &Editor::statusBarApperance); //Signal to toggle the status bar.
+    connect(&dialog, &PreferencesDialog::AutoSaveChanged, this, &Editor::AutoSaveTimer);
     dialog.exec(); //Open preferences.
 }
 

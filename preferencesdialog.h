@@ -72,6 +72,10 @@ private slots:
 
     void on_searchCode_toggled(bool checked);
 
+    void on_On_toggled(bool checked);
+
+    void on_Off_toggled(bool checked);
+
 private:
     Ui::PreferencesDialog *ui;
     QSettings *m_settings;
@@ -79,6 +83,7 @@ private:
 
 signals:
     void toggleStatusBarReq(bool visible);
+    void AutoSaveChanged();
 };
 
 #endif // PREFERENCESDIALOG_H

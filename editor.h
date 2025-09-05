@@ -72,90 +72,49 @@ public:
     ~Editor();
 
 private slots:
+    void AutoSaveTimer();
     void on_actionOpen_triggered();
-
     void on_actionNew_triggered();
-
     void on_actionSave_As_triggered();
-
     void on_editorTabs_tabCloseRequested(int index);
-
     void on_actionSave_triggered();
-
     void on_actionPreferences_triggered();
-
     void on_actionZoom_In_triggered();
-
     void on_actionZoom_Out_triggered();
-
     void on_actionToggle_Read_Only_toggled(bool arg1);
-
     void on_actionAlways_On_Top_toggled(bool arg1);
-
     void on_actionWord_Wrap_toggled(bool arg1);
-
     void on_actionCopy_triggered();
-
     void on_actionSelect_All_triggered();
-
     void on_actionDate_and_Time_Short_triggered();
-
     void on_actionDate_and_Time_Long_triggered();
-
     void on_actionDuplicate_Line_triggered();
-
     void on_actionDelete_line_triggered();
-
     void on_actionDelete_triggered();
-
     void on_actionDelete_Word_triggered();
-
     void on_actionDelete_to_End_of_Line_triggered();
-
     void on_actionUPPERCASE_triggered();
-
     void on_actionLowercase_triggered();
-
     void on_actionPaste_triggered();
-
     void on_actionCut_triggered();
-
     void on_actionSearch_on_Web_triggered();
-
     void on_actionCopy_Current_File_Path_triggered();
-
     void on_actionCopy_Current_Filename_triggered();
-
     void on_actionCopy_Current_Dir_triggered();
-
     void on_actionClose_triggered();
-
     void on_actionClose_All_triggered();
-
     void on_actionSave_All_triggered();
-
     void on_actionExit_triggered();
-
     void on_actionFull_Screen_toggled(bool arg1);
-
     void on_actionUndo_triggered();
-
     void on_actionRedo_triggered();
-
     void on_actionHome_triggered();
-
     void on_actionRestore_Default_Zoom_triggered();
-
     void on_actionGo_To_triggered();
-
     void on_actionToggle_Status_Bar_toggled(bool arg1);
-
     void on_actionToggle_Tool_Bar_toggled(bool arg1);
-
     void on_actionWindows_CR_LF_triggered();
-
     void on_actionUnix_LF_triggered();
-
     void on_actionMacintosh_RC_triggered();
 
 private:
