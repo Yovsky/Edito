@@ -48,6 +48,7 @@ public:
     void CloseTab(int index);
     void FileEdited(bool edited);
     void resetTabState(CodeEditor *editor, bool edited);
+    void AutoSave();
     bool SaveAs(CodeEditor* editor);
     bool Save(CodeEditor* editor);
     CodeEditor* currentEditor() const;

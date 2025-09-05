@@ -47,6 +47,7 @@
 #include <QCloseEvent>
 #include <QStringDecoder>
 #include <QStringEncoder>
+#include <QTimer>
 
 Editor::Editor(QWidget *parent)
     : QMainWindow(parent)
@@ -74,6 +75,11 @@ Editor::Editor(QWidget *parent)
         m_settings->setValue("SEToggled", 1);
         m_settings->sync();
     }
+
+    QTimer *aSave = new QTimer(this);
+    aSave->setSingleShot(false);
+    connect(aSave, &QTimer::timeout, this, &Editor::AutoSave);
+    aSave->start(300000);
 
     LoadSettings(); //Load saved settings.
 
@@ -579,6 +585,16 @@ void Editor::CloseTab(int index)
         currentEncodings.remove(editor);
         isSaved.remove(editor);
         delete editor;
+    }
+}
+
+void Editor::AutoSave()
+{
+    for(int i = 0; i < ui->editorTabs->count(); i++)
+    {
+        CodeEditor *editor = qobject_cast<CodeEditor*>(ui->editorTabs->widget(i));
+        if (editor && filePaths.value(editor).isEmpty() && editor->document()->isModified())
+            Save(editor);
     }
 }
 
