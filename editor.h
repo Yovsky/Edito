@@ -151,6 +151,12 @@ private slots:
 
     void on_actionToggle_Tool_Bar_toggled(bool arg1);
 
+    void on_actionWindows_CR_LF_triggered();
+
+    void on_actionUnix_LF_triggered();
+
+    void on_actionMacintosh_RC_triggered();
+
 private:
     Ui::Editor *ui;
     QLabel *posStatus;

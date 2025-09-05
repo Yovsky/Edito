@@ -112,6 +112,14 @@
      <addaction name="actionCopy_Current_Filename"/>
      <addaction name="actionCopy_Current_Dir"/>
     </widget>
+    <widget class="QMenu" name="menuEOL_Conversion">
+     <property name="title">
+      <string>EOL Conversion</string>
+     </property>
+     <addaction name="actionWindows_CR_LF"/>
+     <addaction name="actionUnix_LF"/>
+     <addaction name="actionMacintosh_RC"/>
+    </widget>
     <addaction name="actionUndo"/>
     <addaction name="actionRedo"/>
     <addaction name="separator"/>
@@ -132,6 +140,7 @@
     <addaction name="menuCopy_to_Clipboard"/>
     <addaction name="menuConvert_Case_to"/>
     <addaction name="menuOn_Selection"/>
+    <addaction name="menuEOL_Conversion"/>
     <addaction name="separator"/>
     <addaction name="actionToggle_Read_Only"/>
     <addaction name="separator"/>
@@ -653,6 +662,21 @@
    </property>
    <property name="text">
     <string>Toggle Tool Bar</string>
+   </property>
+  </action>
+  <action name="actionWindows_CR_LF">
+   <property name="text">
+    <string>Windows (CR LF)</string>
+   </property>
+  </action>
+  <action name="actionUnix_LF">
+   <property name="text">
+    <string>Unix (LF)</string>
+   </property>
+  </action>
+  <action name="actionMacintosh_RC">
+   <property name="text">
+    <string>Macintosh (RC)</string>
    </property>
   </action>
  </widget>

@@ -120,6 +120,28 @@ Editor::Editor(QWidget *parent)
             }
         }
 
+        if (editor && currentEncodings.contains(editor))
+        {
+            if (currentEncodings.value(editor) == "Windows (CR LF)")
+            {
+                ui->actionWindows_CR_LF->setEnabled(false);
+                ui->actionUnix_LF->setEnabled(true);
+                ui->actionMacintosh_RC->setEnabled(true);
+            }
+            else if (currentEncodings.value(editor) == "Unix (LF)")
+            {
+                ui->actionUnix_LF->setEnabled(false);
+                ui->actionWindows_CR_LF->setEnabled(true);
+                ui->actionMacintosh_RC->setEnabled(true);
+            }
+            else if (currentEncodings.value(editor) == "Unix (LF)")
+            {
+                ui->actionMacintosh_RC->setEnabled(false);
+                ui->actionUnix_LF->setEnabled(true);
+                ui->actionWindows_CR_LF->setEnabled(true);
+            }
+        }
+
         this->UpdateStatusBar();
         this->UpdateUndoRedo();
     });
@@ -504,6 +526,7 @@ void Editor::NewFile()
     }
     openedTabs++;
     lineEndings.insert(editor, "Windows (CR LF)");
+    ui->actionWindows_CR_LF->setEnabled(false);
 
     ui->editorTabs->setCurrentWidget(editor);
 
@@ -1357,7 +1380,6 @@ void Editor::on_actionGo_To_triggered()
 
 QStringConverter::Encoding Editor::textToEnc(const QString &encname)
 {
-
     if (encname == "UTF-8") return QStringConverter::Utf8;
     if (encname == "UTF-16LE") return QStringConverter::Utf16LE;
     if (encname == "UTF-16BE") return QStringConverter::Utf16BE;
@@ -1379,4 +1401,34 @@ void Editor::on_actionToggle_Tool_Bar_toggled(bool arg1)
 {
     ui->toolBar->setVisible(arg1);
     m_settings->setValue("ToolBar Apperance", arg1);
+}
+
+void Editor::on_actionWindows_CR_LF_triggered()
+{
+    CodeEditor *editor = currentEditor();
+    lineEndings.insert(editor, "Windows (CR LF)");
+    ui->actionWindows_CR_LF->setEnabled(false);
+    ui->actionUnix_LF->setEnabled(true);
+    ui->actionMacintosh_RC->setEnabled(true);
+    UpdateStatusBar();
+}
+
+void Editor::on_actionUnix_LF_triggered()
+{
+    CodeEditor *editor = currentEditor();
+    lineEndings.insert(editor, "Unix (LF)");
+    ui->actionUnix_LF->setEnabled(false);
+    ui->actionWindows_CR_LF->setEnabled(true);
+    ui->actionMacintosh_RC->setEnabled(true);
+    UpdateStatusBar();
+}
+
+void Editor::on_actionMacintosh_RC_triggered()
+{
+    CodeEditor *editor = currentEditor();
+    lineEndings.insert(editor, "Macintosh (CR)");
+    ui->actionMacintosh_RC->setEnabled(false);
+    ui->actionWindows_CR_LF->setEnabled(true);
+    ui->actionUnix_LF->setEnabled(true);
+    UpdateStatusBar();
 }
