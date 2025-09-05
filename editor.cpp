@@ -89,8 +89,8 @@ Editor::Editor(QWidget *parent)
     ui->statusbar->addPermanentWidget(zoomStatus,2);
     ui->statusbar->addPermanentWidget(posStatus, 9); //Assign the blocks with their sizes.
     ui->statusbar->addPermanentWidget(sizeStatus,9);
-    ui->statusbar->addPermanentWidget(endingStatus, 3);
-    ui->statusbar->addPermanentWidget(encStatus, 3);
+    ui->statusbar->addPermanentWidget(endingStatus, 4);
+    ui->statusbar->addPermanentWidget(encStatus, 4);
 
 
     connect(ui->editorTabs, &QTabWidget::currentChanged, this, [this](int index) //Connecting when swiching tabs.
@@ -503,6 +503,7 @@ void Editor::NewFile()
         ui->editorTabs->addTab(editor, icon,"Untitled-" + QString::number(openedTabs)); //Set tab parameters.
     }
     openedTabs++;
+    lineEndings.insert(editor, "Windows (CR LF)");
 
     ui->editorTabs->setCurrentWidget(editor);
 
