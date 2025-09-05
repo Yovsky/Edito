@@ -158,6 +158,7 @@ private:
     QLabel *encStatus;
     QLabel *zoomStatus;
     QLabel *fileInfo;
+    QLabel *endingStatus;
     QHash<CodeEditor*, QString> tabBaseNames;
     QHash<CodeEditor*, QString> filePaths;
     int zoomLevel;
@@ -172,6 +173,7 @@ private:
     QHash<CodeEditor*, bool> hasBOM;
     QMenu *encMenu;
     QActionGroup *encActionGrp;
+    QHash<CodeEditor*, QString> lineEndings;
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;

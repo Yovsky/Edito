@@ -55,6 +55,7 @@ Editor::Editor(QWidget *parent)
     , sizeStatus(nullptr)
     , encStatus(nullptr)
     , fileInfo(nullptr)
+    , endingStatus(nullptr)
     , zoomLevel(0)
     , statBarVisibility(true)
     , isReadOnly(false)
@@ -82,11 +83,13 @@ Editor::Editor(QWidget *parent)
     encStatus = new QLabel("");
     zoomStatus = new QLabel("100%"); //Zoom label.
     fileInfo = new QLabel("File");
+    endingStatus = new QLabel("NG");
 
     ui->statusbar->addPermanentWidget(fileInfo, 18);
     ui->statusbar->addPermanentWidget(zoomStatus,2);
     ui->statusbar->addPermanentWidget(posStatus, 9); //Assign the blocks with their sizes.
     ui->statusbar->addPermanentWidget(sizeStatus,9);
+    ui->statusbar->addPermanentWidget(endingStatus, 3);
     ui->statusbar->addPermanentWidget(encStatus, 3);
 
 
@@ -238,6 +241,8 @@ void Editor::UpdateStatusBar()
     {
         fileInfo->setText(tabBaseNames.value(editor));
     }
+    if (endingStatus)
+        endingStatus->setText(lineEndings.value(editor));
 }
 
 void Editor::CreateEncMenu()
@@ -356,9 +361,42 @@ void Editor::OpenFile(const QString &FilePath)
         return;
     }
 
+    CodeEditor *editor = new CodeEditor();
+
     //Read content.
     QByteArray data = file.readAll();
     file.close();
+
+    int CRLF = 0;
+    int CR = 0;
+    int LF = 0;
+
+    for (int i = 0; i < data.size(); i++)
+    {
+        if (data[i] == '\r')
+        {
+            if (i+1 < data.size() && data[i+1] == '\n')
+            {
+                CRLF++;
+                i++;
+            }
+            else
+                CR++;
+        }
+        else if (data[i] == '\n')
+            LF++;
+    }
+
+    if (CRLF > CR && CRLF > LF)
+        lineEndings.insert(editor, "Windows (CR LF)");
+    else if (CR > CRLF && CR > LF)
+        lineEndings.insert(editor, "Macintosh (CR)");
+    else if (LF > CRLF && LF > CR)
+        lineEndings.insert(editor, "Unix (LF)");
+    else if (CR == 0 && LF == 0 && CRLF == 0)
+        lineEndings.insert(editor, "Unknown");
+    else
+        lineEndings.insert(editor, "Mixed");
 
     //Detect Encoding.
     encdetector::encodingResult result = encdetector::detectEncoding(data);
@@ -378,7 +416,7 @@ void Editor::OpenFile(const QString &FilePath)
         }
     }
 
-    CodeEditor *editor = new CodeEditor();
+
     isSaved.insert(editor, true);
 
     editor->editorActions(ui->actionCut, ui->actionCopy, ui->actionPaste, ui->actionSelect_All, ui->actionUPPERCASE, ui->actionLowercase, ui->actionSearch_on_Web); //Pass actions for context menu.
