@@ -78,6 +78,7 @@
     <addaction name="actionClose_All"/>
     <addaction name="separator"/>
     <addaction name="actionOpen_Recent_Closed"/>
+    <addaction name="actionEmpty_Recent_Files_List"/>
     <addaction name="separator"/>
     <addaction name="actionHome"/>
     <addaction name="actionExit"/>
@@ -687,6 +688,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+T</string>
+   </property>
+  </action>
+  <action name="actionEmpty_Recent_Files_List">
+   <property name="text">
+    <string>Empty Recent Files List</string>
    </property>
   </action>
  </widget>

@@ -119,6 +119,8 @@ private slots:
 
     void on_actionOpen_Recent_Closed_triggered();
 
+    void on_actionEmpty_Recent_Files_List_triggered();
+
 private:
     Ui::Editor *ui;
     QLabel *posStatus;

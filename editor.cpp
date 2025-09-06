@@ -1510,3 +1510,11 @@ void Editor::on_actionOpen_Recent_Closed_triggered()
         QMessageBox::warning(this, "No Recent Files", "No recent file was found.");
 }
 
+
+void Editor::on_actionEmpty_Recent_Files_List_triggered()
+{
+    QStringList list = m_settings->value("Last Closed").toStringList();
+    list.clear();
+    m_settings->setValue("Last Closed", list);
+}
+
