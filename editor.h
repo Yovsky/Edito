@@ -117,6 +117,8 @@ private slots:
     void on_actionUnix_LF_triggered();
     void on_actionMacintosh_RC_triggered();
 
+    void on_actionOpen_Recent_Closed_triggered();
+
 private:
     Ui::Editor *ui;
     QLabel *posStatus;

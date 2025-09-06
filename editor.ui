@@ -77,6 +77,8 @@
     <addaction name="actionClose"/>
     <addaction name="actionClose_All"/>
     <addaction name="separator"/>
+    <addaction name="actionOpen_Recent_Closed"/>
+    <addaction name="separator"/>
     <addaction name="actionHome"/>
     <addaction name="actionExit"/>
    </widget>
@@ -677,6 +679,14 @@
   <action name="actionMacintosh_RC">
    <property name="text">
     <string>Macintosh (RC)</string>
+   </property>
+  </action>
+  <action name="actionOpen_Recent_Closed">
+   <property name="text">
+    <string>Restore Recent Closed File</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+T</string>
    </property>
   </action>
  </widget>

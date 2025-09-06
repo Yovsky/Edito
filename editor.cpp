@@ -576,14 +576,14 @@ void Editor::NewFile()
 
 void Editor::CloseTab(int index)
 {
-    if (index < 0 || index > ui->editorTabs->count()) return; //Safety.
+    if (index < 0 || index >= ui->editorTabs->count()) return; //Safety.
 
     CodeEditor *editor = qobject_cast<CodeEditor*>(ui->editorTabs->widget(index));
     if (!editor) return; //Safety.
 
-    if (!editor->document()->isModified()) //File is saved.
-        ui->editorTabs->removeTab(index); //Close the tab.
-    else //File is not saved.
+    bool should_close = true;
+
+    if (editor->document()->isModified()) //File is not saved.
     {
         QString fileName = tabBaseNames.value(editor, "Unkown"); //Get the file name.
 
@@ -594,16 +594,28 @@ void Editor::CloseTab(int index)
 
         if (reply == QMessageBox::Save)
         {
-            if(!Save(editor)) return; //Pass to save and handle failure.
+            if(!Save(editor))
+                should_close = false; //Pass to save and handle failure.
         }
         else if (reply == QMessageBox::Cancel)
+            should_close = false; //User canceled.
+    }
+
+    if (should_close)
+    {
+        if (filePaths.contains(editor) && !filePaths.value(editor).isEmpty())
         {
-            return; //User canceled
+            QStringList Closed = m_settings->value("Last Closed").toStringList();
+            Closed.removeAll(filePaths.value(editor));
+            Closed.prepend(filePaths.value(editor));
+            while (Closed.size() > 10)
+                Closed.removeLast();
+            m_settings->setValue("Last Closed", Closed);
         }
 
+        //cleaning.
         cleanupTempFiles(editor);
 
-        //cleaning.
         ui->editorTabs->removeTab(index); //Close the tab.
         tabBaseNames.remove(editor); //Remove tab data.
         filePaths.remove(editor);
@@ -1476,3 +1488,25 @@ void Editor::on_actionMacintosh_RC_triggered()
     ui->actionUnix_LF->setEnabled(true);
     UpdateStatusBar();
 }
+
+void Editor::on_actionOpen_Recent_Closed_triggered()
+{
+    QStringList Paths = m_settings->value("Last Closed").toStringList();
+    if (!Paths.isEmpty() && !Paths.first().isEmpty())
+    {
+        QString path = Paths.first();
+        Paths.removeFirst();
+        m_settings->setValue("Last Closed", Paths);
+
+        if(QFile::exists(path))
+            OpenFile(path);
+        else
+        {
+            QMessageBox::warning(this, "File Not Found", "File no longer exists\n" + QFileInfo(path).fileName());
+            on_actionOpen_Recent_Closed_triggered();
+        }
+    }
+    else
+        QMessageBox::warning(this, "No Recent Files", "No recent file was found.");
+}
+
