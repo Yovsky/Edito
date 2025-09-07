@@ -716,7 +716,7 @@
   </action>
   <action name="actionCmd">
    <property name="text">
-    <string>Cmd</string>
+    <string>cmd</string>
    </property>
   </action>
  </widget>
