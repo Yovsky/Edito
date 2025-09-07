@@ -48,6 +48,7 @@
 #include <QStringDecoder>
 #include <QStringEncoder>
 #include <QTimer>
+#include <QPushButton>
 
 Editor::Editor(QWidget *parent)
     : QMainWindow(parent)
@@ -1519,10 +1520,21 @@ void Editor::on_actionOpen_Recent_Closed_triggered()
 
 void Editor::on_actionEmpty_Recent_Files_List_triggered()
 {
+    QMessageBox msg;
+    msg.setWindowTitle("Warning");
+    msg.setText("Recently closed files list will be cleared.\nAre you sure?");
+    msg.setIcon(QMessageBox::Warning);
+    QPushButton *No = msg.addButton("No", QMessageBox::DestructiveRole);
+    QPushButton *Yes = msg.addButton("Yes", QMessageBox::AcceptRole);
+    msg.setDefaultButton(Yes);
+    msg.exec();
 
-    QStringList list = m_settings->value("Last Closed").toStringList();
-    list.clear();
-    m_settings->setValue("Last Closed", list);
+    if (msg.clickedButton() == Yes)
+    {
+        QStringList list = m_settings->value("Last Closed").toStringList();
+        list.clear();
+        m_settings->setValue("Last Closed", list);
+    }
 }
 
 
