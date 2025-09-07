@@ -79,6 +79,8 @@ private slots:
 
     void on_SetSave_clicked();
 
+    void on_SetRCF_clicked();
+
 private:
     Ui::PreferencesDialog *ui;
     QSettings *m_settings;

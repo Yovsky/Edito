@@ -608,7 +608,7 @@ void Editor::CloseTab(int index)
             QStringList Closed = m_settings->value("Last Closed").toStringList();
             Closed.removeAll(filePaths.value(editor));
             Closed.prepend(filePaths.value(editor));
-            while (Closed.size() > 10)
+            while (Closed.size() > m_settings->value("RCF Limit", 10).toInt())
                 Closed.removeLast();
             m_settings->setValue("Last Closed", Closed);
         }

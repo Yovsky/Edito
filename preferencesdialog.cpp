@@ -35,6 +35,7 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, bool isStatVisible, QW
     ui->Off->setChecked(!m_settings->value("Auto Save", true).toBool());
     ui->SaveBox->setText(QString::number(m_settings->value("AS Time", 300).toInt()));
     ui->SaveCombo->setCurrentIndex(m_settings->value("AS Unit", 0).toInt());
+    ui->RCFBox->setText(QString::number(10));
 
     if (isStatVisible) ui->Show->setChecked(true); //Check the Show button on Visible.
     else if (!isStatVisible) ui->Hide->setChecked(true); //Check the Hide button on Hidden.
@@ -275,5 +276,11 @@ void PreferencesDialog::on_SetSave_clicked()
     m_settings->setValue("AS Time", time);
     m_settings->setValue("AS Unit", unit);
     emit AutoSaveChanged();
+}
+
+
+void PreferencesDialog::on_SetRCF_clicked()
+{
+    m_settings->setValue("RCF Limit", ui->RCFBox->text().toInt());
 }
 
