@@ -72,6 +72,7 @@
       <string>Open Containing Folder</string>
      </property>
      <addaction name="actionFile_Explorer"/>
+     <addaction name="actionCmd"/>
     </widget>
     <addaction name="actionNew"/>
     <addaction name="actionOpen"/>
@@ -711,6 +712,11 @@
   <action name="actionFile_Explorer">
    <property name="text">
     <string>File Explorer</string>
+   </property>
+  </action>
+  <action name="actionCmd">
+   <property name="text">
+    <string>Cmd</string>
    </property>
   </action>
  </widget>
