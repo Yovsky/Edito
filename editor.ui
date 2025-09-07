@@ -67,8 +67,15 @@
     <property name="title">
      <string>File</string>
     </property>
+    <widget class="QMenu" name="menuOpen_Containing_Folder">
+     <property name="title">
+      <string>Open Containing Folder</string>
+     </property>
+     <addaction name="actionFile_Explorer"/>
+    </widget>
     <addaction name="actionNew"/>
     <addaction name="actionOpen"/>
+    <addaction name="menuOpen_Containing_Folder"/>
     <addaction name="separator"/>
     <addaction name="actionSave"/>
     <addaction name="actionSave_As"/>
@@ -699,6 +706,11 @@
   <action name="actionOpen_All_Recent_Files">
    <property name="text">
     <string>Open All Recent Files</string>
+   </property>
+  </action>
+  <action name="actionFile_Explorer">
+   <property name="text">
+    <string>File Explorer</string>
    </property>
   </action>
  </widget>

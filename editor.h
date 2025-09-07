@@ -123,6 +123,8 @@ private slots:
 
     void on_actionOpen_All_Recent_Files_triggered();
 
+    void on_actionFile_Explorer_triggered();
+
 private:
     Ui::Editor *ui;
     QLabel *posStatus;

@@ -147,6 +147,15 @@ Editor::Editor(QWidget *parent)
             }
         }
 
+        if (!filePaths.contains(editor) || filePaths.value(editor).isEmpty())
+        {
+            ui->actionFile_Explorer->setDisabled(true);
+        }
+        else
+        {
+            ui->actionFile_Explorer->setEnabled(true);
+        }
+
         this->UpdateStatusBar();
         this->UpdateUndoRedo();
     });
@@ -1517,7 +1526,6 @@ void Editor::on_actionOpen_Recent_Closed_triggered()
         QMessageBox::warning(this, "No Recent Files", "No recent file was found.");
 }
 
-
 void Editor::on_actionEmpty_Recent_Files_List_triggered()
 {
     QMessageBox msg;
@@ -1536,7 +1544,6 @@ void Editor::on_actionEmpty_Recent_Files_List_triggered()
         m_settings->setValue("Last Closed", list);
     }
 }
-
 
 void Editor::on_actionOpen_All_Recent_Files_triggered()
 {
@@ -1566,3 +1573,9 @@ void Editor::on_actionOpen_All_Recent_Files_triggered()
     }
 }
 
+void Editor::on_actionFile_Explorer_triggered()
+{
+    CodeEditor *editor = currentEditor();
+    if (editor && filePaths.contains(editor) && !filePaths.value(editor).isEmpty())
+        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(filePaths.value(editor)).absolutePath()));
+}
