@@ -19,6 +19,7 @@
 #include "preferencesdialog.h"
 #include "ui_preferencesdialog.h"
 #include <QListWidget>
+#include <QIntValidator>
 
 PreferencesDialog::PreferencesDialog(QSettings *settings, bool isStatVisible, QWidget *parent)
     : QDialog(parent)
@@ -30,6 +31,11 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, bool isStatVisible, QW
     this->setWindowIcon(QIcon(":/icons/settings.png"));
 
     ui->PrefList->setCurrentRow(0);
+
+    QIntValidator *numOnly = new QIntValidator(this);
+
+    ui->RCFBox->setValidator(numOnly);
+    ui->SaveBox->setValidator(numOnly);
 
     ui->On->setChecked(m_settings->value("Auto Save", true).toBool());
     ui->Off->setChecked(!m_settings->value("Auto Save", true).toBool());
