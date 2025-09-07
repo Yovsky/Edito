@@ -78,6 +78,7 @@
     <addaction name="actionClose_All"/>
     <addaction name="separator"/>
     <addaction name="actionOpen_Recent_Closed"/>
+    <addaction name="actionOpen_All_Recent_Files"/>
     <addaction name="actionEmpty_Recent_Files_List"/>
     <addaction name="separator"/>
     <addaction name="actionHome"/>
@@ -693,6 +694,11 @@
   <action name="actionEmpty_Recent_Files_List">
    <property name="text">
     <string>Empty Recent Files List</string>
+   </property>
+  </action>
+  <action name="actionOpen_All_Recent_Files">
+   <property name="text">
+    <string>Open All Recent Files</string>
    </property>
   </action>
  </widget>

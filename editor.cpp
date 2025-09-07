@@ -1491,7 +1491,16 @@ void Editor::on_actionMacintosh_RC_triggered()
 
 void Editor::on_actionOpen_Recent_Closed_triggered()
 {
+    if (!m_settings)
+    {
+        QMessageBox::warning(this, "Error", "Settings not initialized");
+        return;
+    }
     QStringList Paths = m_settings->value("Last Closed").toStringList();
+
+    Paths.removeAll("");
+    Paths.removeAll(QString());
+
     if (!Paths.isEmpty() && !Paths.first().isEmpty())
     {
         QString path = Paths.first();
@@ -1501,10 +1510,7 @@ void Editor::on_actionOpen_Recent_Closed_triggered()
         if(QFile::exists(path))
             OpenFile(path);
         else
-        {
             QMessageBox::warning(this, "File Not Found", "File no longer exists\n" + QFileInfo(path).fileName());
-            on_actionOpen_Recent_Closed_triggered();
-        }
     }
     else
         QMessageBox::warning(this, "No Recent Files", "No recent file was found.");
@@ -1513,8 +1519,38 @@ void Editor::on_actionOpen_Recent_Closed_triggered()
 
 void Editor::on_actionEmpty_Recent_Files_List_triggered()
 {
+
     QStringList list = m_settings->value("Last Closed").toStringList();
     list.clear();
     m_settings->setValue("Last Closed", list);
+}
+
+
+void Editor::on_actionOpen_All_Recent_Files_triggered()
+{
+    if (!m_settings)
+    {
+        QMessageBox::warning(this, "Error", "Settings not initialized");
+        return;
+    }
+
+    QStringList paths = m_settings->value("Last Closed").toStringList();
+    paths.removeAll("");
+    paths.removeAll(QString());
+
+    if (paths.isEmpty())
+    {
+        QMessageBox::warning(this, "No Recent Files", "No recent files were found.");
+        return;
+    }
+
+    m_settings->setValue("Last Closed", QStringList());
+
+    for (const QString& path : paths) {
+        if (QFile::exists(path))
+            OpenFile(path);
+        else
+            QMessageBox::warning(this, "File Not Found", "Skipping missing file: " + QFileInfo(path).fileName());
+    }
 }
 
