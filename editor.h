@@ -125,6 +125,8 @@ private slots:
 
     void on_actionFile_Explorer_triggered();
 
+    void on_actionCmd_triggered();
+
 private:
     Ui::Editor *ui;
     QLabel *posStatus;

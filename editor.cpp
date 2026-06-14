@@ -49,6 +49,8 @@
 #include <QStringEncoder>
 #include <QTimer>
 #include <QPushButton>
+#include <windows.h>
+#include <shellapi.h>
 
 Editor::Editor(QWidget *parent)
     : QMainWindow(parent)
@@ -1532,7 +1534,7 @@ void Editor::on_actionEmpty_Recent_Files_List_triggered()
     msg.setWindowTitle("Warning");
     msg.setText("Recently closed files list will be cleared.\nAre you sure?");
     msg.setIcon(QMessageBox::Warning);
-    QPushButton *No = msg.addButton("No", QMessageBox::DestructiveRole);
+    msg.addButton("No", QMessageBox::DestructiveRole);
     QPushButton *Yes = msg.addButton("Yes", QMessageBox::AcceptRole);
     msg.setDefaultButton(Yes);
     msg.exec();
@@ -1576,6 +1578,50 @@ void Editor::on_actionOpen_All_Recent_Files_triggered()
 void Editor::on_actionFile_Explorer_triggered()
 {
     CodeEditor *editor = currentEditor();
-    if (editor && filePaths.contains(editor) && !filePaths.value(editor).isEmpty())
-        QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(filePaths.value(editor)).absolutePath()));
+    if (!editor) {
+        QMessageBox::information(this, "No Editor", "No active editor window.");
+        return;
+    }
+
+    QString workingDir;
+
+    if (filePaths.contains(editor) && !filePaths.value(editor).isEmpty())
+        workingDir = QFileInfo(filePaths.value(editor)).absolutePath();
+    else
+        workingDir = QDir::currentPath();
+
+    QDesktopServices::openUrl(QUrl::fromLocalFile(workingDir));
+}
+
+void Editor::on_actionCmd_triggered()
+{
+    CodeEditor *editor = currentEditor();
+    if (!editor) {
+        QMessageBox::information(this, "No Editor", "No active editor window.");
+        return;
+    }
+
+    QString workingDir;
+    if (filePaths.contains(editor) && !filePaths.value(editor).isEmpty()) {
+        workingDir = QFileInfo(filePaths.value(editor)).absolutePath();
+    } else {
+        workingDir = QDir::currentPath();
+    }
+
+    std::wstring wWorkingDir = workingDir.toStdWString();
+    std::wstring wCmd = L"/k cd /d \"" + wWorkingDir + L"\"";
+
+    SHELLEXECUTEINFOW sei;
+    ZeroMemory(&sei, sizeof(sei));
+    sei.cbSize = sizeof(sei);
+    sei.fMask = SEE_MASK_NOCLOSEPROCESS;
+    sei.lpVerb = L"open";
+    sei.lpFile = L"cmd.exe";
+    sei.lpParameters = wCmd.c_str();
+    sei.lpDirectory = wWorkingDir.c_str();
+    sei.nShow = SW_SHOW;
+
+    if (!ShellExecuteExW(&sei)) {
+        QMessageBox::critical(this, "Error", "Failed to start command prompt.");
+    }
 }
