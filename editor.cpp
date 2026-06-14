@@ -77,6 +77,7 @@ Editor::Editor(QWidget *parent)
         m_settings->sync();
     }
 
+    CreateEncMenu();
     LoadSettings(); //Load saved settings.
 
     statusBarApperance(statBarVisibility); //Show/Hide status bar on beggining.
@@ -160,7 +161,6 @@ Editor::Editor(QWidget *parent)
         this->UpdateUndoRedo();
     });
 
-    CreateEncMenu();
     UpdateStatusBar();
     AutoSaveTimer();
 
