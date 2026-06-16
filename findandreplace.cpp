@@ -17,7 +17,9 @@ FindAndReplace::~FindAndReplace()
 void FindAndReplace::on_Find_textChanged(const QString &arg1)
 {
     QString target = ui->Find->text();
-    QTextCursor cursor = m_editor->document()->find(target);
+    QFlags<QTextDocument::FindFlag> flagList;
+    if (ui->MatchCase->isChecked()) flagList.setFlag(QTextDocument::FindCaseSensitively);
+    QTextCursor cursor = m_editor->document()->find(target, 0, flagList);
     m_editor->setTextCursor(cursor);
 }
 
