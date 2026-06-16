@@ -15,9 +15,16 @@ class FindAndReplace : public QWidget
 public:
     explicit FindAndReplace(CodeEditor *editor, QWidget *parent = nullptr);
     ~FindAndReplace();
+    void Find();
 
 private slots:
     void on_Find_textChanged(const QString &arg1);
+
+    void on_UseRegularExp_clicked();
+
+    void on_MatchWholeWord_clicked();
+
+    void on_MatchCase_clicked();
 
 private:
     Ui::FindAndReplace *ui;
