@@ -14,6 +14,7 @@ SOURCES += \
     codeeditor.cpp \
     editor.cpp \
     encdetector.cpp \
+    findandreplace.cpp \
     gotodialog.cpp \
     main.cpp \
     edito.cpp \
@@ -24,12 +25,14 @@ HEADERS += \
     edito.h \
     editor.h \
     encdetector.h \
+    findandreplace.h \
     gotodialog.h \
     preferencesdialog.h
 
 FORMS += \
     edito.ui \
     editor.ui \
+    findandreplace.ui \
     gotodialog.ui \
     preferencesdialog.ui
 

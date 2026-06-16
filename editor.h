@@ -21,6 +21,7 @@
 
 #include "codeeditor.h"
 #include "encdetector.h"
+#include "findandreplace.h"
 #include <QMenu>
 #include <QActionGroup>
 #include <QMainWindow>
@@ -126,6 +127,8 @@ private slots:
     void on_actionFile_Explorer_triggered();
 
     void on_actionCmd_triggered();
+
+    void on_actionFind_triggered();
 
 private:
     Ui::Editor *ui;

@@ -252,6 +252,8 @@
    <addaction name="actionUndo"/>
    <addaction name="actionRedo"/>
    <addaction name="separator"/>
+   <addaction name="actionFind"/>
+   <addaction name="separator"/>
    <addaction name="actionPreferences"/>
    <addaction name="actionHome"/>
    <addaction name="separator"/>
@@ -717,6 +719,21 @@
   <action name="actionCmd">
    <property name="text">
     <string>cmd</string>
+   </property>
+  </action>
+  <action name="actionFind">
+   <property name="icon">
+    <iconset resource="Resources.qrc">
+     <normaloff>:/icons/find.png</normaloff>:/icons/find.png</iconset>
+   </property>
+   <property name="text">
+    <string>Find</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
  </widget>

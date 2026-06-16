@@ -26,5 +26,6 @@
         <file>icons/selectLine.png</file>
         <file>icons/home.png</file>
         <file>icons/noFile.png</file>
+        <file>icons/find.png</file>
     </qresource>
 </RCC>

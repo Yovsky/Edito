@@ -1625,3 +1625,11 @@ void Editor::on_actionCmd_triggered()
         QMessageBox::critical(this, "Error", "Failed to start command prompt.");
     }
 }
+
+void Editor::on_actionFind_triggered()
+{
+    FindAndReplace *find = new FindAndReplace(currentEditor());
+    find->setWindowModality(Qt::NonModal);
+    find->show();
+}
+
