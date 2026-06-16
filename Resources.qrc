@@ -27,5 +27,11 @@
         <file>icons/home.png</file>
         <file>icons/noFile.png</file>
         <file>icons/find.png</file>
+        <file>icons/match_case.png</file>
+        <file>icons/match_word.png</file>
+        <file>icons/regular_expression.png</file>
+        <file>icons/replace.png</file>
+        <file>icons/replace_all.png</file>
+        <file>icons/preserve_case.png</file>
     </qresource>
 </RCC>

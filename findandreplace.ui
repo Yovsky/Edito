@@ -39,7 +39,7 @@
     <string>Replace (Optional)</string>
    </property>
   </widget>
-  <widget class="QToolButton" name="toolButton">
+  <widget class="QToolButton" name="MatchCase">
    <property name="geometry">
     <rect>
      <x>340</x>
@@ -48,11 +48,30 @@
      <height>23</height>
     </rect>
    </property>
+   <property name="toolTip">
+    <string>Match Case</string>
+   </property>
    <property name="text">
     <string>...</string>
    </property>
+   <property name="icon">
+    <iconset resource="Resources.qrc">
+     <normaloff>:/icons/match_case.png</normaloff>:/icons/match_case.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>16</width>
+     <height>16</height>
+    </size>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
   </widget>
-  <widget class="QToolButton" name="toolButton_2">
+  <widget class="QToolButton" name="MatchWholeWord">
    <property name="geometry">
     <rect>
      <x>370</x>
@@ -61,11 +80,21 @@
      <height>23</height>
     </rect>
    </property>
+   <property name="toolTip">
+    <string>Match Whole Word</string>
+   </property>
    <property name="text">
     <string>...</string>
    </property>
+   <property name="icon">
+    <iconset resource="Resources.qrc">
+     <normaloff>:/icons/match_word.png</normaloff>:/icons/match_word.png</iconset>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
   </widget>
-  <widget class="QToolButton" name="toolButton_3">
+  <widget class="QToolButton" name="UseRegularExp">
    <property name="geometry">
     <rect>
      <x>400</x>
@@ -74,11 +103,21 @@
      <height>23</height>
     </rect>
    </property>
+   <property name="toolTip">
+    <string>Use Regular Expression</string>
+   </property>
    <property name="text">
     <string>...</string>
    </property>
+   <property name="icon">
+    <iconset resource="Resources.qrc">
+     <normaloff>:/icons/regular_expression.png</normaloff>:/icons/regular_expression.png</iconset>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
   </widget>
-  <widget class="QToolButton" name="toolButton_4">
+  <widget class="QToolButton" name="PreserveCase">
    <property name="geometry">
     <rect>
      <x>340</x>
@@ -87,8 +126,18 @@
      <height>23</height>
     </rect>
    </property>
+   <property name="toolTip">
+    <string>Preserve Case</string>
+   </property>
    <property name="text">
     <string>...</string>
+   </property>
+   <property name="icon">
+    <iconset resource="Resources.qrc">
+     <normaloff>:/icons/preserve_case.png</normaloff>:/icons/preserve_case.png</iconset>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="ReplaceButton">
@@ -127,10 +176,12 @@
     </rect>
    </property>
    <property name="text">
-    <string>No results.</string>
+    <string>No results</string>
    </property>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="Resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
