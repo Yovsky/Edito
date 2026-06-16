@@ -3,6 +3,8 @@
 
 #include "codeeditor.h"
 #include <QWidget>
+#include <QTextEdit>
+#include <QDebug>
 
 namespace Ui {
 class FindAndReplace;
