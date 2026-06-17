@@ -18,6 +18,7 @@ public:
     explicit FindAndReplace(CodeEditor *editor, QWidget *parent = nullptr);
     ~FindAndReplace();
     void Find();
+    void ChangeSelection();
 
 private slots:
     void on_Find_textChanged(const QString &arg1);
@@ -28,9 +29,15 @@ private slots:
 
     void on_MatchCase_clicked();
 
+    void on_Up_clicked();
+
+    void on_Down_clicked();
+
 private:
     Ui::FindAndReplace *ui;
     CodeEditor *m_editor = nullptr;
+    QList<QTextEdit::ExtraSelection> m_selections;
+    int m_index;
 };
 
 #endif // FINDANDREPLACE_H
