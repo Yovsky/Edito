@@ -23,7 +23,19 @@ void FindAndReplace::Find()
     int last = 0;
     while(hasNext)
     {
-        QTextCursor cursor = m_editor->document()->find(target, last, flagList);
+        QTextCursor cursor;
+        if (ui->UseRegularExp->isChecked())
+        {
+            QRegularExpression regex = QRegularExpression(target);
+            if(!regex.isValid())
+            {
+                ui->label->setText(regex.errorString());
+                return;
+            }
+            cursor = m_editor->document()->find(regex, last, flagList);
+        }
+        else
+            cursor = m_editor->document()->find(target, last, flagList);
         if(cursor.isNull())
         {
             hasNext = false;
@@ -33,7 +45,10 @@ void FindAndReplace::Find()
         selection.format.setBackground(QColor(Qt::blue));
         selection.cursor = cursor;
         m_selections.append(selection);
-        last = cursor.selectionEnd();
+        if(cursor.selectionStart() == cursor.selectionEnd())
+            last = cursor.selectionStart() + 1;
+        else
+            last = cursor.selectionEnd();
     }
 
     if (m_selections.size() == 0)

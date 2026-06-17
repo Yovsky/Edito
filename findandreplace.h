@@ -6,6 +6,7 @@
 #include <QTextEdit>
 #include <QDebug>
 #include <QMessageBox>
+#include <QRegularExpression>
 
 namespace Ui {
 class FindAndReplace;
