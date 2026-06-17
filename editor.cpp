@@ -1630,6 +1630,7 @@ void Editor::on_actionFind_triggered()
 {
     FindAndReplace *find = new FindAndReplace(currentEditor());
     find->setWindowModality(Qt::NonModal);
+    find->setWindowFlag(Qt::WindowStaysOnTopHint);
     find->show();
 }
 
