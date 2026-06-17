@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QTextEdit>
 #include <QDebug>
+#include <QMessageBox>
 
 namespace Ui {
 class FindAndReplace;
@@ -32,6 +33,8 @@ private slots:
     void on_Up_clicked();
 
     void on_Down_clicked();
+
+    void on_ReplaceButton_clicked();
 
 private:
     Ui::FindAndReplace *ui;

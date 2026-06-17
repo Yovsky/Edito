@@ -92,3 +92,16 @@ void FindAndReplace::on_Down_clicked()
         m_index = 0;
     ChangeSelection();
 }
+
+void FindAndReplace::on_ReplaceButton_clicked()
+{
+    if (m_selections.isEmpty())
+    {
+        QMessageBox::warning(this, "Error", "No matchings found, cannot replace.");
+        return;
+    }
+    QTextCursor cursor = m_editor->textCursor();
+    cursor.insertText(ui->Replace->text());
+    Find();
+}
+
