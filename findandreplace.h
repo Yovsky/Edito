@@ -19,6 +19,7 @@ public:
     explicit FindAndReplace(CodeEditor *editor, QWidget *parent = nullptr);
     ~FindAndReplace();
     void Find();
+    void Replace();
     void ChangeSelection();
 
 private slots:
@@ -35,6 +36,8 @@ private slots:
     void on_Down_clicked();
 
     void on_ReplaceButton_clicked();
+
+    void on_ReplaceAllButton_clicked();
 
 private:
     Ui::FindAndReplace *ui;

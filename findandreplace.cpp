@@ -7,6 +7,8 @@ FindAndReplace::FindAndReplace(CodeEditor *editor, QWidget *parent)
     , m_editor(editor)
 {
     ui->setupUi(this);
+    ui->Down->setDisabled(true);
+    ui->Up->setDisabled(true);
 }
 
 void FindAndReplace::Find()
@@ -35,14 +37,28 @@ void FindAndReplace::Find()
     }
 
     if (m_selections.size() == 0)
+    {
         ui->label->setText("No results");
+        ui->Down->setDisabled(true);
+        ui->Up->setDisabled(true);
+        m_editor->textCursor().clearSelection();
+    }
     else
     {
         m_index = 0;
         ui->label->setText("1 of " + QString::number(m_selections.size()));
         m_editor->setTextCursor(m_selections[0].cursor);
-        m_editor->setExtraSelections(m_selections);
+        ui->Down->setDisabled(false);
+        ui->Up->setDisabled(false);
     }
+    m_editor->setExtraSelections(m_selections);
+}
+
+void FindAndReplace::Replace()
+{
+    QTextCursor cursor = m_editor->textCursor();
+    cursor.insertText(ui->Replace->text());
+    Find();
 }
 
 void FindAndReplace::ChangeSelection()
@@ -100,8 +116,20 @@ void FindAndReplace::on_ReplaceButton_clicked()
         QMessageBox::warning(this, "Error", "No matchings found, cannot replace.");
         return;
     }
-    QTextCursor cursor = m_editor->textCursor();
-    cursor.insertText(ui->Replace->text());
-    Find();
+    Replace();
+}
+
+
+void FindAndReplace::on_ReplaceAllButton_clicked()
+{
+    if (m_selections.isEmpty())
+    {
+        QMessageBox::warning(this, "Error", "No matchings found, cannot replace.");
+        return;
+    }
+    while (m_selections.size() > 0)
+    {
+        Replace();
+    }
 }
 
