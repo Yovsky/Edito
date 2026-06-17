@@ -72,8 +72,26 @@ void FindAndReplace::Find()
 void FindAndReplace::Replace()
 {
     QTextCursor cursor = m_editor->textCursor();
-    cursor.insertText(ui->Replace->text());
+    QString text = GetReplaceText();
+    cursor.insertText(text);
     Find();
+}
+
+QString FindAndReplace::GetReplaceText()
+{
+    QString replace = ui->Replace->text();
+    QString original = m_editor->textCursor().selectedText();
+    if (original == original.toUpper())
+        return replace.toUpper();
+    else if (original == original.toLower())
+        return replace.toLower();
+    else if (original.at(0).isUpper())
+    {
+        QString res = replace.toLower();
+        res[0] = replace.at(0).toUpper();
+        return res;
+    }
+    return replace;
 }
 
 void FindAndReplace::ChangeSelection()

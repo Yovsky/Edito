@@ -21,6 +21,7 @@ public:
     ~FindAndReplace();
     void Find();
     void Replace();
+    QString GetReplaceText();
     void ChangeSelection();
 
 private slots:
