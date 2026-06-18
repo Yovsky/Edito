@@ -22,6 +22,7 @@ SOURCES += \
     main.cpp \
     edito.cpp \
     preferencesdialog.cpp \
+    spellchecker.cpp \
     third-party/hunspell/affentry.cxx \
     third-party/hunspell/affixmgr.cxx \
     third-party/hunspell/csutil.cxx \
@@ -41,6 +42,7 @@ HEADERS += \
     findandreplace.h \
     gotodialog.h \
     preferencesdialog.h \
+    spellchecker.h \
     third-party/hunspell/affentry.hxx \
     third-party/hunspell/affixmgr.hxx \
     third-party/hunspell/atypes.hxx \
