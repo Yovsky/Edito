@@ -1,5 +1,3 @@
-# Edito - Modern Text Editor.
-
 ![BUILD CI](https://img.shields.io/badge/Build-Passing-27AE60?logo=github)
 ![VERSION](https://img.shields.io/badge/Version-0.0.2-F39C12)
 ![LICENSE](https://img.shields.io/badge/License-GPLv3-2E86AB)
@@ -7,44 +5,25 @@
 ![QT VERSION](https://img.shields.io/badge/Qt-6.0+-41CD52?logo=qt)
 ![C++ VERSION](https://img.shields.io/badge/C++-17-2980B9?logo=c%2B%2B)
 
-A modern, cross-platform text editor built with Qt framework
+# What is Edito?
+
+Edito is a modern, cross-platform text editor built with Qt framework using C++
 
 ## Features
 - **Cross-Platform support** : Runs seamlessly on Windows, Linux, and macOS
 - **Modern UI** : Clean, professional and easy interface
 - **File Operations** : Full support for new, open, save, save as operations.
 - **Encoding Support** : Support for UTF-8, UTF-16BE, UTF-16LE, UTF-32BE, UTF-32LE, ISO-8859-1 and System encoding.
+- **Search Features** : Support for features such as Find and replace.
 
 ## Instalation
-### Prerequisites
-- Qt 6.0 or higher
-- C++17 Compatible compiler
-- QMake 3.16+
-
-### Building from Source
-```bash
-# Clone the repository
-git clone https://github.com/Yovsky/Edito.git
-cd Edito
-
-# Create build directory
-mkdir build && cd build
-
-# Configure with CMake
-cmake ..
-
-# Build the project
-cmake --build .
-
-# Install (optional)
-cmake --install .
-```
-### Pre-built Binaries
-Download the latest release for your platform from the [Releases page](https://github.com/Yovsky/Edito/releases)
+See the [Installation](https://github.com/Yovsky/Edito/blob/main/docs/instalation.md)
 
 ## Usage
-### Basic Text Editing
-Edito works like any standard text editor. Create new files, edit existing ones, and save your work with your preferred encoding.
+See the [usage](https://github.com/Yovsky/Edito/blob/main/docs/usage.md)
+
+## Contributing 
+See the [CONTRIBUTING](https://github.com/Yovsky/Edito/blob/main/CONTRIBUTING.md) file for details.
 
 ## License
 This project is licensed under the GPLv3 License - see the [LICENSE](https://github.com/Yovsky/Edito/blob/main/LICENSE) file for details.
