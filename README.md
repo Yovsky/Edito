@@ -17,10 +17,10 @@ Edito is a modern, cross-platform text editor built with Qt framework using C++
 - **Search Features** : Support for features such as Find and replace.
 
 ## Instalation
-See the [Installation](https://github.com/Yovsky/Edito/blob/main/docs/instalation.md)
+See the [Installation](https://github.com/Yovsky/Edito/blob/main/docs/instalation.md) file for details.
 
 ## Usage
-See the [usage](https://github.com/Yovsky/Edito/blob/main/docs/usage.md)
+See the [usage](https://github.com/Yovsky/Edito/blob/main/docs/usage.md) file for details.
 
 ## Contributing 
 See the [CONTRIBUTING](https://github.com/Yovsky/Edito/blob/main/CONTRIBUTING.md) file for details.
