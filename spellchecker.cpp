@@ -8,17 +8,31 @@ SpellChecker::SpellChecker(QObject *parent)
 }
 void SpellChecker::Check(QString content)
 {
-    QList<QString> wordList = GetList(content);
-    for (QString word : wordList)
+    QList<WordInfo> wordList = GetList(content);
+    for (WordInfo w : wordList)
     {
-        if (m_spell->spell(word.toStdString()) != 0)
-            qDebug() << word + " is correct";
-        else
-            qDebug() << word + " has a mistake";
+        if (m_spell->spell(w.word.toStdString()) == 0)
+        {
+            qDebug() << "Word " + w.word + " from " + QString::number(w.start) + " to " + QString::number(w.end) + " has a mistake";
+        }
     }
 }
 
-QList<QString> SpellChecker::GetList(QString content)
+QList<WordInfo> SpellChecker::GetList(QString content)
 {
-    return content.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
+    QRegularExpression regex("\\b\\w+\\b");
+    QRegularExpressionMatchIterator iterator = regex.globalMatch(content);
+
+    QList<WordInfo> res;
+    while (iterator.hasNext())
+    {
+        QRegularExpressionMatch match = iterator.next();
+
+        WordInfo w;
+        w.word = match.captured();
+        w.start = match.capturedStart();
+        w.end = match.capturedEnd();
+        res.append(w);
+    }
+    return res;
 }
