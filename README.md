@@ -17,7 +17,7 @@ Edito is a modern, cross-platform text editor built with Qt framework using C++
 - **Search Features** : Support for features such as Find and replace.
 
 ## Instalation
-See the [Installation](docs/instalation.md) file for details.
+See the [Installation](docs/installation.md) file for details.
 
 ## Usage
 See the [usage](docs/usage.md) file for details.
