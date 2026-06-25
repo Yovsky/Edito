@@ -23,8 +23,10 @@
 #include <QColor>
 #include <QMenu>
 
-CodeEditor::CodeEditor(QWidget *parent)
+CodeEditor::CodeEditor(SpellChecker *checker, QWidget *parent)
     : QPlainTextEdit(parent)
+    , userInputTimer(new QTimer())
+    , m_checker(checker)
     , CurrentZoomLevel(0)
 {
     setLineWrapMode(NoWrap);
@@ -44,6 +46,11 @@ CodeEditor::CodeEditor(QWidget *parent)
     connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
     connect(this, &CodeEditor::selectionChanged, this, &CodeEditor::highlightCurrentLine);
     connect(this, &CodeEditor::selectionChanged, this, &CodeEditor::onSelectionChanged);
+    connect(this, &CodeEditor::textChanged, this, &CodeEditor::UpdateUserInputTimer);
+    connect(userInputTimer, &QTimer::timeout, [=] () {
+        CallSpellChecker();
+    });
+    userInputTimer->setSingleShot(true);
 
     updateLineNumberAreaWidth(0);
     highlightCurrentLine();
@@ -235,4 +242,14 @@ void CodeEditor::keyPressEvent(QKeyEvent *event)
         return;
     }
     QPlainTextEdit::keyPressEvent(event);
+}
+
+void CodeEditor::UpdateUserInputTimer()
+{
+    userInputTimer->start(1200);
+}
+
+void CodeEditor::CallSpellChecker()
+{
+    m_checker->Check(this->document()->toPlainText());
 }

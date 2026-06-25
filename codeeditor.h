@@ -23,6 +23,8 @@
 #include <QWidget>
 #include <QPaintEvent>
 #include <QResizeEvent>
+#include <QTimer>
+#include <spellchecker.h>
 
 class LineNumberArea;
 
@@ -31,7 +33,7 @@ class CodeEditor : public QPlainTextEdit
     Q_OBJECT
 
 public:
-    explicit CodeEditor(QWidget *parent = nullptr);
+    explicit CodeEditor(SpellChecker *checker, QWidget *parent = nullptr);
 
     void editorActions(QAction *cut, QAction *copy, QAction *paste, QAction *selectAll, QAction *upper, QAction *lower, QAction *webSearch);
 
@@ -39,7 +41,8 @@ public:
     int lineNumberAreaWidth();
     void setZoomLevel(int level);
     int getZoomLevel();
-
+    void UpdateUserInputTimer();
+    void CallSpellChecker();
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -55,6 +58,8 @@ private:
     QAction *a_cut, *a_copy, *a_paste, *a_selectAll;
     QAction *a_upper, *a_lower;
     QAction *a_searchOnWeb;
+    QTimer *userInputTimer;
+    SpellChecker *m_checker;
 
     QWidget *lineNumberArea;
     int CurrentZoomLevel = 0;
