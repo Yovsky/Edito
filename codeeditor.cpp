@@ -23,7 +23,7 @@
 #include <QColor>
 #include <QMenu>
 
-CodeEditor::CodeEditor(SpellChecker *checker, QWidget *parent)
+CodeEditor::CodeEditor(QWidget *parent, SpellChecker *checker)
     : QPlainTextEdit(parent)
     , userInputTimer(new QTimer())
     , m_checker(checker)
@@ -251,5 +251,5 @@ void CodeEditor::UpdateUserInputTimer()
 
 void CodeEditor::CallSpellChecker()
 {
-    m_checker->Check(this->document()->toPlainText());
+    m_checker->Check(this, this->document()->toPlainText());
 }

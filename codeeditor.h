@@ -24,16 +24,17 @@
 #include <QPaintEvent>
 #include <QResizeEvent>
 #include <QTimer>
-#include <spellchecker.h>
 
 class LineNumberArea;
+
+class SpellChecker;
 
 class CodeEditor : public QPlainTextEdit
 {
     Q_OBJECT
 
 public:
-    explicit CodeEditor(SpellChecker *checker, QWidget *parent = nullptr);
+    explicit CodeEditor(QWidget *parent = nullptr, SpellChecker *checker = nullptr);
 
     void editorActions(QAction *cut, QAction *copy, QAction *paste, QAction *selectAll, QAction *upper, QAction *lower, QAction *webSearch);
 

@@ -61,7 +61,6 @@ void Edito::on_Open_clicked()
     else QMessageBox::critical(this, "Error", "Failed to open from a file.");
 }
 
-
 void Edito::on_createNew_clicked()
 {
     this->close();
@@ -73,7 +72,6 @@ void Edito::on_createNew_clicked()
     editor->activateWindow();
     editor->NewFile();
 }
-
 
 void Edito::on_Options_clicked()
 {
@@ -91,7 +89,6 @@ void Edito::on_Options_clicked()
     dialog.exec();
 }
 
-
 void Edito::on_EmptyFile_clicked()
 {
     this->close();
@@ -101,4 +98,3 @@ void Edito::on_EmptyFile_clicked()
     editor->raise();
     editor->activateWindow();
 }
-

@@ -427,7 +427,7 @@ void Editor::OpenFile(const QString &FilePath)
         return;
     }
 
-    CodeEditor *editor = new CodeEditor(m_checker);
+    CodeEditor *editor = new CodeEditor(nullptr, m_checker);
 
     //Read content.
     QByteArray data = file.readAll();
@@ -524,7 +524,7 @@ void Editor::OpenFile(const QString &FilePath)
 
 void Editor::NewFile()
 {
-    CodeEditor *editor = new CodeEditor(m_checker); //Handle the CreateNew from external windows.
+    CodeEditor *editor = new CodeEditor(nullptr, m_checker); //Handle the CreateNew from external windows.
 
     isSaved.insert(editor, false);
     currentEncodings.insert(editor, "UTF-8");
@@ -1349,7 +1349,7 @@ void Editor::restoreSeccionFile(const QString &tempPath, const QString &original
         }
 
         // Create editor with restored content
-        CodeEditor *editor = new CodeEditor(m_checker);
+        CodeEditor *editor = new CodeEditor(nullptr, m_checker);
         editor->setPlainText(content);
         editor->document()->setModified(isModified); // Restore modified state
 
