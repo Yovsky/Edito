@@ -45,6 +45,11 @@ public:
     void UpdateUserInputTimer();
     void CallSpellChecker();
 
+    void SetSpellcheckerSelections(QList<QTextEdit::ExtraSelection> selections);
+    void SetLineHighlighterSelections(QList<QTextEdit::ExtraSelection> selections);
+    void SetFindAndReplaceSelections(QList<QTextEdit::ExtraSelection> selections);
+    void UpdateSelections();
+
 protected:
     void resizeEvent(QResizeEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
@@ -61,6 +66,10 @@ private:
     QAction *a_searchOnWeb;
     QTimer *userInputTimer;
     SpellChecker *m_checker;
+
+    QList<QTextEdit::ExtraSelection> m_spellcheckerSelections;
+    QList<QTextEdit::ExtraSelection> m_lineHighlighterSelections;
+    QList<QTextEdit::ExtraSelection> m_findAndReplaceSelections;
 
     QWidget *lineNumberArea;
     int CurrentZoomLevel = 0;

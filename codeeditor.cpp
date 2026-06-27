@@ -148,7 +148,7 @@ void CodeEditor::highlightCurrentLine()
         extraSelections.append(selection);
     }
 
-    setExtraSelections(extraSelections);
+    SetLineHighlighterSelections(extraSelections);
 }
 
 void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
@@ -246,10 +246,39 @@ void CodeEditor::keyPressEvent(QKeyEvent *event)
 
 void CodeEditor::UpdateUserInputTimer()
 {
-    userInputTimer->start(1200);
+    userInputTimer->start(1000);
 }
 
 void CodeEditor::CallSpellChecker()
 {
     m_checker->Check(this, this->document()->toPlainText());
+}
+
+void CodeEditor::SetSpellcheckerSelections(QList<QTextEdit::ExtraSelection> selections)
+{
+    m_spellcheckerSelections = selections;
+    UpdateSelections();
+}
+
+void CodeEditor::SetLineHighlighterSelections(QList<QTextEdit::ExtraSelection> selections)
+{
+    m_lineHighlighterSelections = selections;
+    UpdateSelections();
+}
+
+void CodeEditor::SetFindAndReplaceSelections(QList<QTextEdit::ExtraSelection> selections)
+{
+    m_findAndReplaceSelections = selections;
+    UpdateSelections();
+}
+
+void CodeEditor::UpdateSelections()
+{
+    QList<QTextEdit::ExtraSelection> m_allSelections;
+
+    m_allSelections += m_lineHighlighterSelections;
+    m_allSelections += m_findAndReplaceSelections;
+    m_allSelections += m_spellcheckerSelections; // always keep the spellchecker selection at the top (last to add to the list) so it will be always visible
+
+    this->setExtraSelections(m_allSelections);
 }

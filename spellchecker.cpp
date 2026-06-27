@@ -12,31 +12,27 @@ void SpellChecker::Check(CodeEditor* editor, QString content)
 {
     if (!editor) return;
 
-    editor->blockSignals(true);
-
-    QTextCursor originalCursor = editor->textCursor();
-
-    QTextCursor clearCursor(editor->document());
-    clearCursor.select(QTextCursor::Document);
-    QTextCharFormat clearFormat;
-    clearFormat.setUnderlineStyle(QTextCharFormat::NoUnderline);
-    clearCursor.mergeCharFormat(clearFormat);
-
-    QTextCursor markerCursor(editor->document());
+    QList<QTextEdit::ExtraSelection> selections;
     QList<WordInfo> wordList = GetList(content);
 
     for (const WordInfo &w : wordList)
     {
         if (m_spell->spell(w.word.toStdString()) == 0)
         {
+            QTextEdit::ExtraSelection selection;
+            QTextCursor markerCursor(editor->document());
+
             markerCursor.setPosition(w.start);
             markerCursor.setPosition(w.end, QTextCursor::KeepAnchor);
-            markerCursor.mergeCharFormat(m_errorSpellFormat);
+
+            selection.format = m_errorSpellFormat;
+            selection.cursor = markerCursor;
+
+            selections.append(selection);
         }
     }
 
-    editor->setTextCursor(originalCursor);
-    editor->blockSignals(false);
+    editor->SetSpellcheckerSelections(selections);
 }
 
 QList<WordInfo> SpellChecker::GetList(QString content)
