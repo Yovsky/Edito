@@ -21,13 +21,15 @@ class SpellChecker : public QObject
     Q_OBJECT
 public:
     explicit SpellChecker(QObject *parent = nullptr);
-    void Check(CodeEditor *editor, QString content);
+    void Check(CodeEditor *editor);
     QList<WordInfo> GetList(QString content);
-    void Suggest(CodeEditor editor, WordInfo words);
+    QList<QString> Suggest(CodeEditor *editor, QString word);
+    bool IsMisspelled(CodeEditor *editor, qint64 pos);
 
 private:
     Hunspell *m_spell = nullptr;
     QTextCharFormat m_errorSpellFormat;
+    QList<WordInfo> m_misspelled;
 
 signals:
 };

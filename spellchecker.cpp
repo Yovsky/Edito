@@ -8,9 +8,10 @@ SpellChecker::SpellChecker(QObject *parent)
     m_errorSpellFormat.setUnderlineColor(Qt::red);
 }
 
-void SpellChecker::Check(CodeEditor* editor, QString content)
+void SpellChecker::Check(CodeEditor* editor)
 {
     if (!editor) return;
+    QString content = editor->document()->toPlainText();
 
     QList<QTextEdit::ExtraSelection> selections;
     QList<WordInfo> wordList = GetList(content);
@@ -19,6 +20,10 @@ void SpellChecker::Check(CodeEditor* editor, QString content)
     {
         if (m_spell->spell(w.word.toStdString()) == 0)
         {
+            // add misspelled word to the misspelled list
+            m_misspelled.append(w);
+
+            // underline the misspelled word
             QTextEdit::ExtraSelection selection;
             QTextCursor markerCursor(editor->document());
 
@@ -32,6 +37,7 @@ void SpellChecker::Check(CodeEditor* editor, QString content)
         }
     }
 
+    // apply the underlining
     editor->SetSpellcheckerSelections(selections);
 }
 
@@ -54,7 +60,35 @@ QList<WordInfo> SpellChecker::GetList(QString content)
     return res;
 }
 
-void SpellChecker::Suggest(CodeEditor editor, WordInfo words)
+QList<QString> SpellChecker::Suggest(CodeEditor* editor, QString word)
 {
+    QList<QString> corrections;
 
+    // create and populate the suggestions list
+    char **list = nullptr;
+    int count = m_spell->suggest(&list, word.toStdString().c_str());
+
+    // safety and convert to QString list
+    if (count > 0 && list != nullptr)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            corrections.append(QString::fromUtf8(list[i]));
+        }
+    }
+
+    m_spell->free_list(&list, count);
+
+    return corrections;
+}
+
+bool SpellChecker::IsMisspelled(CodeEditor* editor, qint64 pos)
+{
+    Check(editor);
+    for (WordInfo w : m_misspelled)
+    {
+        if (pos >= w.start && pos <= w.end)
+            return true;
+    }
+    return false;
 }

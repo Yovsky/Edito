@@ -73,6 +73,21 @@ void CodeEditor::contextMenuEvent(QContextMenuEvent *event)
 {
     QMenu *menu = new QMenu(this);
 
+    QTextCursor cursor = cursorForPosition(event->pos());
+    int pos = cursor.position();
+    bool isMisspelled = m_checker->IsMisspelled(this, pos);
+    if (isMisspelled)
+    {
+        cursor.select(QTextCursor::WordUnderCursor);
+        QList<QString> corrections = m_checker->Suggest(this, cursor.selectedText());
+        for (QString s : corrections)
+        {
+            QAction* action = menu->addAction(s);
+            m_suggestions[action] = s;
+        }
+    }
+    menu->addSeparator();
+
     menu->addAction(a_cut);
     menu->addAction(a_copy);
     menu->addAction(a_paste);
@@ -86,8 +101,13 @@ void CodeEditor::contextMenuEvent(QContextMenuEvent *event)
     menu->addAction(a_searchOnWeb);
     menu->addSeparator();
 
-    menu->exec(event->globalPos());
+    QAction *chosen = menu->exec(event->globalPos());
     delete menu;
+
+    if (m_suggestions.contains(chosen))
+    {
+        cursor.insertText(m_suggestions[chosen]);
+    }
 }
 
 void CodeEditor::onSelectionChanged()
@@ -251,7 +271,7 @@ void CodeEditor::UpdateUserInputTimer()
 
 void CodeEditor::CallSpellChecker()
 {
-    m_checker->Check(this, this->document()->toPlainText());
+    m_checker->Check(this);
 }
 
 void CodeEditor::SetSpellcheckerSelections(QList<QTextEdit::ExtraSelection> selections)

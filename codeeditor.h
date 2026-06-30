@@ -24,6 +24,8 @@
 #include <QPaintEvent>
 #include <QResizeEvent>
 #include <QTimer>
+#include <QContextMenuEvent>
+#include <QMap>
 
 class LineNumberArea;
 
@@ -66,6 +68,7 @@ private:
     QAction *a_searchOnWeb;
     QTimer *userInputTimer;
     SpellChecker *m_checker;
+    QMap<QAction*, QString> m_suggestions;
 
     QList<QTextEdit::ExtraSelection> m_spellcheckerSelections;
     QList<QTextEdit::ExtraSelection> m_lineHighlighterSelections;
