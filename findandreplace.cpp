@@ -1,14 +1,21 @@
 #include "findandreplace.h"
 #include "ui_findandreplace.h"
 
-FindAndReplace::FindAndReplace(CodeEditor *editor, QWidget *parent)
+FindAndReplace::FindAndReplace(CodeEditor *editor, QString selected, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::FindAndReplace)
     , m_editor(editor)
 {
     ui->setupUi(this);
+
+    // destroy the object on closure
+    setAttribute(Qt::WA_DeleteOnClose);
+
     ui->Down->setDisabled(true);
     ui->Up->setDisabled(true);
+
+    // add the selected text by the user to find box
+    ui->Find->setText(selected);
 }
 
 void FindAndReplace::Find()
@@ -103,6 +110,9 @@ void FindAndReplace::ChangeSelection()
 
 FindAndReplace::~FindAndReplace()
 {
+    // remove all selections after window is closed
+    m_editor->SetFindAndReplaceSelections({});
+
     delete ui;
 }
 
