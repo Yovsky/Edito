@@ -8,6 +8,9 @@ FindAndReplace::FindAndReplace(CodeEditor *editor, QString selected, QWidget *pa
 {
     ui->setupUi(this);
 
+    // destroy the object on closure
+    setAttribute(Qt::WA_DeleteOnClose);
+
     ui->Down->setDisabled(true);
     ui->Up->setDisabled(true);
 
@@ -107,6 +110,9 @@ void FindAndReplace::ChangeSelection()
 
 FindAndReplace::~FindAndReplace()
 {
+    // remove all selections after window is closed
+    m_editor->SetFindAndReplaceSelections({});
+
     delete ui;
 }
 
