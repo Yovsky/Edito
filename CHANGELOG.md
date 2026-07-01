@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Added automatic spellchecking to the editor. Misspelled words are now underlined in red, and right-clicking offers suggested replacements
 
 ### Changed
 
@@ -15,4 +16,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Known Issues
 
-### Added
