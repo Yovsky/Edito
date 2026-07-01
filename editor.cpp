@@ -1629,7 +1629,8 @@ void Editor::on_actionCmd_triggered()
 
 void Editor::on_actionFind_triggered()
 {
-    FindAndReplace *find = new FindAndReplace(currentEditor());
+    QString selected = currentEditor()->textCursor().selectedText();
+    FindAndReplace *find = new FindAndReplace(currentEditor(), selected);
     find->setWindowModality(Qt::NonModal);
     find->setWindowFlag(Qt::WindowStaysOnTopHint);
     find->show();

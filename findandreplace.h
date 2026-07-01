@@ -17,7 +17,7 @@ class FindAndReplace : public QWidget
     Q_OBJECT
 
 public:
-    explicit FindAndReplace(CodeEditor *editor, QWidget *parent = nullptr);
+    explicit FindAndReplace(CodeEditor *editor, QString selected, QWidget *parent = nullptr);
     ~FindAndReplace();
     void Find();
     void Replace();
