@@ -23,8 +23,10 @@
 #include <QColor>
 #include <QMenu>
 
-CodeEditor::CodeEditor(QWidget *parent)
+CodeEditor::CodeEditor(QWidget *parent, SpellChecker *checker)
     : QPlainTextEdit(parent)
+    , userInputTimer(new QTimer())
+    , m_checker(checker)
     , CurrentZoomLevel(0)
 {
     setLineWrapMode(NoWrap);
@@ -44,6 +46,11 @@ CodeEditor::CodeEditor(QWidget *parent)
     connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
     connect(this, &CodeEditor::selectionChanged, this, &CodeEditor::highlightCurrentLine);
     connect(this, &CodeEditor::selectionChanged, this, &CodeEditor::onSelectionChanged);
+    connect(this, &CodeEditor::textChanged, this, &CodeEditor::UpdateUserInputTimer);
+    connect(userInputTimer, &QTimer::timeout, [=] () {
+        CallSpellChecker();
+    });
+    userInputTimer->setSingleShot(true);
 
     updateLineNumberAreaWidth(0);
     highlightCurrentLine();
@@ -66,6 +73,21 @@ void CodeEditor::contextMenuEvent(QContextMenuEvent *event)
 {
     QMenu *menu = new QMenu(this);
 
+    QTextCursor cursor = cursorForPosition(event->pos());
+    int pos = cursor.position();
+    bool isMisspelled = m_checker->IsMisspelled(this, pos);
+    if (isMisspelled)
+    {
+        cursor.select(QTextCursor::WordUnderCursor);
+        QList<QString> corrections = m_checker->Suggest(this, cursor.selectedText());
+        for (QString s : corrections)
+        {
+            QAction* action = menu->addAction(s);
+            m_suggestions[action] = s;
+        }
+    }
+    menu->addSeparator();
+
     menu->addAction(a_cut);
     menu->addAction(a_copy);
     menu->addAction(a_paste);
@@ -79,8 +101,13 @@ void CodeEditor::contextMenuEvent(QContextMenuEvent *event)
     menu->addAction(a_searchOnWeb);
     menu->addSeparator();
 
-    menu->exec(event->globalPos());
+    QAction *chosen = menu->exec(event->globalPos());
     delete menu;
+
+    if (m_suggestions.contains(chosen))
+    {
+        cursor.insertText(m_suggestions[chosen]);
+    }
 }
 
 void CodeEditor::onSelectionChanged()
@@ -141,7 +168,7 @@ void CodeEditor::highlightCurrentLine()
         extraSelections.append(selection);
     }
 
-    setExtraSelections(extraSelections);
+    SetLineHighlighterSelections(extraSelections);
 }
 
 void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
@@ -235,4 +262,43 @@ void CodeEditor::keyPressEvent(QKeyEvent *event)
         return;
     }
     QPlainTextEdit::keyPressEvent(event);
+}
+
+void CodeEditor::UpdateUserInputTimer()
+{
+    userInputTimer->start(1000);
+}
+
+void CodeEditor::CallSpellChecker()
+{
+    m_checker->Check(this);
+}
+
+void CodeEditor::SetSpellcheckerSelections(QList<QTextEdit::ExtraSelection> selections)
+{
+    m_spellcheckerSelections = selections;
+    UpdateSelections();
+}
+
+void CodeEditor::SetLineHighlighterSelections(QList<QTextEdit::ExtraSelection> selections)
+{
+    m_lineHighlighterSelections = selections;
+    UpdateSelections();
+}
+
+void CodeEditor::SetFindAndReplaceSelections(QList<QTextEdit::ExtraSelection> selections)
+{
+    m_findAndReplaceSelections = selections;
+    UpdateSelections();
+}
+
+void CodeEditor::UpdateSelections()
+{
+    QList<QTextEdit::ExtraSelection> m_allSelections;
+
+    m_allSelections += m_lineHighlighterSelections;
+    m_allSelections += m_findAndReplaceSelections;
+    m_allSelections += m_spellcheckerSelections; // always keep the spellchecker selection at the top (last to add to the list) so it will be always visible
+
+    this->setExtraSelections(m_allSelections);
 }

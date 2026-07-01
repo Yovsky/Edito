@@ -20,6 +20,7 @@
  */
 
 #include <QMainWindow>
+#include <spellchecker.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -46,5 +47,6 @@ private slots:
 
 private:
     Ui::Edito *ui;
+    SpellChecker* checker;
 };
 #endif // EDITO_H

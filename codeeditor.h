@@ -23,15 +23,20 @@
 #include <QWidget>
 #include <QPaintEvent>
 #include <QResizeEvent>
+#include <QTimer>
+#include <QContextMenuEvent>
+#include <QMap>
 
 class LineNumberArea;
+
+class SpellChecker;
 
 class CodeEditor : public QPlainTextEdit
 {
     Q_OBJECT
 
 public:
-    explicit CodeEditor(QWidget *parent = nullptr);
+    explicit CodeEditor(QWidget *parent = nullptr, SpellChecker *checker = nullptr);
 
     void editorActions(QAction *cut, QAction *copy, QAction *paste, QAction *selectAll, QAction *upper, QAction *lower, QAction *webSearch);
 
@@ -39,7 +44,13 @@ public:
     int lineNumberAreaWidth();
     void setZoomLevel(int level);
     int getZoomLevel();
+    void UpdateUserInputTimer();
+    void CallSpellChecker();
 
+    void SetSpellcheckerSelections(QList<QTextEdit::ExtraSelection> selections);
+    void SetLineHighlighterSelections(QList<QTextEdit::ExtraSelection> selections);
+    void SetFindAndReplaceSelections(QList<QTextEdit::ExtraSelection> selections);
+    void UpdateSelections();
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -55,6 +66,13 @@ private:
     QAction *a_cut, *a_copy, *a_paste, *a_selectAll;
     QAction *a_upper, *a_lower;
     QAction *a_searchOnWeb;
+    QTimer *userInputTimer;
+    SpellChecker *m_checker;
+    QMap<QAction*, QString> m_suggestions;
+
+    QList<QTextEdit::ExtraSelection> m_spellcheckerSelections;
+    QList<QTextEdit::ExtraSelection> m_lineHighlighterSelections;
+    QList<QTextEdit::ExtraSelection> m_findAndReplaceSelections;
 
     QWidget *lineNumberArea;
     int CurrentZoomLevel = 0;

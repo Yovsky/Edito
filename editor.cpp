@@ -52,7 +52,7 @@
 #include <windows.h>
 #include <shellapi.h>
 
-Editor::Editor(QWidget *parent)
+Editor::Editor(SpellChecker *check, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Editor)
     , posStatus(nullptr)
@@ -66,6 +66,7 @@ Editor::Editor(QWidget *parent)
     , wordWrap(false)
     , m_settings(nullptr)
     , openedTabs(0)
+    , m_checker(check)
 {
     ui->setupUi(this);
     ui->editorTabs->removeTab(0); //Removing the default "Tab 1".
@@ -426,7 +427,7 @@ void Editor::OpenFile(const QString &FilePath)
         return;
     }
 
-    CodeEditor *editor = new CodeEditor();
+    CodeEditor *editor = new CodeEditor(nullptr, m_checker);
 
     //Read content.
     QByteArray data = file.readAll();
@@ -523,7 +524,7 @@ void Editor::OpenFile(const QString &FilePath)
 
 void Editor::NewFile()
 {
-    CodeEditor *editor = new CodeEditor(); //Handle the CreateNew from external windows.
+    CodeEditor *editor = new CodeEditor(nullptr, m_checker); //Handle the CreateNew from external windows.
 
     isSaved.insert(editor, false);
     currentEncodings.insert(editor, "UTF-8");
@@ -1348,7 +1349,7 @@ void Editor::restoreSeccionFile(const QString &tempPath, const QString &original
         }
 
         // Create editor with restored content
-        CodeEditor *editor = new CodeEditor();
+        CodeEditor *editor = new CodeEditor(nullptr, m_checker);
         editor->setPlainText(content);
         editor->document()->setModified(isModified); // Restore modified state
 
@@ -1633,4 +1634,3 @@ void Editor::on_actionFind_triggered()
     find->setWindowFlag(Qt::WindowStaysOnTopHint);
     find->show();
 }
-

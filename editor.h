@@ -22,6 +22,7 @@
 #include "codeeditor.h"
 #include "encdetector.h"
 #include "findandreplace.h"
+#include "spellchecker.h"
 #include <QMenu>
 #include <QActionGroup>
 #include <QMainWindow>
@@ -37,7 +38,7 @@ class Editor : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit Editor(QWidget *parent = nullptr);
+    explicit Editor( SpellChecker *checker, QWidget *parent = nullptr);
     void OpenFile(const QString &FilePath);
     void SaveSettings();
     void LoadSettings();
@@ -154,6 +155,7 @@ private:
     QMenu *encMenu;
     QActionGroup *encActionGrp;
     QHash<CodeEditor*, QString> lineEndings;
+    SpellChecker *m_checker;
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;

@@ -31,6 +31,7 @@
 Edito::Edito(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Edito)
+    , checker(new SpellChecker)
 {
     ui->setupUi(this);
 }
@@ -50,7 +51,7 @@ void Edito::on_Open_clicked()
     {
         this->close();
         qDebug() << "opended: " << FileOpened;
-        Editor *editor = new Editor();
+        Editor *editor = new Editor(checker);
         editor->setAttribute(Qt::WA_DeleteOnClose);
         editor->show();
         editor->raise();
@@ -60,19 +61,17 @@ void Edito::on_Open_clicked()
     else QMessageBox::critical(this, "Error", "Failed to open from a file.");
 }
 
-
 void Edito::on_createNew_clicked()
 {
     this->close();
     qDebug() << "Opened new";
-    Editor *editor = new Editor();
+    Editor *editor = new Editor(checker);
     editor->setAttribute(Qt::WA_DeleteOnClose);
     editor->show();
     editor->raise();
     editor->activateWindow();
     editor->NewFile();
 }
-
 
 void Edito::on_Options_clicked()
 {
@@ -90,14 +89,12 @@ void Edito::on_Options_clicked()
     dialog.exec();
 }
 
-
 void Edito::on_EmptyFile_clicked()
 {
     this->close();
-    Editor *editor = new Editor();
+    Editor *editor = new Editor(checker);
     editor->setAttribute(Qt::WA_DeleteOnClose);
     editor->show();
     editor->raise();
     editor->activateWindow();
 }
-

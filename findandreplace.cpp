@@ -66,7 +66,7 @@ void FindAndReplace::Find()
         ui->Down->setDisabled(false);
         ui->Up->setDisabled(false);
     }
-    m_editor->setExtraSelections(m_selections);
+    m_editor->SetFindAndReplaceSelections(m_selections);
 }
 
 void FindAndReplace::Replace()
@@ -98,7 +98,7 @@ void FindAndReplace::ChangeSelection()
 {
     ui->label->setText(QString::number(m_index + 1) + " of " + QString::number(m_selections.size()));
     m_editor->setTextCursor(m_selections[m_index].cursor);
-    m_editor->setExtraSelections(m_selections);
+    m_editor->SetFindAndReplaceSelections(m_selections);
 }
 
 FindAndReplace::~FindAndReplace()
