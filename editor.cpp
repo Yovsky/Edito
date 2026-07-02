@@ -433,6 +433,8 @@ void Editor::OpenFile(const QString &FilePath)
     QByteArray data = file.readAll();
     file.close();
 
+    qDebug() << "opened size" + QString::number(data.size());
+
     int CRLF = 0;
     int CR = 0;
     int LF = 0;
