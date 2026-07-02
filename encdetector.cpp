@@ -19,11 +19,15 @@
 #include "encdetector.h"
 #include <QFile>
 #include <QDebug>
+#include <uchardet.h>
 
 encdetector::encodingResult encdetector::detectEncoding(const QByteArray &data)
 {
     encdetector::encodingResult res;
     res.hasBOM = false;
+
+    uchardet_t detector = uchardet_new();
+    uchardet_delete(detector);
 
     qDebug() << "Data size:" << data.size() << "bytes";
 

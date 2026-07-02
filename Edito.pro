@@ -14,7 +14,12 @@ DEFINES += \
     HUNSPELL_STATIC \
     PROJECT_ROOT=\\\"$$PWD/\\\"
 
-INCLUDEPATH += $$PWD/3rdparty/hunspell
+INCLUDEPATH += \
+    $$PWD/third-party/hunspell \
+    $$PWD/third-party/uchardet
+
+LIBS += -L$$PWD/third-party/uchardet \
+        -luchardet
 
 SOURCES += \
     codeeditor.cpp \
