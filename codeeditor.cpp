@@ -73,20 +73,26 @@ void CodeEditor::contextMenuEvent(QContextMenuEvent *event)
 {
     QMenu *menu = new QMenu(this);
 
+    // get the current position of the click
     QTextCursor cursor = cursorForPosition(event->pos());
     int pos = cursor.position();
+
+    // check if the clicked word is misspelled
     bool isMisspelled = m_checker->IsMisspelled(this, pos);
     if (isMisspelled)
     {
+        // populate the suggestion list from the Suggest function in spellchecker
         cursor.select(QTextCursor::WordUnderCursor);
         QList<QString> corrections = m_checker->Suggest(this, cursor.selectedText());
+
+        // create the context menu item for each suggestion and add them to a map to link each item with its word
         for (QString s : corrections)
         {
             QAction* action = menu->addAction(s);
             m_suggestions[action] = s;
         }
+        menu->addSeparator();
     }
-    menu->addSeparator();
 
     menu->addAction(a_cut);
     menu->addAction(a_copy);
@@ -101,9 +107,11 @@ void CodeEditor::contextMenuEvent(QContextMenuEvent *event)
     menu->addAction(a_searchOnWeb);
     menu->addSeparator();
 
+    // get the action selected by the user
     QAction *chosen = menu->exec(event->globalPos());
     delete menu;
 
+    // replace the misspelled word with the choosen suggestion by the user (if selected)
     if (m_suggestions.contains(chosen))
     {
         cursor.insertText(m_suggestions[chosen]);
@@ -118,9 +126,12 @@ void CodeEditor::onSelectionChanged()
 
 int CodeEditor::lineNumberAreaWidth()
 {
-    int digits = 4; //Set the initial margin width.
+    //Set the initial margin width.
+    int digits = 4;
     int max = qMax(1, blockCount());
-    while (max >= 10000) { //Adjust the width for bigger line counts.
+
+    //Adjust the width for bigger line counts.
+    while (max >= 10000) {
         max /= 10;
         ++digits;
     }
@@ -294,6 +305,7 @@ void CodeEditor::SetFindAndReplaceSelections(QList<QTextEdit::ExtraSelection> se
 
 void CodeEditor::UpdateSelections()
 {
+    // create a single ExtraSelections list to prevent interfering between selections
     QList<QTextEdit::ExtraSelection> m_allSelections;
 
     m_allSelections += m_lineHighlighterSelections;
