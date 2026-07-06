@@ -1,7 +1,7 @@
 #ifndef FINDANDREPLACE_H
 #define FINDANDREPLACE_H
 
-#include "codeeditor.h"
+#include "src/ui/codeeditor.h"
 #include <QWidget>
 #include <QTextEdit>
 #include <QDebug>

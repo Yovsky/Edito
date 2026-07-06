@@ -1,7 +1,7 @@
 #ifndef SPELLCHECKER_H
 #define SPELLCHECKER_H
 
-#include "codeeditor.h"
+#include "src/ui/codeeditor.h"
 #include <QObject>
 #include <third-party/hunspell/hunspell.hxx>
 #include <QDebug>

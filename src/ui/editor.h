@@ -19,10 +19,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "codeeditor.h"
-#include "encdetector.h"
-#include "findandreplace.h"
-#include "spellchecker.h"
+#include "src/ui/codeeditor.h"
+#include "src/core/encdetector.h"
+#include "src/dialogs/findandreplace.h"
+#include "src/core/spellchecker.h"
 #include <QMenu>
 #include <QActionGroup>
 #include <QMainWindow>
