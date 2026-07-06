@@ -16,10 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "edito.h"
-#include "editor.h"
+#include "src/ui/edito.h"
+#include "src/ui/editor.h"
 #include "ui_edito.h"
-#include "preferencesdialog.h"
+#include "src/dialogs/preferencesdialog.h"
 #include <QFileDialog>
 #include <QDebug>
 #include <QString>

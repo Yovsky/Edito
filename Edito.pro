@@ -4,7 +4,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++17
 
-RC_ICONS = edito.ico
+RC_ICONS = icons/edito.ico
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -14,18 +14,23 @@ DEFINES += \
     HUNSPELL_STATIC \
     PROJECT_ROOT=\\\"$$PWD/\\\"
 
-INCLUDEPATH += $$PWD/3rdparty/hunspell
+INCLUDEPATH += \
+    $$PWD/third-party/hunspell \
+    $$PWD/third-party/uchardet
+
+LIBS += -L$$PWD/third-party/uchardet \
+        -luchardet
 
 SOURCES += \
-    codeeditor.cpp \
-    editor.cpp \
-    encdetector.cpp \
-    findandreplace.cpp \
-    gotodialog.cpp \
-    main.cpp \
-    edito.cpp \
-    preferencesdialog.cpp \
-    spellchecker.cpp \
+    src/ui/codeeditor.cpp \
+    src/ui/editor.cpp \
+    src/core/encdetector.cpp \
+    src/dialogs/findandreplace.cpp \
+    src/dialogs/gotodialog.cpp \
+    src/core/main.cpp \
+    src/ui/edito.cpp \
+    src/dialogs/preferencesdialog.cpp \
+    src/core/spellchecker.cpp \
     third-party/hunspell/affentry.cxx \
     third-party/hunspell/affixmgr.cxx \
     third-party/hunspell/csutil.cxx \
@@ -38,14 +43,14 @@ SOURCES += \
     third-party/hunspell/suggestmgr.cxx
 
 HEADERS += \
-    codeeditor.h \
-    edito.h \
-    editor.h \
-    encdetector.h \
-    findandreplace.h \
-    gotodialog.h \
-    preferencesdialog.h \
-    spellchecker.h \
+    src/ui/codeeditor.h \
+    src/ui/edito.h \
+    src/ui/editor.h \
+    src/core/encdetector.h \
+    src/dialogs/findandreplace.h \
+    src/dialogs/gotodialog.h \
+    src/dialogs/preferencesdialog.h \
+    src/core/spellchecker.h \
     third-party/hunspell/affentry.hxx \
     third-party/hunspell/affixmgr.hxx \
     third-party/hunspell/atypes.hxx \
@@ -67,11 +72,11 @@ HEADERS += \
     third-party/hunspell/w_char.hxx
 
 FORMS += \
-    edito.ui \
-    editor.ui \
-    findandreplace.ui \
-    gotodialog.ui \
-    preferencesdialog.ui
+    src/ui/edito.ui \
+    src/ui/editor.ui \
+    src/dialogs/findandreplace.ui \
+    src/dialogs/gotodialog.ui \
+    src/dialogs/preferencesdialog.ui
 
 TRANSLATIONS += \
     Edito_en_US.ts

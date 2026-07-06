@@ -19,7 +19,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "codeeditor.h"
+#include "src/ui/codeeditor.h"
 #include <QDialog>
 
 namespace Ui {
