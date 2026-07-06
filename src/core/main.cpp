@@ -1,6 +1,3 @@
-#ifndef EDITO_H
-#define EDITO_H
-
 /*
  * Edito - A modern, cross-platform text editor
  * Copyright (C) 2025 Yovsky <Yovsky@proton.me>
@@ -19,34 +16,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <QMainWindow>
-#include <spellchecker.h>
+#include "src/ui/edito.h"
+#include <QApplication>
+#include <QLocale>
+#include <QTranslator>
 
-QT_BEGIN_NAMESPACE
-namespace Ui {
-class Edito;
-}
-QT_END_NAMESPACE
-
-class Edito : public QMainWindow
+int main(int argc, char *argv[])
 {
-    Q_OBJECT
+    QApplication a(argc, argv);
 
-public:
-    Edito(QWidget *parent = nullptr);
-    ~Edito();
-
-private slots:
-    void on_Open_clicked();
-
-    void on_createNew_clicked();
-
-    void on_Options_clicked();
-
-    void on_EmptyFile_clicked();
-
-private:
-    Ui::Edito *ui;
-    SpellChecker* checker;
-};
-#endif // EDITO_H
+    QTranslator translator;
+    const QStringList uiLanguages = QLocale::system().uiLanguages();
+    for (const QString &locale : uiLanguages) {
+        const QString baseName = "Edito_" + QLocale(locale).name();
+        if (translator.load(":/i18n/" + baseName)) {
+            a.installTranslator(&translator);
+            break;
+        }
+    }
+    Edito w;
+    w.show();
+    return a.exec();
+}

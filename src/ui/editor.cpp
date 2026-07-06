@@ -16,10 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "editor.h"
-#include "edito.h"
-#include "gotodialog.h"
-#include "preferencesdialog.h"
+#include "src/ui/editor.h"
+#include "src/ui/edito.h"
+#include "src/dialogs/gotodialog.h"
+#include "src/dialogs/preferencesdialog.h"
 #include "qtextobject.h"
 #include "ui_editor.h"
 #include <QString>
@@ -671,6 +671,7 @@ bool Editor::SaveAs(CodeEditor* editor)
         QStringConverter::Encoding enc = textToEnc(currentEncodings.value(editor));
 
         QString text = editor->toPlainText();
+        qDebug() << text;
 
         if (lineEndings.value(editor) == "Windows (CR LF)" || lineEndings.value(editor) == "Unknown" || lineEndings.value(editor) == "Mixed")
         {
