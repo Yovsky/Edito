@@ -16,7 +16,11 @@ DEFINES += \
 
 INCLUDEPATH += \
     $$PWD/third-party/hunspell \
-    $$PWD/third-party/uchardet
+    $$PWD/third-party/uchardet  \
+    $$PWD/src/ui \
+    $$PWD/src/core \
+    $$PWD/src/dialogs
+
 
 LIBS += -L$$PWD/third-party/uchardet \
         -luchardet

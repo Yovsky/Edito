@@ -2,8 +2,22 @@
 
 SpellChecker::SpellChecker(QObject *parent)
     : QObject{parent}
-    , m_spell(new Hunspell(PROJECT_ROOT "dictionaries/en_US.aff", PROJECT_ROOT "dictionaries/en_US.dic"))
 {
+    QString appDir = QCoreApplication::applicationDirPath();
+
+    QString affPath = appDir + "/dictionaries/en_US.aff";
+    QString dicPath = appDir + "/dictionaries/en_US.dic";
+
+    qDebug() << affPath;
+    qDebug() << dicPath;
+
+    qDebug() << QFile::exists(affPath);
+    qDebug() << QFile::exists(dicPath);
+
+    m_spell = new Hunspell(
+        affPath.toUtf8().constData(),
+        dicPath.toUtf8().constData());
+
     m_errorSpellFormat.setUnderlineStyle(QTextCharFormat::WaveUnderline);
     m_errorSpellFormat.setUnderlineColor(Qt::red);
 }
@@ -12,6 +26,8 @@ void SpellChecker::Check(CodeEditor* editor)
 {
     if (!editor) return;
     QString content = editor->document()->toPlainText();
+
+    m_misspelled.clear();
 
     QList<QTextEdit::ExtraSelection> selections;
     QList<WordInfo> wordList = GetList(content);

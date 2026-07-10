@@ -76,6 +76,7 @@ void CodeEditor::contextMenuEvent(QContextMenuEvent *event)
     QTextCursor cursor = cursorForPosition(event->pos());
     int pos = cursor.position();
     bool isMisspelled = m_checker->IsMisspelled(this, pos);
+    m_suggestions.clear();
     if (isMisspelled)
     {
         cursor.select(QTextCursor::WordUnderCursor);
