@@ -8,6 +8,8 @@
 #include <QMessageBox>
 #include <QRegularExpression>
 #include <QTextCharFormat>
+#include <QCoreApplication>
+#include <QFile>
 
 struct WordInfo
 {
